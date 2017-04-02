@@ -5,10 +5,25 @@
  */
 package csg.data;
 
+import csg.CSGApp;
+import java.util.ArrayList;
+
 /**
  *
  * @author Navin
  */
 public class CSGData {
+    CSGApp app;
+    ArrayList<TeachingAssistant> TeachingAssistants;
+    
+    public CSGData(CSGApp initApp){
+        app = initApp;
+    }
+
+    public ArrayList<TeachingAssistant> getTeachingAssistants() {
+        return TeachingAssistants;
+    }
+    
+    
     
 }

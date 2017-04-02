@@ -11,4 +11,11 @@ package csg;
  */
 public class CSGStyle {
     
+    CSGApp app;
+    
+    
+    public CSGStyle(CSGApp initApp){
+        app = initApp;
+    }
+    
 }

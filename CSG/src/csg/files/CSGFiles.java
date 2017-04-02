@@ -5,10 +5,16 @@
  */
 package csg.files;
 
+import csg.CSGApp;
+
 /**
  *
  * @author Navin
  */
 public class CSGFiles {
+    CSGApp app;
     
+    public CSGFiles(CSGApp initApp){
+    app = initApp;
+}
 }
