@@ -28,7 +28,11 @@ public abstract class AppTemplate extends Application {
     // THIS APP HAS 4 COMPONENTS
     
     // THE COMPONENT FOR MANAGING CUSTOM APP DATA
-    protected AppDataComponent dataComponent;
+    protected AppDataComponent courseDataComponent;
+    protected AppDataComponent taDataComponent;
+    protected AppDataComponent recitationDataComponent;
+    protected AppDataComponent scheduleDataComponent;
+    protected AppDataComponent projectDataComponent;
     
     // THE COMPONENT FOR MANAGING CUSTOM FILE I/O
     protected AppFileComponent fileComponent;
@@ -48,18 +52,36 @@ public abstract class AppTemplate extends Application {
      * to the particular app's dependencies.
      */
     public abstract void buildAppComponentsHook();
+
     
-    // COMPONENT ACCESSOR METHODS
+    public AppDataComponent getTADataComponent() { 
+        return taDataComponent; 
+    }    
+    public AppDataComponent getCourseDataComponent() { 
+        return courseDataComponent; 
+    }
+
+    public AppDataComponent getRecitationDataComponent() {
+        return recitationDataComponent;
+    }
+
+    public AppDataComponent getScheduleDataComponent() {
+        return scheduleDataComponent;
+    }
 
     /**
      *  Accessor for the data component.
      */
-    public AppDataComponent getDataComponent() { return dataComponent; }
+    public AppDataComponent getProjectDataComponent() {
+        return projectDataComponent;
+    }
 
     /**
      *  Accessor for the file component.
      */
-    public AppFileComponent getFileComponent() { return fileComponent; }
+    public AppFileComponent getFileComponent() {
+        return fileComponent;
+    }
 
     /**
      *  Accessor for the workspace component.
@@ -85,7 +107,7 @@ public abstract class AppTemplate extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-	// LET'S START BY INITIALIZING OUR DIALOGS
+//	// LET'S START BY INITIALIZING OUR DIALOGS
 	AppMessageDialogSingleton messageDialog = AppMessageDialogSingleton.getSingleton();
 	messageDialog.init(primaryStage);
 	AppYesNoCancelDialogSingleton yesNoDialog = AppYesNoCancelDialogSingleton.getSingleton();

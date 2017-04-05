@@ -53,7 +53,10 @@ public class AppGUI {
     protected Button saveButton;
     protected Button saveAsButton;
     protected Button exportButton;
+    protected Button aboutButton;
     protected Button exitButton;
+    protected Button undoButton;
+    protected Button redoButton;
     
     // THIS DIALOG IS USED FOR GIVING FEEDBACK TO THE USER
     protected AppYesNoCancelDialogSingleton yesNoCancelDialog;
@@ -127,6 +130,9 @@ public class AppGUI {
 	exitButton.setDisable(false);
         saveAsButton.setDisable(false);
         exportButton.setDisable(false);
+        aboutButton.setDisable(false);
+        undoButton.setDisable(false);
+        redoButton.setDisable(false);
 
         // NOTE THAT THE NEW, LOAD, AND EXIT BUTTONS
         // ARE NEVER DISABLED SO WE NEVER HAVE TO TOUCH THEM
@@ -150,7 +156,10 @@ public class AppGUI {
         saveButton = initChildButton(fileToolbarPane,	SAVE_ICON.toString(),	    SAVE_TOOLTIP.toString(),	true);
         saveAsButton = initChildButton(fileToolbarPane,	SAVE_AS_ICON.toString(),    SAVE_AS_TOOLTIP.toString(),	true);
         exportButton = initChildButton(fileToolbarPane,	EXPORT_ICON.toString(),      EXPORT_TOOLTIP.toString(),	true);
+        aboutButton = initChildButton(fileToolbarPane,	ABOUT_ICON.toString(),      ABOUT_TOOLTIP.toString(), false);
         exitButton = initChildButton(fileToolbarPane,	EXIT_ICON.toString(),	    EXIT_TOOLTIP.toString(),	false);
+        undoButton = initChildButton(fileToolbarPane,	UNDO_ICON.toString(),      UNDO_TOOLTIP.toString(), true);
+        redoButton = initChildButton(fileToolbarPane,	REDO_ICON.toString(),	    REDO_TOOLTIP.toString(), true);
 
 	// AND NOW SETUP THEIR EVENT HANDLERS
         fileController = new AppFileController(app);
@@ -169,8 +178,17 @@ public class AppGUI {
         exportButton.setOnAction(e ->{
             fileController.handleExportRequest();
         });
+        aboutButton.setOnAction(e ->{
+            fileController.handleAboutRequest();
+        });
         exitButton.setOnAction(e -> {
             fileController.handleExitRequest();
+        });
+        undoButton.setOnAction(e -> {
+            fileController.handleUndoRequest();
+        });	
+        redoButton.setOnAction(e -> {
+            fileController.handleRedoRequest();
         });	
     }
 
@@ -253,8 +271,11 @@ public class AppGUI {
 	newButton.getStyleClass().add(CLASS_FILE_BUTTON);
 	loadButton.getStyleClass().add(CLASS_FILE_BUTTON);
 	saveButton.getStyleClass().add(CLASS_FILE_BUTTON);
+        aboutButton.getStyleClass().add(CLASS_FILE_BUTTON);
         saveAsButton.getStyleClass().add(CLASS_FILE_BUTTON);
 	exitButton.getStyleClass().add(CLASS_FILE_BUTTON);
+        undoButton.getStyleClass().add(CLASS_FILE_BUTTON);
+        redoButton.getStyleClass().add(CLASS_FILE_BUTTON);
     }
     public AppFileController getAppFileController(){
         return fileController;

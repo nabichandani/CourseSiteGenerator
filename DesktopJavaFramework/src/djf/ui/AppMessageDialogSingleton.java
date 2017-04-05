@@ -37,7 +37,7 @@ public class AppMessageDialogSingleton extends Stage {
      * 
      * @param closeButtonText Text to appear on the close button.
      */
-    private AppMessageDialogSingleton() {}
+    public AppMessageDialogSingleton() {}
     
     /**
      * A static accessor method for getting the singleton object.

@@ -10,6 +10,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import properties_manager.PropertiesManager;
 import djf.AppTemplate;
+import static djf.settings.AppPropertyType.ABOUT_MESSAGE;
+import static djf.settings.AppPropertyType.ABOUT_TITLE;
 import static djf.settings.AppPropertyType.EXPORT_COMPLETE_MESSAGE;
 import static djf.settings.AppPropertyType.EXPORT_COMPLETE_TITLE;
 import static djf.settings.AppPropertyType.LOAD_ERROR_MESSAGE;
@@ -34,6 +36,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
 /**
  * This class provides the event programmed responses for the file controls
@@ -63,7 +66,7 @@ public class AppFileController {
         // NOTHING YET
         saved = true;
         app = initApp;
-        
+
     }
     
     /**
@@ -103,10 +106,10 @@ public class AppFileController {
 		app.getWorkspaceComponent().resetWorkspace();
 
                 // RESET THE DATA
-                app.getDataComponent().resetData();
+                app.getTADataComponent().resetData();
                 
                 // NOW RELOAD THE WORKSPACE WITH THE RESET DATA
-                app.getWorkspaceComponent().reloadWorkspace(app.getDataComponent());
+                app.getWorkspaceComponent().reloadWorkspace(app.getTADataComponent());
 
 		// MAKE SURE THE WORKSPACE IS ACTIVATED
 		app.getWorkspaceComponent().activateWorkspace(app.getGUI().getAppPane());
@@ -179,7 +182,7 @@ public class AppFileController {
             Path destPath = selectedFile.toPath();
          
             String path = "../TAManagerTester/public_html/js/OfficeHoursGridData.json";
-            app.getFileComponent().saveData(app.getDataComponent(), path);
+            app.getFileComponent().saveData(app.getTADataComponent(), path);
             
             
             String initPath = "../TAManagerTester/public_html/";
@@ -289,6 +292,11 @@ public class AppFileController {
 	    dialog.show(props.getProperty(LOAD_ERROR_TITLE), props.getProperty(LOAD_ERROR_MESSAGE));
         }
     }
+    public void handleAboutRequest(){
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+        dialog.show(props.getProperty(ABOUT_TITLE), props.getProperty(ABOUT_MESSAGE));
+    }
     public void handleSaveAsRequest(){
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         try{        
@@ -313,7 +321,7 @@ public class AppFileController {
     // HELPER METHOD FOR SAVING WORK
     private void saveWork(File selectedFile) throws IOException {
 	// SAVE IT TO A FILE
-	app.getFileComponent().saveData(app.getDataComponent(), selectedFile.getPath());
+	app.getFileComponent().saveData(app.getTADataComponent(), selectedFile.getPath());
 	
 	// MARK IT AS SAVED
 	currentWorkFile = selectedFile;
@@ -356,6 +364,13 @@ public class AppFileController {
         }
     }
     
+    public void handleUndoRequest(){
+        
+    }
+    public void handleRedoRequest(){
+        
+    }
+    
     public String getAbsolutePath(){
         return currentWorkFile.getAbsolutePath();
     }
@@ -390,7 +405,7 @@ public class AppFileController {
         // IF THE USER SAID YES, THEN SAVE BEFORE MOVING ON
         if (selection.equals(AppYesNoCancelDialogSingleton.YES)) {
             // SAVE THE DATA FILE
-            AppDataComponent dataManager = app.getDataComponent();
+            AppDataComponent dataManager = app.getTADataComponent();
 	    
 	    if (currentWorkFile == null) {
 		// PROMPT THE USER FOR A FILE NAME
@@ -442,12 +457,12 @@ public class AppFileController {
         // ONLY OPEN A NEW FILE IF THE USER SAYS OK
         if (selectedFile != null) {
             try {
-                app.getFileComponent().loadData(app.getDataComponent(), selectedFile.getAbsolutePath());
+                app.getFileComponent().loadData(app.getTADataComponent(), selectedFile.getAbsolutePath());
             }catch (Exception e) {
                 AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
                 selectedFile = origFile;
                 try {
-                    app.getFileComponent().loadData(app.getDataComponent(), selectedFile.getAbsolutePath());
+                    app.getFileComponent().loadData(app.getTADataComponent(), selectedFile.getAbsolutePath());
                 } catch (IOException ex) {
                     Logger.getLogger(AppFileController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -458,10 +473,10 @@ public class AppFileController {
 		app.getWorkspaceComponent().resetWorkspace();
 
                 // RESET THE DATA
-                app.getDataComponent().resetData();
+                app.getTADataComponent().resetData();
                 
                 // LOAD THE FILE INTO THE DATA
-                app.getFileComponent().loadData(app.getDataComponent(), selectedFile.getAbsolutePath());
+                app.getFileComponent().loadData(app.getTADataComponent(), selectedFile.getAbsolutePath());
                 
 		// MAKE SURE THE WORKSPACE IS ACTIVATED
 		app.getWorkspaceComponent().activateWorkspace(app.getGUI().getAppPane());

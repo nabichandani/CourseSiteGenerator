@@ -12,53 +12,44 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Navin
  */
-public class TeachingAssistant{
-    private StringProperty name;
-    private StringProperty email;
-    private boolean undergrad;
-    
-    public TeachingAssistant(StringProperty name, 
-        StringProperty email, boolean undergrad){
-        this.name = name;
-        this.email = email;
-        this.undergrad = undergrad;
+public class TeachingAssistant<E extends Comparable<E>> implements Comparable<E>  {
+    // THE TABLE WILL STORE TA NAMES AND EMAILS
+    private final StringProperty name;
+    private final StringProperty email;
+    private boolean isUndergrad;
+    /**
+     * Constructor initializes the TA name
+     */
+    public TeachingAssistant(String initName, String initEmail, boolean ug) {
+        name = new SimpleStringProperty(initName);
+        email = new SimpleStringProperty(initEmail);
+        isUndergrad = ug;
     }
 
-    public StringProperty getName() {
-        return name;
-    }
+    // ACCESSORS AND MUTATORS FOR THE PROPERTIES
 
-    public void setName(StringProperty name) {
-        this.name = name;
-    }
-
-    public StringProperty getEmail() {
-        return email;
-    }
-
-    public void setEmail(StringProperty email) {
-        this.email = email;
-    }
-
-    public boolean isUndergrad() {
-        return undergrad;
-    }
-
-    public void setUndergrad(boolean isUndergrad) {
-        this.undergrad = isUndergrad;
+    public String getName() {
+        return name.get();
     }
     
-    public boolean isUnique(TeachingAssistant TA){
-        if(this.name.getValue().equals(TA.getName().getValue())){
-            if(this.email.getValue().equals(TA.getEmail().getValue())){
-                if(this.isUndergrad() == TA.isUndergrad()){
-                    return true;
-                }
-            }
-        }
-        return false;
+    public String getEmail(){
+        return email.get();
+    }
+
+    public void setName(String initName) {
+        name.set(initName);
     }
     
+    public void setEmail(String initEmail) {
+        email.set(initEmail);
+    }
+
+    @Override
+    public int compareTo(E otherTA) {
+        return getName().compareTo(((TeachingAssistant)otherTA).getName());
+    }
+    
+    @Override
     public String toString() {
         return name.getValue();
     }

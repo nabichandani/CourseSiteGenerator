@@ -1,8 +1,12 @@
 
 package csg;
 
+import csg.data.ProjectData;
+import csg.data.Recitation;
+import csg.data.RecitationData;
+import csg.data.ScheduleData;
 import java.util.Locale;
-import csg.data.CSGData;
+import csg.data.TAData;
 import csg.files.CSGFiles;
 import csg.ui.CSGWorkspace;
 import djf.AppTemplate;
@@ -18,10 +22,14 @@ public class CSGApp extends AppTemplate{
    
     
     public void buildAppComponentsHook() {
-        CSGWorkspace workspace = new CSGWorkspace(this);
-        CSGData data = new CSGData(this);
-        CSGStyle style = new CSGStyle(this);
-        CSGFiles files = new CSGFiles(this);
+        courseDataComponent = new TAData(this);
+        taDataComponent = new TAData(this);
+        recitationDataComponent= new RecitationData(this);
+        projectDataComponent= new ProjectData(this);
+        scheduleDataComponent= new ScheduleData(this);
+        workspaceComponent = new CSGWorkspace(this);
+        fileComponent = new CSGFiles(this);
+        styleComponent = new CSGStyle(this);
     }
 
 

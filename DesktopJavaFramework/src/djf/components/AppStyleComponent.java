@@ -39,8 +39,8 @@ public abstract class AppStyleComponent {
     public void initStylesheet(AppTemplate app) {
 	// SELECT THE STYLESHEET
 	PropertiesManager props = PropertiesManager.getPropertiesManager();
-	String stylesheet = props.getProperty(APP_PATH_CSS);
-	stylesheet += props.getProperty(APP_CSS);
+	String stylesheet = props.getProperty(APP_CSS);
+	//stylesheet += props.getProperty(APP_CSS);
         Class appClass = app.getClass();
 	URL stylesheetURL = appClass.getResource(stylesheet);
 	String stylesheetPath = stylesheetURL.toExternalForm();
