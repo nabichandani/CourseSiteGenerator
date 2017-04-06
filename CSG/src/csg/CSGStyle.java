@@ -50,6 +50,31 @@ public class CSGStyle extends AppStyleComponent{
     
     public static String CLASS_COURSE_INFO_PANE = "course_info_pane";
     public static String CLASS_COURSE_INFO_LABEL = "course_info_label";
+    public static String CLASS_COURSE_FIRST_BOX = "course_details_pane";
+    public static String CLASS_COURSE_PANE = "course_pane";
+    public static String CLASS_COURSE_EXPORT_LABEL = "export_label";
+    public static String CLASS_COURSE_TEMPLATE_PANE = "course_template_pane";
+    public static String CLASS_COURSE_TEMPLATE_HEADER = "course_template_header";
+    public static String CLASS_COURSE_TEMPLATE_LOCATION = "course_template_location";
+    public static String CLASS_COURSE_SITE_PAGE = "course_site_page_label";
+    public static String CLASS_PAGE_STYLE_PANE = "page_style_pane";
+    public static String CLASS_PAGE_STYLE_LABEL = "page_style_label";
+    public static String CLASS_BANNER_LABEL = "style_banner_label";
+    public static String CLASS_LEFT_FOOTER_LABEL = "style_left_footer_label";
+    public static String CLASS_RIGHT_FOOTER_LABEL = "style_right_footer_label";
+    public static String CLASS_STYLE_NOTE_LABEL = "page_style_note_label";
+    
+    public static String CLASS_RECITATION_PANE = "recitation_pane";
+    public static String CLASS_RECITATION_HEADER = "recitation_header_label";
+    public static String CLASS_RECITATION_ADD_LABEL = "recitation_addedit_label";
+    public static String CLASS_RECITATION_ADD_PANE = "recitation_add_pane";
+    
+    public static String CLASS_RECITATION_SECTION_LABEL = "recitation_section_label";
+    public static String CLASS_RECITATION_INSTRUCTOR_LABEL = "recitation_instructor_label";
+    public static String CLASS_RECITATION_DAYTIME_LABEL = "recitation_daytime_label";
+    public static String CLASS_RECITATION_LOCATION_LABEL = "recitation_location_label";
+    public static String CLASS_RECITATION_TA1_LABEL = "recitation_ta1_label";
+    public static String CLASS_RECITATION_TA2_LABEL = "recitation_ta2_label";    
     
     // THIS PROVIDES ACCESS TO OTHER COMPONENTS
     private AppTemplate app;
@@ -103,7 +128,32 @@ public class CSGStyle extends AppStyleComponent{
         workspaceComponent.getCourseInfoPane().getStyleClass().add(CLASS_COURSE_INFO_PANE);
         workspaceComponent.getCourseInfoLabel().getStyleClass().add(CLASS_COURSE_INFO_LABEL);
         
+        workspaceComponent.getCourseDetails().getStyleClass().add(CLASS_COURSE_FIRST_BOX);
+        workspaceComponent.getCoursePane().getStyleClass().add(CLASS_COURSE_PANE);
+        workspaceComponent.getExportLabel().getStyleClass().add(CLASS_COURSE_EXPORT_LABEL);
+        workspaceComponent.getCourseTemplatePane().getStyleClass().add(CLASS_COURSE_TEMPLATE_PANE);
+        workspaceComponent.getCourseTemplateHeaderLabel().getStyleClass().add(CLASS_COURSE_TEMPLATE_HEADER);
+        workspaceComponent.getCourseTemplateLocLabel().getStyleClass().add(CLASS_COURSE_TEMPLATE_LOCATION);
+        workspaceComponent.getCourseSitePageLabel().getStyleClass().add(CLASS_COURSE_SITE_PAGE);
+        workspaceComponent.getPageStylePane().getStyleClass().add(CLASS_PAGE_STYLE_PANE);
+        workspaceComponent.getPageStyleHeader().getStyleClass().add(CLASS_PAGE_STYLE_LABEL);
         
+        workspaceComponent.getBannerLabel().getStyleClass().add(CLASS_BANNER_LABEL);
+        workspaceComponent.getLeftFooterLabel().getStyleClass().add(CLASS_LEFT_FOOTER_LABEL);
+        workspaceComponent.getRightFooterLabel().getStyleClass().add(CLASS_RIGHT_FOOTER_LABEL);
+        workspaceComponent.getStyleSheetLabel().getStyleClass().add(CLASS_STYLE_NOTE_LABEL);
+        
+        workspaceComponent.getRecitationHeaderLabel().getStyleClass().add(CLASS_RECITATION_HEADER);
+        workspaceComponent.getRecitationPane().getStyleClass().add(CLASS_RECITATION_PANE);
+        workspaceComponent.getRecitationAddLabel().getStyleClass().add(CLASS_RECITATION_ADD_LABEL);
+        workspaceComponent.getRecitationAddPane().getStyleClass().add(CLASS_RECITATION_ADD_PANE);
+        
+        workspaceComponent.getRecSection().getStyleClass().add(CLASS_RECITATION_SECTION_LABEL);
+        workspaceComponent.getRecInstructor().getStyleClass().add(CLASS_RECITATION_INSTRUCTOR_LABEL);
+        workspaceComponent.getRecDayTime().getStyleClass().add(CLASS_RECITATION_DAYTIME_LABEL);
+        workspaceComponent.getRecLocation().getStyleClass().add(CLASS_RECITATION_LOCATION_LABEL);
+        workspaceComponent.getRecTA1().getStyleClass().add(CLASS_RECITATION_TA1_LABEL);  
+        workspaceComponent.getRecTA2().getStyleClass().add(CLASS_RECITATION_TA2_LABEL);
     }
     
     /**

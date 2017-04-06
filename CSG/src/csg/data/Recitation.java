@@ -14,17 +14,18 @@ public class Recitation {
    String instructor;
    String dayTime;
    String location;
-   TeachingAssistant firstTA;
-   TeachingAssistant secondTA;
+   String firstTA;
+   String secondTA;
    
-   public Recitation(String section, String recitation, String dayTime, 
+   public Recitation(String section, String instructor, String dayTime, 
         String location, TeachingAssistant taOne, TeachingAssistant taTwo){  
        
+       this.section = section;
        this.location = location;
        this.instructor = instructor;
        this.dayTime = dayTime;
-       firstTA = taOne;
-       secondTA = taTwo;
+       firstTA = taOne.getName();
+       secondTA = taTwo.getName();
    }
 
     public String getSection() {
@@ -59,21 +60,23 @@ public class Recitation {
         this.location = location;
     }
 
-    public TeachingAssistant getFirstTA() {
+    public String getFirstTA() {
         return firstTA;
     }
 
-    public void setFirstTA(TeachingAssistant firstTA) {
+    public void setFirstTA(String firstTA) {
         this.firstTA = firstTA;
     }
 
-    public TeachingAssistant getSecondTA() {
+    public String getSecondTA() {
         return secondTA;
     }
 
-    public void setSecondTA(TeachingAssistant secondTA) {
+    public void setSecondTA(String secondTA) {
         this.secondTA = secondTA;
     }
+
+
    
    
 }

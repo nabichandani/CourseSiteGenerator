@@ -6,12 +6,17 @@ import csg.CSGApp;
 import csg.CSGProp;
 import static csg.CSGProp.COURSE_SUBHEADER;
 import csg.CSGStyle;
+import csg.data.CourseTemplate;
+import csg.data.Recitation;
+import csg.data.RecitationData;
 import csg.data.TAData;
 import csg.data.TeachingAssistant;
 import djf.components.AppDataComponent;
 import djf.components.AppWorkspaceComponent;
+import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
-import java.awt.Rectangle;
+import javafx.scene.shape.Rectangle;
+import java.io.File;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.BorderPane;
@@ -29,16 +34,26 @@ import javafx.scene.control.TableColumn;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
+import sun.applet.Main;
 
 /**
  *
@@ -85,7 +100,64 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     
     Label courseInfoLabel;
     HBox courseInfoPane;
+    Label exportLabel;
+    VBox courseDetails;
+    VBox coursePane;
+    VBox courseTemplatePane;
+    Label courseTemplateHeaderLabel;
+    Label courseTemplateLocLabel;
+    Label courseSitePageLabel;
     
+    
+    //CourseTemplate objects that will go into the template tableview
+    ObservableList<CourseTemplate> templates;
+    CourseTemplate home;
+    CourseTemplate syllabus;
+    CourseTemplate schedule;
+    CourseTemplate hws;
+    CourseTemplate projects;
+    
+    TableView <CourseTemplate> templateTable;
+    TableColumn<CourseTemplate, Boolean> useColumn;
+    TableColumn<CourseTemplate, String> navColumn;
+    TableColumn<CourseTemplate, String> fileNameColumn;
+    TableColumn<CourseTemplate, String> scriptColumn;
+    
+    VBox pageStylePane;
+    Label pageStyleHeader; 
+    Label bannerLabel;
+    Label leftFooterLabel;
+    Label rightFooterLabel;
+    Label styleSheetLabel;
+    
+    VBox recitationPane;
+    HBox recitationHeaderPane;
+    Label recitationHeaderLabel;
+    VBox recitationAddPane;
+    Label recitationAddLabel;
+    
+    TableView <Recitation> recitationTable;
+    TableColumn<Recitation, String> sectionColumn;
+    TableColumn<Recitation, String> instructorColumn;
+    TableColumn<Recitation, String> dayTimeColumn;
+    TableColumn<Recitation, String> locationColumn;
+    TableColumn<Recitation, String> ta1Column;
+    TableColumn<Recitation, String> ta2Column;
+    
+    Label recSection;
+    Label recInstructor;
+    Label recDayTime;
+    Label recLocation;
+    Label recTA1;
+    Label recTA2;
+    TextField recSectionText;
+    TextField recInstructorText;
+    TextField recDayTimeText;
+    TextField recLocationText;
+    ComboBox recTA1Combo;
+    ComboBox recTA2Combo;
+    
+    VBox SchedulePane;
     
     public CSGWorkspace(CSGApp initApp){
         app = initApp;
@@ -245,12 +317,21 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         taTab.setContent(sPane);
         
-        //VBOX to hold the first box in course tab
-        VBox courseDetails = new VBox();
-        courseDetails.setSpacing(5);
         
+        //CoursePane will hold all the panes in CourseTab and CourseDetails
+        //holds the first VBox.
+        coursePane = new VBox();
+        coursePane.setSpacing(10);
+        courseDetails = new VBox();
+        courseDetails.setPadding(new Insets(0,0,10,0)); 
+        courseDetails.setSpacing(15);
+        coursePane.setAlignment(Pos.TOP_CENTER);
+        courseDetails.setMaxWidth(900);
+       
+
         //FirstBox Header
-        courseTab.setContent(courseDetails);
+        courseTab.setContent(coursePane);
+        coursePane.getChildren().add(courseDetails);
         courseInfoPane = new HBox();
         String courseSubheaderText = props.getProperty(CSGProp.COURSE_SUBHEADER.toString());
         courseInfoLabel = new Label(courseSubheaderText);
@@ -287,7 +368,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         String courseYearText = props.getProperty(CSGProp.YEAR_TEXT.toString());
         Label courseYearLabel = new Label(courseYearText);
-        courseYearLabel.setPadding(new Insets(0,10,0,25)); 
+        courseYearLabel.setPadding(new Insets(0,26,0,9)); 
         courseSemYear.getChildren().add(courseYearLabel);
         courseSemYear.setSpacing(80);
         
@@ -337,6 +418,357 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         Label courseExportDirLabel = new Label(courseExportDirText);
         courseExportDir.getChildren().add(courseExportDirLabel);
         courseDetails.getChildren().add(courseExportDir);
+        String changeButtonText = props.getProperty(CSGProp.CHANGE_TEXT.toString());
+        Button exportChangeButton = new Button();
+        exportChangeButton.setText(changeButtonText);
+        exportLabel = new Label();             
+        String exportDirLoc= "Select an export location";
+        exportLabel.setText(exportDirLoc);
+        exportChangeButton.setOnAction(e ->{
+             String exportDirLocation = pickDirectory();
+             exportLabel.setText(exportDirLocation);
+            
+        });
+        courseExportDir.getChildren().add(exportLabel);
+        courseExportDir.getChildren().add(exportChangeButton);
+        
+        //Course Template is second box in Course Tab
+        courseTemplatePane = new VBox();
+        courseTemplatePane.setMaxWidth(900);
+        courseTemplatePane.setSpacing(15);
+        coursePane.getChildren().add(courseTemplatePane);
+        
+        //Header for Course Template
+        String courseTemplateText = props.getProperty(CSGProp.TEMPLATE_TEXT.toString());
+        courseTemplateHeaderLabel = new Label();
+        courseTemplateHeaderLabel.setText(courseTemplateText);
+        courseTemplatePane.getChildren().add(courseTemplateHeaderLabel);
+        
+        //Directory Info label
+        String courseDirInfoText = props.getProperty(CSGProp.DIR_INFO_TEXT.toString());
+        Label courseDirInfoLabel = new Label();
+        courseDirInfoLabel.setText(courseDirInfoText);
+        courseTemplatePane.getChildren().add(courseDirInfoLabel);
+        
+        //Template Location Label
+        String courseTemplateLocText = "Choose a template location";
+        courseTemplateLocLabel = new Label();
+        courseTemplateLocLabel.setText(courseTemplateLocText);
+        courseTemplatePane.getChildren().add(courseTemplateLocLabel);
+        
+        //SelectTemplateButton
+        String courseTemplateButtonString = props.getProperty(CSGProp.SELECT_TEMPLATE_DIRECTORY_TEXT.toString());
+        Button courseTemplateButton = new Button(courseTemplateButtonString);
+        courseTemplatePane.getChildren().add(courseTemplateButton);
+        courseTemplateButton.setOnAction(e ->{
+             String exportDirLocation = pickDirectory();
+             courseTemplateLocLabel.setText(exportDirLocation); 
+        });        
+        
+
+        //Site Pages Label
+        String courseSitePageText = props.getProperty(CSGProp.SITE_PAGE_TEXT.toString());
+        courseSitePageLabel = new Label();
+        courseSitePageLabel.setText(courseSitePageText);
+        courseTemplatePane.getChildren().add(courseSitePageLabel);
+        
+        //Create and initialize the template variables        
+        templates = FXCollections.observableArrayList();
+        home = new CourseTemplate(true, "Home", "index.html", "Homebuilder.js");
+        syllabus = new CourseTemplate(true, "Syllabus", 
+            "syllabus.html", "SyllabusBuilder.js");
+        schedule = new CourseTemplate(true, "Schedule",
+            "schedule.html", "ScheduleBuilder.js");
+        hws = new CourseTemplate(true, "HWs", "hws.html", "HWsBuilder.js");
+        projects = new CourseTemplate(true, "Projects", 
+            "projects.html", "ProjectsBuilder.html");
+        
+        templates.add(home);
+        templates.add(syllabus);
+        templates.add(schedule);
+        templates.add(hws);
+        templates.add(projects);
+        
+        //Creates the tableview for template items
+        templateTable = new TableView();
+        courseTemplatePane.getChildren().add(templateTable);
+        templateTable.getSelectionModel().
+            setSelectionMode(SelectionMode.SINGLE);
+        templateTable.setItems(templates);
+        String useColumnText = props.getProperty(CSGProp.USE_TEXT.toString());
+        String navbarColumnText = props.getProperty(CSGProp.NAVBAR_TEXT
+            .toString());
+        String fileColumnText = props.getProperty(CSGProp.FILE_TEXT.toString());
+        String scriptColumnText = props.getProperty(CSGProp.SCRIPT_TEXT
+            .toString());
+        useColumn = new TableColumn(useColumnText);
+        
+        useColumn.setCellValueFactory(new PropertyValueFactory<CourseTemplate,
+            Boolean>("use"));
+        useColumn.setCellFactory(CheckBoxTableCell.forTableColumn(useColumn));
+        
+        navColumn = new TableColumn(navbarColumnText);
+        navColumn.setMinWidth(150);
+        navColumn.setCellValueFactory(new PropertyValueFactory<CourseTemplate, 
+            String>("navbarTitle"));
+        fileNameColumn = new TableColumn(fileColumnText);
+        fileNameColumn.setCellValueFactory(new PropertyValueFactory<CourseTemplate, 
+            String>("fileName"));
+        scriptColumn = new TableColumn(scriptColumnText);
+        scriptColumn.setCellValueFactory(new PropertyValueFactory<CourseTemplate, 
+            String>("script"));
+        templateTable.getColumns().add(useColumn);
+        
+        templateTable.getColumns().add(navColumn);
+        templateTable.getColumns().add(fileNameColumn);
+        templateTable.getColumns().add(scriptColumn);
+        templateTable.setMaxWidth(533);
+        templateTable.setMaxHeight(170);
+        
+        
+        //Third and last pane in the Course Tab
+        pageStylePane = new VBox();
+        pageStylePane.setSpacing(15);
+        pageStylePane.setMaxWidth(900);
+        coursePane.getChildren().add(pageStylePane);
+        String pageStyleText = props.getProperty(CSGProp.PAGE_STYLE_TEXT.toString());
+        pageStyleHeader = new Label(pageStyleText);
+        pageStylePane.getChildren().add(pageStyleHeader);
+        
+        //first row in Page Style Pane
+        HBox bannerStylePane = new HBox();
+        pageStylePane.getChildren().add(bannerStylePane);
+        String bannerText = props.getProperty(CSGProp.BANNER_IMAGE_TEXT.toString());
+        bannerLabel = new Label(bannerText);
+        Button bannerChangeButton = new Button();
+        ImageView bannerImage = new ImageView();
+        bannerChangeButton.setText(props.getProperty(CSGProp.CHANGE_TEXT.toString()));
+        bannerChangeButton.setOnAction(e ->{
+             String bannerLocation = pickFile();
+             //edit this
+             Image newImg = new Image(Main.class.getResourceAsStream("About.png"));
+             bannerImage.setImage(newImg);        
+        }); 
+        bannerStylePane.getChildren().add(bannerLabel);
+        bannerStylePane.getChildren().add(bannerImage);
+        bannerStylePane.getChildren().add(bannerChangeButton);
+        
+        //second row in Page Style Pane
+        HBox leftFooterPane = new HBox();
+        pageStylePane.getChildren().add(leftFooterPane);
+        String leftFooterText = props.getProperty(CSGProp.LEFT_FOOTER_TEXT.toString());
+        leftFooterLabel = new Label(leftFooterText);
+        Button leftFooterChangeButton = new Button();
+        ImageView leftFooterImage = new ImageView();
+        leftFooterChangeButton.setText(props.getProperty(CSGProp.CHANGE_TEXT.toString()));
+        leftFooterChangeButton.setOnAction(e ->{
+             String bannerLocation = pickFile();
+             //edit this
+             Image newImg = new Image(Main.class.getResourceAsStream("About.png"));
+             bannerImage.setImage(newImg);        
+        }); 
+        leftFooterPane.getChildren().add(leftFooterLabel);
+        leftFooterPane.getChildren().add(leftFooterImage);
+        leftFooterPane.getChildren().add(leftFooterChangeButton);
+        
+        
+        //third row in Page Style Pane
+        HBox rightFooterPane = new HBox();
+        pageStylePane.getChildren().add(rightFooterPane);
+        String rightFooterText = props.getProperty(CSGProp.RIGHT_FOOTER_TEXT.toString());
+        rightFooterLabel = new Label(rightFooterText);
+        Button rightFooterChangeButton = new Button();
+        ImageView rightFooterImage = new ImageView();
+        rightFooterChangeButton.setText(props.getProperty(CSGProp.CHANGE_TEXT.toString()));
+        rightFooterChangeButton.setOnAction(e ->{
+             String bannerLocation = pickFile();
+             //edit this
+             Image newImg = new Image(Main.class.getResourceAsStream("About.png"));
+             bannerImage.setImage(newImg);        
+        }); 
+        rightFooterPane.getChildren().add(rightFooterLabel);
+        rightFooterPane.getChildren().add(rightFooterImage);
+        rightFooterPane.getChildren().add(rightFooterChangeButton);
+        
+        //fourth row in Page Style Pane
+        HBox styleSheetPane = new HBox();
+        styleSheetPane.setSpacing(15);
+        pageStylePane.getChildren().add(styleSheetPane);
+        String styleSheetText = props.getProperty(CSGProp.STYLESHEET_TEXT.toString());
+        styleSheetLabel = new Label(styleSheetText);
+        ComboBox styleSheetCombo = new ComboBox();
+        styleSheetCombo.setMinWidth(200);
+        styleSheetPane.getChildren().add(styleSheetLabel);
+        styleSheetPane.getChildren().add(styleSheetCombo);
+        
+        // Note in Page Style Pane
+        Label styleNote = new Label();
+        String styleSheetNoteText = props.getProperty(CSGProp.STYLESHEET_NOTE.toString());
+        styleNote.setText(styleSheetNoteText);
+        pageStylePane.getChildren().add(styleNote);
+        
+        
+        //Recitation tab with recitationPane covering the whole tab.
+        recitationPane = new VBox();
+        recitationPane.setSpacing(10);
+        recitationTab.setContent(recitationPane);
+        
+        //Recitation Header and delete button
+        recitationHeaderPane = new HBox();
+        recitationHeaderPane.setSpacing(15);
+        recitationHeaderLabel = new Label();
+        String recitationHeaderText = props.getProperty
+             (CSGProp.RECITATION_TEXT.toString());
+        recitationHeaderLabel.setText(recitationHeaderText);
+        recitationHeaderPane.getChildren().add(recitationHeaderLabel);
+        recitationPane.getChildren().add(recitationHeaderPane);
+        
+        //Creating rectangle in Recitation Header
+        Rectangle recitationRectangle = new Rectangle(40, 40, Color.WHITE);
+        recitationRectangle.setStroke(Color.BLACK);
+        Text rectText = new Text("-");
+        rectText.setBoundsType(TextBoundsType.VISUAL); 
+        StackPane recRectPane = new StackPane();
+        recRectPane.getChildren().addAll(recitationRectangle, rectText);
+        recitationHeaderPane.getChildren().add(recRectPane);
+        
+        //eventHandler for clicking rectangle
+        recitationRectangle.setOnMouseClicked(e ->{
+
+        });
+        
+        
+        RecitationData recData = (RecitationData) app.
+            getRecitationDataComponent();
+        
+        //Creates the recitation TableView
+        recitationTable = new TableView(); 
+        recitationTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        ObservableList<Recitation> recitationList = recData.getRecitations();
+        recitationTable.setItems(recitationList);
+        String sectionColumnText = props.getProperty(CSGProp.SECTION_TEXT.toString());
+        String instructorColumnText = props.getProperty(CSGProp.INSTRUCTOR_TEXT.toString());
+        String dayTimeColumnText = props.getProperty(CSGProp.DAYTIME_TEXT.toString());
+        String locationColumnText = props.getProperty(CSGProp.LOCATION_TEXT.toString());
+        String taColumnText = props.getProperty(CSGProp.TA_TEXT.toString());
+        sectionColumn = new TableColumn(sectionColumnText);
+        sectionColumn.setMinWidth(80);
+        instructorColumn = new TableColumn(instructorColumnText);
+        instructorColumn.setMinWidth(120);
+        dayTimeColumn = new TableColumn(dayTimeColumnText);
+        locationColumn = new TableColumn(locationColumnText);
+        ta1Column = new TableColumn(taColumnText);
+        ta2Column = new TableColumn(taColumnText);
+        
+        sectionColumn.setCellValueFactory(
+             new PropertyValueFactory<Recitation, String>("section"));
+        instructorColumn.setCellValueFactory(
+             new PropertyValueFactory<Recitation, String>("instructor"));        
+        dayTimeColumn.setCellValueFactory(
+             new PropertyValueFactory<Recitation, String>("dayTime"));
+        locationColumn.setCellValueFactory(
+             new PropertyValueFactory<Recitation, String>("location"));
+        ta1Column.setCellValueFactory(
+             new PropertyValueFactory<Recitation, String>("firstTA"));
+        ta2Column.setCellValueFactory(
+             new PropertyValueFactory<Recitation, String>("secondTA"));
+       
+        recitationTable.getColumns().add(sectionColumn);
+        recitationTable.getColumns().add(instructorColumn);
+        recitationTable.getColumns().add(dayTimeColumn);
+        recitationTable.getColumns().add(locationColumn);
+        recitationTable.getColumns().add(ta1Column);
+        recitationTable.getColumns().add(ta2Column);
+        recitationTable.setMaxWidth(800);    
+        recitationPane.getChildren().add(recitationTable);
+        
+        // add/edit recitation box under table
+        // Recitation Add Header
+        recitationAddPane = new VBox();
+        recitationAddPane.setSpacing(15);
+        recitationAddPane.setMaxWidth(800);
+        recitationPane.getChildren().add(recitationAddPane);
+        recitationAddLabel = new Label(props.getProperty
+        (CSGProp.ADDEDIT_TEXT.toString()));
+        recitationAddPane.getChildren().add(recitationAddLabel);
+        
+        //Recitation Section HBox
+        HBox recSecBox = new HBox();
+        recSection = new Label(props.getProperty(CSGProp.SECTION_COLON_TEXT.toString()));
+        recSection.setPadding(new Insets(0,103,0,20));
+        recSectionText = new TextField();
+        recSectionText.setMinWidth(200);
+        recSecBox.getChildren().add(recSection);
+        recSecBox.getChildren().add(recSectionText);
+        recitationAddPane.getChildren().add(recSecBox);
+        
+        //Recitation Instructor HBox
+        HBox recInsBox = new HBox();
+        recInstructor = new Label(props.getProperty(CSGProp.INSTRUCTOR_COLON_TEXT.toString()));
+        recInstructor.setPadding(new Insets(0,77,0,19));
+        recInstructorText = new TextField();
+        recInstructorText.setMinWidth(200);
+        recInsBox.getChildren().add(recInstructor);
+        recInsBox.getChildren().add(recInstructorText);
+        recitationAddPane.getChildren().add(recInsBox);        
+        
+        //Recitation DayTime HBox
+        HBox recDayTimeBox = new HBox();
+        recDayTime = new Label(props.getProperty(CSGProp.DAYTIME_COLON_TEXT.toString()));
+        recDayTime.setPadding(new Insets(0,94,0,20));
+        recDayTimeText = new TextField();
+        recDayTimeText.setMinWidth(200);
+        recDayTimeBox.getChildren().add(recDayTime);
+        recDayTimeBox.getChildren().add(recDayTimeText);
+        recitationAddPane.getChildren().add(recDayTimeBox);   
+        
+        //Recitation Location HBox
+        HBox recLocationBox = new HBox();
+        recLocation = new Label(props.getProperty(CSGProp.LOCATION_COLON_TEXT.toString()));
+        recLocation.setPadding(new Insets(0,94,0,20));
+        recLocationText = new TextField();
+        recLocationText.setMinWidth(200);
+        recLocationBox.getChildren().add(recLocation);
+        recLocationBox.getChildren().add(recLocationText);
+        recitationAddPane.getChildren().add(recLocationBox); 
+        
+        //Recitation TA1 HBox
+        HBox recTA1Box = new HBox();
+        recTA1 = new Label(props.getProperty(CSGProp.TA_COLON_TEXT.toString()));
+        recTA1.setPadding(new Insets(0,40,0,20));
+        recTA1Combo = new ComboBox();
+        recTA1Combo.setMinWidth(200);
+        recTA1Box.getChildren().add(recTA1);
+        recTA1Box.getChildren().add(recTA1Combo);
+        recitationAddPane.getChildren().add(recTA1Box); 
+
+        //Recitation TA2 HBox
+        HBox recTA2Box = new HBox();
+        recTA2 = new Label(props.getProperty(CSGProp.TA_COLON_TEXT.toString()));
+        recTA2.setPadding(new Insets(0,40,0,20));
+        recTA2Combo = new ComboBox();
+        recTA2Combo.setMinWidth(200);
+        recTA2Box.getChildren().add(recTA2);
+        recTA2Box.getChildren().add(recTA2Combo);
+        recitationAddPane.getChildren().add(recTA2Box); 
+        
+        // Recitation Buttons 
+        HBox recButtonsBox = new HBox();
+        recButtonsBox.setPadding(new Insets(0,0,15,19));
+        recButtonsBox.setSpacing(65);
+        Button recAddButton = new Button();
+
+        recAddButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT.toString()));
+        Button recClearButton = new Button();
+        recClearButton.setText(props.getProperty(CSGProp.CLEAR_TEXT.toString()));
+        recButtonsBox.getChildren().add(recAddButton);
+        recButtonsBox.getChildren().add(recClearButton);
+        recitationAddPane.getChildren().add(recButtonsBox); 
+        
+        //Schedule Tab Start
+        SchedulePane = new VBox();
+        scheduleTab.setContent(SchedulePane);
+        
         
         ((BorderPane) workspace).setCenter(courseTabPane);
 
@@ -359,6 +791,19 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public HBox getAddBox() {
         return addBox;
     }
+
+    public VBox getCourseDetails() {
+        return courseDetails;
+    }
+
+    public VBox getCourseTemplatePane() {
+        return courseTemplatePane;
+    }
+
+    public Label getCourseTemplateLocLabel() {
+        return courseTemplateLocLabel;
+    }
+    
     
     public TextField getNameTextField() {
         return taNameTextField;
@@ -375,6 +820,36 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         return taClearButton;
     }
 
+    public VBox getCoursePane() {
+        return coursePane;
+    }
+
+    public Label getCourseTemplateHeaderLabel() {
+        return courseTemplateHeaderLabel;
+    }
+
+    public Label getCourseSitePageLabel() {
+        return courseSitePageLabel;
+    }
+
+    public Label getBannerLabel() {
+        return bannerLabel;
+    }
+
+    public Label getLeftFooterLabel() {
+        return leftFooterLabel;
+    }
+
+    public Label getRightFooterLabel() {
+        return rightFooterLabel;
+    }
+    
+    
+    
+    public Label getExportLabel() {
+        return exportLabel;
+    }
+    
     public HBox getOfficeHoursSubheaderBox() {
         return officeHoursHeaderBox;
     }
@@ -451,8 +926,71 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         return courseInfoPane;
     }
 
+    public String pickDirectory(){
+        DirectoryChooser dc = new DirectoryChooser();
+        File file = dc.showDialog(app.getGUI().getWindow());
+        String location = file.getPath();
+        return location;
+    }
+    public String pickFile(){
+        FileChooser fc = new FileChooser();
+        File file = fc.showOpenDialog(app.getGUI().getWindow());
+        String location = file.getPath();
+        return location;
+    }
+
+    public VBox getPageStylePane() {
+        return pageStylePane;
+    }
+
+    public Label getPageStyleHeader() {
+        return pageStyleHeader;
+    }
+
+    public Label getStyleSheetLabel() {
+        return styleSheetLabel;
+    }
+
+    public VBox getRecitationPane() {
+        return recitationPane;
+    }
+
+    public Label getRecitationHeaderLabel() {
+        return recitationHeaderLabel;
+    }
+
+    public VBox getRecitationAddPane() {
+        return recitationAddPane;
+    }
+
+    public Label getRecitationAddLabel() {
+        return recitationAddLabel;
+    }
+
+    public Label getRecSection() {
+        return recSection;
+    }
+
+    public Label getRecInstructor() {
+        return recInstructor;
+    }
+
+    public Label getRecDayTime() {
+        return recDayTime;
+    }
+
+    public Label getRecLocation() {
+        return recLocation;
+    }
+
+    public Label getRecTA1() {
+        return recTA1;
+    }
+
+    public Label getRecTA2() {
+        return recTA2;
+    }
     
-   
     
     
 

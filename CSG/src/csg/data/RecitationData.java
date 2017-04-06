@@ -7,6 +7,8 @@ package csg.data;
 
 import csg.CSGApp;
 import djf.components.AppDataComponent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -15,9 +17,20 @@ import djf.components.AppDataComponent;
 public class RecitationData implements AppDataComponent{
     CSGApp app;
     
+    ObservableList<Recitation> recitations;
+    
     public RecitationData(CSGApp initApp){
-    app = initApp;    
+    app = initApp;   
+    recitations = FXCollections.observableArrayList();
+    
+    
     }
+
+    public ObservableList<Recitation> getRecitations() {
+        return recitations;
+    }
+    
+    
 
     @Override
     public void resetData() {

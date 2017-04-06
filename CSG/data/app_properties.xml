@@ -73,10 +73,10 @@
         <property name="WORK_LOADED_MESSAGE"		value="The Work has been Loaded"></property>
         <property name="WORK_SAVED_MESSAGE"		value="The Work has been Saved"></property>
         <property name="SAVE_UNSAVED_WORK_MESSAGE"	value="Do you want to save your unsaved work first?"></property>
-	<property name="SAVE_WORK_TITLE"		value="Save your work"></property>
-	<property name="LOAD_WORK_TITLE"		value="Select work file to load"></property>
-	<property name="WORK_FILE_EXT"			value="json"></property>
-	<property name="WORK_FILE_EXT_DESC"		value="JSON File"></property>
+	       <property name="SAVE_WORK_TITLE"		value="Save your work"></property>
+	        <property name="LOAD_WORK_TITLE"		value="Select work file to load"></property>
+	         <property name="WORK_FILE_EXT"			value="json"></property>
+	          <property name="WORK_FILE_EXT_DESC"		value="JSON File"></property>
 
         <!-- WORKSPACE CONTROLS STUFF -->
         <property name="TAS_HEADER_TEXT"                value="Teaching Assistants"></property>
@@ -95,6 +95,37 @@
         <property name="INSTRUCTOR_NAME_TEXT"         value="Instructor Name:"></property>
         <property name="INSTRUCTOR_HOME_TEXT"         value="Instructor Home:"></property>
         <property name="EXPORT_DIR_TEXT"         value="Export Dir.:"></property>
+        <property name="CHANGE_TEXT"         value="Change"></property>
+        <property name="TEMPLATE_TEXT"         value="Site Template"></property>
+        <property name="DIR_INFO_TEXT"         value="The selected directory should contain the full site template, including the HTML files."></property>
+        <property name="SELECT_TEMPLATE_DIRECTORY_TEXT"         value="Select Template Directory"></property>
+        <property name="SITE_PAGE_TEXT"         value="Site Pages"></property>
+        <property name="USE_TEXT"         value="Use"></property>
+        <property name="NAVBAR_TEXT"         value="Navbar Title"></property>
+        <property name="FILE_TEXT"         value="File Name"></property>
+        <property name="SCRIPT_TEXT"         value="Script"></property>
+        <property name="PAGE_STYLE_TEXT"         value="Page Style"></property>
+        <property name="BANNER_IMAGE_TEXT"         value="Banner School Image:"></property>
+        <property name="LEFT_FOOTER_TEXT"         value="Left Footer Image:"></property>
+        <property name="RIGHT_FOOTER_TEXT"         value="Right Footer Image:"></property>
+        <property name="STYLESHEET_TEXT"         value="Stylesheet:"></property>
+        <property name="STYLESHEET_NOTE"         value="NOTE: New stylesheets may be placed in work/css to be selectable"></property>
+        <property name="RECITATION_TEXT"         value="Recitations"></property>
+
+        <property name="SECTION_TEXT"         value="Section"></property>
+        <property name="INSTRUCTOR_TEXT"         value="Instructor"></property>
+        <property name="DAYTIME_TEXT"         value="Day/Time"></property>
+        <property name="LOCATION_TEXT"         value="Location"></property>
+        <property name="TA_TEXT"         value="TA"></property>
+        <property name="ADDEDIT_TEXT"         value="Add/Edit"></property>
+
+        <property name="SECTION_COLON_TEXT"         value="Section:"></property>
+        <property name="INSTRUCTOR_COLON_TEXT"         value="Instructor:"></property>
+        <property name="DAYTIME_COLON_TEXT"         value="Day/Time:"></property>
+        <property name="LOCATION_COLON_TEXT"         value="Location:"></property>
+        <property name="TA_COLON_TEXT"         value="Supervising TA:"></property>
+        <property name="ADDUPDATE_TEXT"         value= "Add/Update"></property>
+        <property name="CLEAR_TEXT"         value="Clear"></property>
 
         <!-- WORKSPACE ERROR MESSAGES -->
         <property name="MISSING_TA_NAME_TITLE"          value="Missing TA Name"></property>
