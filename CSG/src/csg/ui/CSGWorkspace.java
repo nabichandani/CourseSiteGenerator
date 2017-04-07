@@ -9,6 +9,8 @@ import csg.CSGStyle;
 import csg.data.CourseTemplate;
 import csg.data.Recitation;
 import csg.data.RecitationData;
+import csg.data.ScheduleData;
+import csg.data.ScheduleItem;
 import csg.data.TAData;
 import csg.data.TeachingAssistant;
 import djf.components.AppDataComponent;
@@ -39,6 +41,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -157,8 +160,40 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     ComboBox recTA1Combo;
     ComboBox recTA2Combo;
     
-    VBox SchedulePane;
+    VBox schedulePane;
+    Label scheduleHeaderLabel;
+    VBox calenderPane;
+    Label calenderBoundariesLabel;
+    HBox calenderRowPane;
+    Label startMondayLabel;
+    Label endFridayLabel;
+    DatePicker monStartDatePicker;
+    DatePicker friEndDatePicker;
+    VBox scheduleTablePane;
+    Label scheduleItemLabel;
     
+    TableView<ScheduleItem> scheduleTable;
+    TableColumn<ScheduleItem, String> typeColumn;
+    TableColumn<ScheduleItem, String> dateColumn;
+    TableColumn<ScheduleItem, String> titleColumn;
+    TableColumn<ScheduleItem, String> topicColumn;
+    
+    Label scheduleAddEdit;
+    Label scheduleTypeLabel;
+    ComboBox scheduleTypeCombo;
+    Label scheduleDateLabel;
+    DatePicker scheduleDatePicker;
+    Label scheduleTimeLabel;
+    TextField scheduleTimeTextField; 
+    Label scheduleTitleLabel;
+    TextField scheduleTitleTextField; 
+    Label scheduleTopicLabel;
+    TextField scheduleTopicTextField; 
+    Label scheduleLinkLabel;    
+    TextField scheduleLinkTextField; 
+    Label scheduleCriteriaLabel;
+    TextField scheduleCriteriaTextField; 
+                 
     public CSGWorkspace(CSGApp initApp){
         app = initApp;
         PropertiesManager props = PropertiesManager.getPropertiesManager();     
@@ -611,10 +646,12 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         //Recitation tab with recitationPane covering the whole tab.
         recitationPane = new VBox();
         recitationPane.setSpacing(10);
+        recitationPane.setAlignment(Pos.TOP_CENTER);
         recitationTab.setContent(recitationPane);
         
         //Recitation Header and delete button
         recitationHeaderPane = new HBox();
+        recitationHeaderPane.setPadding(new Insets(0,0,0, 554));
         recitationHeaderPane.setSpacing(15);
         recitationHeaderLabel = new Label();
         String recitationHeaderText = props.getProperty
@@ -758,7 +795,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         recButtonsBox.setSpacing(65);
         Button recAddButton = new Button();
 
-        recAddButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT.toString()));
+        recAddButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT
+            .toString()));
         Button recClearButton = new Button();
         recClearButton.setText(props.getProperty(CSGProp.CLEAR_TEXT.toString()));
         recButtonsBox.getChildren().add(recAddButton);
@@ -766,9 +804,214 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         recitationAddPane.getChildren().add(recButtonsBox); 
         
         //Schedule Tab Start
-        SchedulePane = new VBox();
-        scheduleTab.setContent(SchedulePane);
+        schedulePane = new VBox();
+        schedulePane.setSpacing(10);
+        schedulePane.setAlignment(Pos.TOP_CENTER);
+        scheduleTab.setContent(schedulePane);
         
+        //Schedule Header Label
+        HBox scheduleHeaderPane = new HBox();
+        scheduleHeaderPane.setPadding(new Insets(0,0,0, 552));
+        scheduleHeaderLabel = new Label();
+        scheduleHeaderLabel.setText(props.getProperty
+            (CSGProp.SCHEDULE_TEXT.toString()));
+        scheduleHeaderPane.getChildren().add(scheduleHeaderLabel);
+        schedulePane.getChildren().add(scheduleHeaderPane);
+        
+        //Calender pane in recitation - header
+        calenderPane = new VBox();
+        calenderPane.setSpacing(15);
+        calenderBoundariesLabel = new Label(props.getProperty
+            (CSGProp.CALENDER_BOUNDARIES_TEXT.toString()));
+        calenderBoundariesLabel.setPadding(new Insets(0,0,0,30));
+        calenderPane.setMaxWidth(800);
+        calenderPane.getChildren().add(calenderBoundariesLabel);
+        schedulePane.getChildren().add(calenderPane);
+        
+        //Calender pane in recitation - calender row
+        calenderRowPane = new HBox();
+        calenderRowPane.setPadding(new Insets(0, 0, 20, 0));
+        calenderPane.getChildren().add(calenderRowPane);
+        startMondayLabel = new Label();
+        startMondayLabel.setPadding(new Insets(0,10,0,30));
+        startMondayLabel.setText(props.getProperty
+            (CSGProp.START_MONDAY_TEXT.toString()));
+        calenderRowPane.getChildren().add(startMondayLabel);
+        monStartDatePicker = new DatePicker();
+        monStartDatePicker.setMinWidth(100);
+        calenderRowPane.getChildren().add(monStartDatePicker);
+        endFridayLabel = new Label();
+        endFridayLabel.setPadding(new Insets(0,10,0,70));
+        endFridayLabel.setText(props.getProperty
+            (CSGProp.END_FRIDAY_TEXT.toString()));
+        calenderRowPane.getChildren().add(endFridayLabel);
+        friEndDatePicker = new DatePicker();
+        friEndDatePicker.setMinWidth(100);
+        calenderRowPane.getChildren().add(friEndDatePicker);
+        
+        //SchedulePane with table- header
+        scheduleTablePane = new VBox();
+        scheduleTablePane.setMaxWidth(800);
+        schedulePane.getChildren().add(scheduleTablePane);
+        scheduleTablePane.setSpacing(15);
+        HBox scheduleTableHeaderPane = new HBox();
+        scheduleItemLabel = new Label(props.getProperty
+            (CSGProp.SCHEDULE_ITEM_TEXT.toString()));
+        scheduleItemLabel.setPadding(new Insets(15,0,0,5));
+        scheduleTablePane.getChildren().add(scheduleTableHeaderPane);
+        scheduleTableHeaderPane.getChildren().add(scheduleItemLabel);
+        
+        Rectangle scheduleRectangle = new Rectangle(40, 30, Color.WHITE);
+        scheduleRectangle.setStroke(Color.BLACK);
+        Text scheduleText = new Text("-");
+        scheduleText.setBoundsType(TextBoundsType.VISUAL); 
+        StackPane schRectPane = new StackPane();
+        schRectPane.getChildren().addAll(scheduleRectangle, scheduleText);
+        schRectPane.setPadding(new Insets(0,0,0,15));
+        scheduleTableHeaderPane.getChildren().add(schRectPane);
+        
+        scheduleRectangle.setOnMouseClicked(e ->{
+            //add text here
+        });
+        
+        //SchedulePane with table- table
+        HBox scheduleTableHolderPane = new HBox();
+        scheduleTable = new TableView();
+        scheduleTableHolderPane.getChildren().add(scheduleTable);
+        scheduleTableHolderPane.setPadding(new Insets(0,0,0,10));
+        scheduleTablePane.getChildren().add(scheduleTableHolderPane);  
+        scheduleTable.getSelectionModel().setSelectionMode
+            (SelectionMode.SINGLE);
+        ScheduleData scheduleData= (ScheduleData)app.getScheduleDataComponent();
+        ObservableList<ScheduleItem> schedule = scheduleData.getSchedule();
+        scheduleTable.setItems(schedule);
+        String typeColumnText = props.getProperty(CSGProp.TYPE_COL_TEXT.toString());
+        String dateColumnText = props.getProperty(CSGProp.DATE_COL_TEXT.toString());
+        String titleColumnText = props.getProperty(CSGProp.TITLE_COL_TEXT.toString());
+        String topicColumnText = props.getProperty(CSGProp.TOPIC_COL_TEXT.toString());
+        typeColumn = new TableColumn(typeColumnText);
+        dateColumn = new TableColumn(dateColumnText);
+        titleColumn = new TableColumn(titleColumnText);
+        topicColumn = new TableColumn(topicColumnText);
+        scheduleTable.getColumns().add(typeColumn);
+        scheduleTable.getColumns().add(dateColumn);
+        scheduleTable.getColumns().add(titleColumn);
+        scheduleTable.getColumns().add(topicColumn);
+        typeColumn.setCellValueFactory(new PropertyValueFactory<ScheduleItem, String>("type"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<ScheduleItem, String>("date"));
+        titleColumn.setCellValueFactory(new PropertyValueFactory<ScheduleItem, String>("title"));
+        topicColumn.setCellValueFactory(new PropertyValueFactory<ScheduleItem, String>("topic"));
+        typeColumn.setMinWidth(150);
+        dateColumn.setMinWidth(150);
+        titleColumn.setMinWidth(200);
+        topicColumn.setMinWidth(280);
+        scheduleTable.setMaxWidth(780);
+        scheduleTable.setMaxHeight(300);
+        scheduleTable.setPadding(new Insets(0,0,40,0));
+        
+        //Add Edit Label in Schedule
+        scheduleAddEdit = new Label(props.getProperty(CSGProp.ADDEDIT_TEXT.toString()));
+        scheduleTablePane.getChildren().add(scheduleAddEdit);
+        scheduleAddEdit.setPadding(new Insets(0,0,0,30));
+        
+        //Type Row in Schedule
+        HBox scheduleTypePane = new HBox();
+        scheduleTablePane.getChildren().add(scheduleTypePane);
+        scheduleTypeLabel = new Label();
+        String scheduleTypeText = props.getProperty(CSGProp.TYPE_COLON_TEXT.toString());
+        scheduleTypeLabel.setText(scheduleTypeText);
+        scheduleTypeLabel.setPadding(new Insets(0,80,0,30));
+        scheduleTypeCombo = new ComboBox();
+        scheduleTypeCombo.setMinWidth(250);
+        scheduleTypePane.getChildren().add(scheduleTypeLabel);
+        scheduleTypePane.getChildren().add(scheduleTypeCombo);
+                
+
+        //Date Row in Schedule
+        HBox scheduleDatePane = new HBox();
+        scheduleTablePane.getChildren().add(scheduleDatePane);
+        scheduleDateLabel = new Label();
+        String scheduleDateText = props.getProperty(CSGProp.DATE_COLON_TEXT.toString());
+        scheduleDateLabel.setText(scheduleDateText);
+        scheduleDateLabel.setPadding(new Insets(0,80,0,30));
+        scheduleDatePicker = new DatePicker();
+        scheduleDatePicker.setMinWidth(100);
+        scheduleDatePane.getChildren().add(scheduleDateLabel);
+        scheduleDatePane.getChildren().add(scheduleDatePicker);
+        
+        
+        //Time Row in Schedule
+        HBox scheduleTimePane = new HBox();
+        scheduleTablePane.getChildren().add(scheduleTimePane);
+        scheduleTimeLabel = new Label();
+        String scheduleTimeText = props.getProperty(CSGProp.TIME_COLON_TEXT.toString());
+        scheduleTimeLabel.setText(scheduleTimeText);
+        scheduleTimeLabel.setPadding(new Insets(0,80,0,30));
+        scheduleTimeTextField = new TextField();
+        scheduleTimeTextField.setMinWidth(250);
+        scheduleTimePane.getChildren().add(scheduleTimeLabel);
+        scheduleTimePane.getChildren().add(scheduleTimeTextField);
+        
+         //Title Row in Schedule
+        HBox scheduleTitlePane = new HBox();
+        scheduleTablePane.getChildren().add(scheduleTitlePane);
+        scheduleTitleLabel = new Label();
+        String scheduleTitleText = props.getProperty(CSGProp.TITLE_TEXT.toString());
+        scheduleTitleLabel.setText(scheduleTitleText);
+        scheduleTitleLabel.setPadding(new Insets(0,71,0,30));
+        scheduleTitleTextField = new TextField();
+        scheduleTitleTextField.setMinWidth(500);
+        scheduleTitlePane.getChildren().add(scheduleTitleLabel);
+        scheduleTitlePane.getChildren().add(scheduleTitleTextField);
+        
+        //Topic Row in Schedule
+        HBox scheduleTopicPane = new HBox();
+        scheduleTablePane.getChildren().add(scheduleTopicPane);
+        scheduleTopicLabel = new Label();
+        String scheduleTopicText = props.getProperty(CSGProp.TOPIC_COLON_TEXT.toString());
+        scheduleTopicLabel.setText(scheduleTopicText);
+        scheduleTopicLabel.setPadding(new Insets(0,71,0,30));
+        scheduleTopicTextField = new TextField();
+        scheduleTopicTextField.setMinWidth(500);
+        scheduleTopicPane.getChildren().add(scheduleTopicLabel);
+        scheduleTopicPane.getChildren().add(scheduleTopicTextField);
+        
+        //Link Row in Schedule
+        HBox scheduleLinkPane = new HBox();
+        scheduleTablePane.getChildren().add(scheduleLinkPane);
+        scheduleLinkLabel = new Label();
+        String schedulelLinkText = props.getProperty(CSGProp.LINK_COLON_TEXT.toString());
+        scheduleLinkLabel.setText(schedulelLinkText);
+        scheduleLinkLabel.setPadding(new Insets(0,80,0,30));
+        scheduleLinkTextField = new TextField();
+        scheduleLinkTextField.setMinWidth(500);
+        scheduleLinkPane.getChildren().add(scheduleLinkLabel);
+        scheduleLinkPane.getChildren().add(scheduleLinkTextField);
+        
+        //Criteria Row in Schedule
+        HBox scheduleCriteriaPane = new HBox();
+        scheduleTablePane.getChildren().add(scheduleCriteriaPane);
+        scheduleCriteriaLabel = new Label();
+        String schedulelCriteriaText = props.getProperty(CSGProp.CRITERIA_COLON_TEXT.toString());
+        scheduleCriteriaLabel.setText(schedulelCriteriaText);
+        scheduleCriteriaLabel.setPadding(new Insets(0,44,0,30));
+        scheduleCriteriaTextField = new TextField();
+        scheduleCriteriaTextField.setMinWidth(500);
+        scheduleCriteriaPane.getChildren().add(scheduleCriteriaLabel);
+        scheduleCriteriaPane.getChildren().add(scheduleCriteriaTextField);
+        
+        
+        //Buttons row ins Schedule
+        HBox scheduleButtonPane = new HBox();
+        scheduleTablePane.getChildren().add(scheduleButtonPane);
+        scheduleButtonPane.setPadding(new Insets(5, 0, 10, 30));
+        scheduleButtonPane.setSpacing(14);
+        Button scheduleAddUpdateButton = new Button();
+        scheduleAddUpdateButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT.toString()));
+        Button scheduleClearButton = new Button();
+        scheduleClearButton.setText(props.getProperty(CSGProp.CLEAR_TEXT.toString()));
+        scheduleButtonPane.getChildren().add(scheduleAddUpdateButton);
+        scheduleButtonPane.getChildren().add(scheduleClearButton);
         
         ((BorderPane) workspace).setCenter(courseTabPane);
 
@@ -843,8 +1086,22 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public Label getRightFooterLabel() {
         return rightFooterLabel;
     }
-    
-    
+
+    public VBox getSchedulePane() {
+        return schedulePane;
+    }
+
+    public Label getScheduleHeaderLabel() {
+        return scheduleHeaderLabel;
+    }
+
+    public VBox getCalenderPane() {
+        return calenderPane;
+    }
+
+    public Label getCalenderBoundariesLabel() {
+        return calenderBoundariesLabel;
+    }
     
     public Label getExportLabel() {
         return exportLabel;
@@ -989,6 +1246,54 @@ public class CSGWorkspace extends AppWorkspaceComponent{
 
     public Label getRecTA2() {
         return recTA2;
+    }
+
+    public Label getStartMondayLabel() {
+        return startMondayLabel;
+    }
+
+    public Label getEndFridayLabel() {
+        return endFridayLabel;
+    }
+
+    public VBox getScheduleTablePane() {
+        return scheduleTablePane;
+    }
+
+    public Label getScheduleItemLabel() {
+        return scheduleItemLabel;
+    }
+
+    public Label getScheduleAddEdit() {
+        return scheduleAddEdit;
+    }
+
+    public Label getScheduleTypeLabel() {
+        return scheduleTypeLabel;
+    }
+
+    public Label getScheduleDateLabel() {
+        return scheduleDateLabel;
+    }
+
+    public Label getScheduleTimeLabel() {
+        return scheduleTimeLabel;
+    }
+
+    public Label getScheduleTitleLabel() {
+        return scheduleTitleLabel;
+    }
+
+    public Label getScheduleTopicLabel() {
+        return scheduleTopicLabel;
+    }
+
+    public Label getScheduleLinkLabel() {
+        return scheduleLinkLabel;
+    }
+
+    public Label getScheduleCriteriaLabel() {
+        return scheduleCriteriaLabel;
     }
     
     

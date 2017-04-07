@@ -49,7 +49,7 @@ public class CSGStyle extends AppStyleComponent{
     public static String CLASS_OFFICE_HOURS_GRID_TA_CELL_LABEL = "office_hours_grid_ta_cell_label";
     
     public static String CLASS_COURSE_INFO_PANE = "course_info_pane";
-    public static String CLASS_COURSE_INFO_LABEL = "course_info_label";
+    public static String CLASS_COURSE_INFO_LABEL = "course_info_header";
     public static String CLASS_COURSE_FIRST_BOX = "course_details_pane";
     public static String CLASS_COURSE_PANE = "course_pane";
     public static String CLASS_COURSE_EXPORT_LABEL = "export_label";
@@ -65,7 +65,7 @@ public class CSGStyle extends AppStyleComponent{
     public static String CLASS_STYLE_NOTE_LABEL = "page_style_note_label";
     
     public static String CLASS_RECITATION_PANE = "recitation_pane";
-    public static String CLASS_RECITATION_HEADER = "recitation_header_label";
+    public static String CLASS_RECITATION_HEADER = "tab_header";
     public static String CLASS_RECITATION_ADD_LABEL = "recitation_addedit_label";
     public static String CLASS_RECITATION_ADD_PANE = "recitation_add_pane";
     
@@ -74,7 +74,20 @@ public class CSGStyle extends AppStyleComponent{
     public static String CLASS_RECITATION_DAYTIME_LABEL = "recitation_daytime_label";
     public static String CLASS_RECITATION_LOCATION_LABEL = "recitation_location_label";
     public static String CLASS_RECITATION_TA1_LABEL = "recitation_ta1_label";
-    public static String CLASS_RECITATION_TA2_LABEL = "recitation_ta2_label";    
+    public static String CLASS_RECITATION_TA2_LABEL = "recitation_ta2_label";
+    
+    public static String CLASS_SCHEDULE_PANE = "schedule_pane";
+    public static String CLASS_SCHEDULE_HEADER = "tab_header";
+    public static String CLASS_CALENDER_PANE = "schedule_helper_pane";
+    public static String CLASS_CALENDER_HEADER= "schedule_helper_pane_header";
+    public static String CLASS_SCHEDULE_START_MON_LABEL= "schedule_reg_label";
+    public static String CLASS_SCHEDULE_END_FRIDAY_LABEL= "schedule_reg_label";
+    public static String CLASS_SCHEDULE_TABLE_PANE= "schedule_helper_pane";
+    public static String CLASS_SCHEDULE_ITEM_LABEL= "schedule_helper_pane_header";
+    
+    public static String CLASS_SCHEDULE_ADDEDIT_LABEL= "schedule_helper_pane_header";
+    public static String CLASS_SCHEDULE_REG_SCHEDULE_LABEL= "schedule_reg_label";
+    
     
     // THIS PROVIDES ACCESS TO OTHER COMPONENTS
     private AppTemplate app;
@@ -154,6 +167,24 @@ public class CSGStyle extends AppStyleComponent{
         workspaceComponent.getRecLocation().getStyleClass().add(CLASS_RECITATION_LOCATION_LABEL);
         workspaceComponent.getRecTA1().getStyleClass().add(CLASS_RECITATION_TA1_LABEL);  
         workspaceComponent.getRecTA2().getStyleClass().add(CLASS_RECITATION_TA2_LABEL);
+        
+        workspaceComponent.getSchedulePane().getStyleClass().add(CLASS_SCHEDULE_PANE);
+        workspaceComponent.getScheduleHeaderLabel().getStyleClass().add(CLASS_SCHEDULE_HEADER);
+        workspaceComponent.getCalenderPane().getStyleClass().add(CLASS_CALENDER_PANE);
+        workspaceComponent.getCalenderBoundariesLabel().getStyleClass().add(CLASS_CALENDER_HEADER);
+        workspaceComponent.getStartMondayLabel().getStyleClass().add(CLASS_SCHEDULE_START_MON_LABEL);
+        workspaceComponent.getEndFridayLabel().getStyleClass().add(CLASS_SCHEDULE_END_FRIDAY_LABEL);
+        workspaceComponent.getScheduleTablePane().getStyleClass().add(CLASS_SCHEDULE_TABLE_PANE);
+        workspaceComponent.getScheduleItemLabel().getStyleClass().add(CLASS_SCHEDULE_ITEM_LABEL);
+        
+        workspaceComponent.getScheduleAddEdit().getStyleClass().add(CLASS_SCHEDULE_ADDEDIT_LABEL);
+        workspaceComponent.getScheduleTypeLabel().getStyleClass().add(CLASS_SCHEDULE_REG_SCHEDULE_LABEL);
+        workspaceComponent.getScheduleDateLabel().getStyleClass().add(CLASS_SCHEDULE_REG_SCHEDULE_LABEL);
+        workspaceComponent.getScheduleTimeLabel().getStyleClass().add(CLASS_SCHEDULE_REG_SCHEDULE_LABEL);
+        workspaceComponent.getScheduleTitleLabel().getStyleClass().add(CLASS_SCHEDULE_REG_SCHEDULE_LABEL);
+        workspaceComponent.getScheduleTopicLabel().getStyleClass().add(CLASS_SCHEDULE_REG_SCHEDULE_LABEL);
+        workspaceComponent.getScheduleLinkLabel().getStyleClass().add(CLASS_SCHEDULE_REG_SCHEDULE_LABEL);
+        workspaceComponent.getScheduleCriteriaLabel().getStyleClass().add(CLASS_SCHEDULE_REG_SCHEDULE_LABEL);
     }
     
     /**

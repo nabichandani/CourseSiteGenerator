@@ -51,7 +51,7 @@
     -fx-background-color:rgb(178,178,252);
 }
 
-.header_label, .recitation_header_label {
+.header_label, .tab_header {
     -fx-font-family:"Courier New", serif;
     -fx-font-style: normal;
     -fx-font-weight: bold;
@@ -142,8 +142,8 @@
      -fx-font-weight:bold;
 }
 
-.course_info_label, .course_template_header, .page_style_label, 
-.recitation_addedit_label{
+.course_template_header, .page_style_label, .course_info_header,
+.recitation_addedit_label, .schedule_helper_pane_header{
      -fx-font-family:"Courier New", serif;
      -fx-font-style: normal;
      -fx-font-weight:bold;
@@ -151,7 +151,7 @@
 }
 .export_label, .course_template_location, .course_site_page_label, 
 .style_banner_label, .style_left_footer_label, .style_right_footer_label, 
-.page_style_note_label{
+.page_style_note_label, .schedule_reg_label{
      -fx-font-family:"Courier New", serif;
      -fx-font-style: normal;
      -fx-font-weight:bold;
@@ -166,10 +166,10 @@
 
 
 .course_details_pane, .course_template_pane, .page_style_pane, 
-.recitation_add_pane{
+.recitation_add_pane, .schedule_helper_pane{
     -fx-background-color: #d3d3d3;
 }
-.course_pane, .recitation_pane {
+.course_pane, .recitation_pane, .schedule_pane {
     -fx-background-color: #ffdb99;
 }
 

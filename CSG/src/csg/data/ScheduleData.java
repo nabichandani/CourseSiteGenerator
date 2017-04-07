@@ -7,6 +7,8 @@ package csg.data;
 
 import csg.CSGApp;
 import djf.components.AppDataComponent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -15,9 +17,24 @@ import djf.components.AppDataComponent;
 public class ScheduleData implements AppDataComponent{
     CSGApp app;
     
+    ObservableList<ScheduleItem> schedule;
+    
     public ScheduleData(CSGApp initapp){
         app = initapp;
+        
+        schedule = FXCollections.observableArrayList();
+        
+        
+        
+        
+        
     }
+
+    public ObservableList<ScheduleItem> getSchedule() {
+        return schedule;
+    }
+    
+    
     
     @Override
     public void resetData() {

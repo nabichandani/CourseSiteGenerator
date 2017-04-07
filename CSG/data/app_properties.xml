@@ -127,6 +127,24 @@
         <property name="ADDUPDATE_TEXT"         value= "Add/Update"></property>
         <property name="CLEAR_TEXT"         value="Clear"></property>
 
+        <property name="SCHEDULE_TEXT"         value="Schedule"></property>
+        <property name="CALENDER_BOUNDARIES_TEXT"         value="Calender Boundaries"></property>
+        <property name="START_MONDAY_TEXT"         value="Starting Monday:"></property>
+        <property name="END_FRIDAY_TEXT"         value="Ending Friday:"></property>
+        <property name="SCHEDULE_ITEM_TEXT"         value="Schedule Items"></property>
+
+        <property name="TYPE_COL_TEXT"         value="Type"></property>
+        <property name="DATE_COL_TEXT"         value="Date"></property>
+        <property name="TITLE_COL_TEXT"         value="Title"></property>
+        <property name="TOPIC_COL_TEXT"         value="Topic"></property>
+
+        <property name="TYPE_COLON_TEXT"         value="Type:"></property>
+        <property name="DATE_COLON_TEXT"         value="Date:"></property>
+        <property name="TIME_COLON_TEXT"         value="Time:"></property>
+        <property name="TOPIC_COLON_TEXT"         value="Topic:"></property>
+        <property name="LINK_COLON_TEXT"         value="Link:"></property>
+        <property name="CRITERIA_COLON_TEXT"         value="Criteria:"></property>
+
         <!-- WORKSPACE ERROR MESSAGES -->
         <property name="MISSING_TA_NAME_TITLE"          value="Missing TA Name"></property>
         <property name="MISSING_TA_NAME_MESSAGE"        value="You must provide a TA Name"></property>
