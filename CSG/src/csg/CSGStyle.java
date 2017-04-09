@@ -63,6 +63,7 @@ public class CSGStyle extends AppStyleComponent{
     public static String CLASS_LEFT_FOOTER_LABEL = "style_left_footer_label";
     public static String CLASS_RIGHT_FOOTER_LABEL = "style_right_footer_label";
     public static String CLASS_STYLE_NOTE_LABEL = "page_style_note_label";
+    public static String CLASS_COURSE_REG_LABEL = "reg_label";
     
     public static String CLASS_RECITATION_PANE = "recitation_pane";
     public static String CLASS_RECITATION_HEADER = "tab_header";
@@ -78,16 +79,27 @@ public class CSGStyle extends AppStyleComponent{
     
     public static String CLASS_SCHEDULE_PANE = "schedule_pane";
     public static String CLASS_SCHEDULE_HEADER = "tab_header";
-    public static String CLASS_CALENDER_PANE = "schedule_helper_pane";
-    public static String CLASS_CALENDER_HEADER= "schedule_helper_pane_header";
-    public static String CLASS_SCHEDULE_START_MON_LABEL= "schedule_reg_label";
-    public static String CLASS_SCHEDULE_END_FRIDAY_LABEL= "schedule_reg_label";
-    public static String CLASS_SCHEDULE_TABLE_PANE= "schedule_helper_pane";
-    public static String CLASS_SCHEDULE_ITEM_LABEL= "schedule_helper_pane_header";
+    public static String CLASS_CALENDER_PANE = "helper_pane";
+    public static String CLASS_CALENDER_HEADER= "helper_pane_header";
+    public static String CLASS_SCHEDULE_START_MON_LABEL= "reg_label";
+    public static String CLASS_SCHEDULE_END_FRIDAY_LABEL= "reg_label";
+    public static String CLASS_SCHEDULE_TABLE_PANE= "helper_pane";
+    public static String CLASS_SCHEDULE_ITEM_LABEL= "helper_pane_header";
     
-    public static String CLASS_SCHEDULE_ADDEDIT_LABEL= "schedule_helper_pane_header";
-    public static String CLASS_SCHEDULE_REG_SCHEDULE_LABEL= "schedule_reg_label";
+    public static String CLASS_SCHEDULE_ADDEDIT_LABEL= "recitation_addedit_label";
+    public static String CLASS_SCHEDULE_REG_SCHEDULE_LABEL= "reg_label";
+    public static String CLASS_TABLE_COLUMN= "table_column";
     
+    public static String CLASS_PROJECT_PANE= "project_pane";
+    public static String CLASS_PROJECT_LABEL= "tab_header";
+    public static String CLASS_TEAMS_PANE = "helper_pane";
+    public static String CLASS_TEAMS_HEADER = "helper_pane_header";
+   
+   public static String CLASS_TEAMS_ADD_LABEL = "recitation_addedit_label";
+   public static String CLASS_TEAMS_REG_LABEL = "reg_label";
+   
+   public static String CLASS_PROJECT_WHOLE_PANE = "project_pane";
+
     
     // THIS PROVIDES ACCESS TO OTHER COMPONENTS
     private AppTemplate app;
@@ -141,6 +153,15 @@ public class CSGStyle extends AppStyleComponent{
         workspaceComponent.getCourseInfoPane().getStyleClass().add(CLASS_COURSE_INFO_PANE);
         workspaceComponent.getCourseInfoLabel().getStyleClass().add(CLASS_COURSE_INFO_LABEL);
         
+        workspaceComponent.getCourseSubjectLabel().getStyleClass().add(CLASS_COURSE_REG_LABEL);
+        workspaceComponent.getCourseNumberLabel().getStyleClass().add(CLASS_COURSE_REG_LABEL);
+        workspaceComponent.getCourseSemesterLabel().getStyleClass().add(CLASS_COURSE_REG_LABEL);
+        workspaceComponent.getCourseYearLabel().getStyleClass().add(CLASS_COURSE_REG_LABEL);
+        workspaceComponent.getCourseTitleLabel().getStyleClass().add(CLASS_COURSE_REG_LABEL);
+        workspaceComponent.getCourseInsNameLabel().getStyleClass().add(CLASS_COURSE_REG_LABEL);
+        workspaceComponent.getCourseInsHomeLabel().getStyleClass().add(CLASS_COURSE_REG_LABEL);
+        workspaceComponent.getCourseExportDirLabel().getStyleClass().add(CLASS_COURSE_REG_LABEL);
+        
         workspaceComponent.getCourseDetails().getStyleClass().add(CLASS_COURSE_FIRST_BOX);
         workspaceComponent.getCoursePane().getStyleClass().add(CLASS_COURSE_PANE);
         workspaceComponent.getExportLabel().getStyleClass().add(CLASS_COURSE_EXPORT_LABEL);
@@ -185,8 +206,49 @@ public class CSGStyle extends AppStyleComponent{
         workspaceComponent.getScheduleTopicLabel().getStyleClass().add(CLASS_SCHEDULE_REG_SCHEDULE_LABEL);
         workspaceComponent.getScheduleLinkLabel().getStyleClass().add(CLASS_SCHEDULE_REG_SCHEDULE_LABEL);
         workspaceComponent.getScheduleCriteriaLabel().getStyleClass().add(CLASS_SCHEDULE_REG_SCHEDULE_LABEL);
+        
+        workspaceComponent.getProjectPane().getStyleClass().add(CLASS_PROJECT_PANE);
+        workspaceComponent.getProjectWholePane().getStyleClass().add(CLASS_PROJECT_PANE);
+        workspaceComponent.getProjectHeaderLabel().getStyleClass().add(CLASS_PROJECT_LABEL);
+        workspaceComponent.getTeamsPane().getStyleClass().add(CLASS_TEAMS_PANE);
+        workspaceComponent.getTeamsHeaderLabel().getStyleClass().add(CLASS_TEAMS_HEADER);
+        
+        workspaceComponent.getNameColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getEmailColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getUseColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getNavColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getFileNameColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getScriptColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getInstructorColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getDayTimeColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getLocationColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getTa1Column().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getTa2Column().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getTypeColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getDateColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getTitleColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getTopicColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getTeamNameColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getColorColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getTextColorColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getLinkColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        workspaceComponent.getSectionColumn().getStyleClass().add(CLASS_TABLE_COLUMN);
+        
+        workspaceComponent.getTeamNameLabel().getStyleClass().add(CLASS_TEAMS_REG_LABEL); 
+        workspaceComponent.getTeamColorLabel().getStyleClass().add(CLASS_TEAMS_REG_LABEL);
+        workspaceComponent.getTeamLinkLabel().getStyleClass().add(CLASS_TEAMS_REG_LABEL);
+        workspaceComponent.getTeamTextColorLabel().getStyleClass().add(CLASS_TEAMS_REG_LABEL);
+        workspaceComponent.getTeamAddEditLabel().getStyleClass().add(CLASS_TEAMS_ADD_LABEL);
+        
+        workspaceComponent.getStudentPane().getStyleClass().add(CLASS_TEAMS_PANE);
+        workspaceComponent.getStudentHeaderLabel().getStyleClass().add(CLASS_TEAMS_HEADER);
+        workspaceComponent.getStudentAddEditLabel().getStyleClass().add(CLASS_TEAMS_ADD_LABEL);
+        
+        workspaceComponent.getStudentFNameLabel().getStyleClass().add(CLASS_TEAMS_REG_LABEL);
+        workspaceComponent.getStudentLNameLabel().getStyleClass().add(CLASS_TEAMS_REG_LABEL);
+        workspaceComponent.getStudentRoleLabel().getStyleClass().add(CLASS_TEAMS_REG_LABEL);
+        workspaceComponent.getStudentTeamLabel().getStyleClass().add(CLASS_TEAMS_REG_LABEL);
     }
-    
     /**
      * This method initializes the style for all UI components in
      * the office hours grid. Note that this should be called every

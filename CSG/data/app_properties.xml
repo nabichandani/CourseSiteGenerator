@@ -145,6 +145,28 @@
         <property name="LINK_COLON_TEXT"         value="Link:"></property>
         <property name="CRITERIA_COLON_TEXT"         value="Criteria:"></property>
 
+        <property name="PROJECT_TEXT"         value="Projects"></property>
+        <property name="TEAMS_TEXT"         value="Teams"></property>
+        <property name="COLOR_TEXT"         value="Color (hex#)"></property>
+        <property name="TEXT_COLOR_TEXT"         value="Text Color (hex#)"></property>
+        <property name="LINK_TEXT"         value="Link"></property>
+
+        <property name="NAME_COLON_TEXT"         value="Name:"></property>
+        <property name="COLOR_COLON_TEXT"         value="Color:"></property>
+        <property name="TEXT_COLOR_COLON_TEXT"         value="Text Color:"></property>
+        <property name="LINK_COLON_TEXT"         value="Link:"></property>
+
+        <property name="STUDENT_TEXT"         value="Students"></property>
+        <property name="FIRSTNAME_TEXT"         value="First Name"></property>
+        <property name="LASTNAME_TEXT"         value="Last Name"></property>
+        <property name="STUDENT_TEAM_TEXT"         value="Team"></property>
+        <property name="ROLE_TEXT"         value="Role"></property>
+
+        <property name="FIRSTNAME_COLON_TEXT"         value="First Name:"></property>
+        <property name="LASTNAME_COLON_TEXT"         value="Last Name:"></property>
+        <property name="STUDENT_TEAM_COLON_TEXT"         value="Team:"></property>
+        <property name="ROLE_COLON_TEXT"         value="Role:"></property>
+
         <!-- WORKSPACE ERROR MESSAGES -->
         <property name="MISSING_TA_NAME_TITLE"          value="Missing TA Name"></property>
         <property name="MISSING_TA_NAME_MESSAGE"        value="You must provide a TA Name"></property>

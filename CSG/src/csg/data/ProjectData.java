@@ -7,6 +7,8 @@ package csg.data;
 
 import csg.CSGApp;
 import djf.components.AppDataComponent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -15,10 +17,24 @@ import djf.components.AppDataComponent;
 public class ProjectData implements AppDataComponent{
     
     CSGApp app;
+    ObservableList<Team> teams;
+    ObservableList<Student> students;
     
     public ProjectData(CSGApp initapp){
+        teams = FXCollections.observableArrayList();
+        students = FXCollections.observableArrayList();
+        
         app = initapp;
     }
+
+    public ObservableList<Team> getTeams() {
+        return teams;
+    }
+
+    public ObservableList<Student> getStudents() {
+        return students;
+    }
+    
     
     @Override
     public void resetData() {

@@ -12,10 +12,10 @@ package csg.data;
 public class Student {
     String firstName;
     String lastName;
-    Team team;
+    String team;
     String role;
     
-    public Student(String firstName, String lastName, Team team, String role){
+    public Student(String firstName, String lastName, String team, String role){
         this.firstName = firstName;
         this.lastName = lastName;
         this.team = team;
@@ -38,11 +38,11 @@ public class Student {
         this.lastName = lastName;
     }
 
-    public Team getTeam() {
+    public String getTeam() {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void setTeam(String team) {
         this.team = team;
     }
 
@@ -57,7 +57,7 @@ public class Student {
     public boolean isUnique(Student student){
         if(this.firstName.equals(student.getFirstName())){
              if(this.lastName.equals(student.getLastName())){
-                  if(this.team.getName().equals(student.getTeam().getName())){
+                  if(this.team.equals(student.getTeam())){
                        if(this.role.equals(student.getRole())){
                            return true;
                        }
