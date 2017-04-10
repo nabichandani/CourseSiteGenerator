@@ -8,7 +8,7 @@
 -->
 <properties>
     <property_list>
-        <property name="APP_TITLE"	    value="TA Manager"></property>
+        <property name="APP_TITLE"	    value="CSG Manager"></property>
 	<property name="APP_LOGO"	    value="TAManagerLogo.png"></property>
 	<property name="APP_PATH_CSS"	    value="style/"></property>
 	<property name="APP_CSS"	    value="csg_style.css"></property>
@@ -80,6 +80,7 @@
 
         <!-- WORKSPACE CONTROLS STUFF -->
         <property name="TAS_HEADER_TEXT"                value="Teaching Assistants"></property>
+        <property name="UNDERGRAD_COLUMN_TEXT"          value="Undergrad"></property>
         <property name="NAME_COLUMN_TEXT"               value="Name"></property>
         <property name="EMAIL_COLUMN_TEXT"              value="Email"></property>
         <property name="NAME_PROMPT_TEXT"               value="Name"></property>
@@ -166,6 +167,19 @@
         <property name="LASTNAME_COLON_TEXT"         value="Last Name:"></property>
         <property name="STUDENT_TEAM_COLON_TEXT"         value="Team:"></property>
         <property name="ROLE_COLON_TEXT"         value="Role:"></property>
+        <property name="EXPORT_LOCATION_TEXT"         value="Select an export location"></property>
+        <property name="TEMPLATE_LOCATION_TEXT"         value="Choose a template location"></property>
+
+        <property name="SUBMIT_TEXT"         value="Submit"></property>
+        <property name="START_TIME_TEXT"         value="Start Time"></property>
+        <property name="END_TIME_TEXT"         value="End Time"></property>
+        <property name="UPDATE_TA"         value="Update TA"></property>
+
+        <property name="COURSE_TAB"         value="Course Data"></property>
+        <property name="TA_TAB"         value="TA Data"></property>
+        <property name="REC_TAB"         value="Recitation Data"></property>
+        <property name="SCHEDULE_TAB"         value="Schedule Data"></property>
+        <property name="PROJECT_TAB"         value="Project Data"></property>
 
         <!-- WORKSPACE ERROR MESSAGES -->
         <property name="MISSING_TA_NAME_TITLE"          value="Missing TA Name"></property>

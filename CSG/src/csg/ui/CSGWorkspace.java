@@ -16,8 +16,15 @@ import csg.data.Student;
 import csg.data.TAData;
 import csg.data.TeachingAssistant;
 import csg.data.Team;
+import csg.files.CSGFiles;
 import djf.components.AppDataComponent;
 import djf.components.AppWorkspaceComponent;
+import static djf.settings.AppPropertyType.GRID_CONFIRMATION_MESSAGE;
+import static djf.settings.AppPropertyType.GRID_CONFIRMATION_TITLE;
+import static djf.settings.AppPropertyType.GRID_ERROR_MESSAGE;
+import static djf.settings.AppPropertyType.GRID_ERROR_TITLE;
+import djf.ui.AppMessageDialogSingleton;
+import djf.ui.AppYesNoCancelDialogSingleton;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.scene.shape.Rectangle;
@@ -39,6 +46,7 @@ import javafx.scene.control.TableColumn;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -256,31 +264,32 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                  
     public CSGWorkspace(CSGApp initApp){
         app = initApp;
+        controller = new CSGControls(app);
         PropertiesManager props = PropertiesManager.getPropertiesManager();     
         TabPane courseTabPane = new TabPane();
         
         Tab courseTab = new Tab();
-        courseTab.setText("Course Data");
+        courseTab.setText(props.getProperty(CSGProp.COURSE_TAB.toString()));
         courseTab.setClosable(false);
         courseTabPane.getTabs().add(courseTab);
         
         Tab taTab = new Tab();
-        taTab.setText("TA Data");
+        taTab.setText(props.getProperty(CSGProp.TA_TAB.toString()));
         taTab.setClosable(false);
         courseTabPane.getTabs().add(taTab);
         
         Tab recitationTab = new Tab();
-        recitationTab.setText("Recitation Data");
+        recitationTab.setText(props.getProperty(CSGProp.REC_TAB.toString()));
         recitationTab.setClosable(false);
         courseTabPane.getTabs().add(recitationTab);
         
         Tab scheduleTab = new Tab();
-        scheduleTab.setText("Schedule Data");
+        scheduleTab.setText(props.getProperty(CSGProp.SCHEDULE_TAB.toString()));
         scheduleTab.setClosable(false);
         courseTabPane.getTabs().add(scheduleTab);
         
         Tab projectTab = new Tab();
-        projectTab.setText("Project Data");
+        projectTab.setText(props.getProperty(CSGProp.PROJECT_TAB.toString()));
         projectTab.setClosable(false);
         courseTabPane.getTabs().add(projectTab);
         
@@ -291,7 +300,17 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         tasHeaderBox = new HBox();
         String tasHeaderText = props.getProperty(CSGProp.TAS_HEADER_TEXT.toString());
         tasHeaderLabel = new Label(tasHeaderText);
+        
+        Rectangle taRectangle = new Rectangle(40, 40, Color.WHITE);
+        taRectangle.setStroke(Color.BLACK);
+        Text taText = new Text("-");
+        taText.setBoundsType(TextBoundsType.VISUAL); 
+        StackPane taRectPane = new StackPane();
+        taRectPane.setPadding(new Insets(0,0,0, 10));
+        taRectPane.getChildren().addAll(taRectangle, taText);
+        
         tasHeaderBox.getChildren().add(tasHeaderLabel);
+        tasHeaderBox.getChildren().add(taRectPane);
 
         // MAKE THE TABLE AND SETUP THE DATA MODEL
         taTable = new TableView();
@@ -299,8 +318,16 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         TAData data = (TAData) app.getTADataComponent();
         ObservableList<TeachingAssistant> tableData = data.getTeachingAssistants();
         taTable.setItems(tableData);
+        String undergradColumnText = props.getProperty(CSGProp.UNDERGRAD_COLUMN_TEXT.toString());
         String nameColumnText = props.getProperty(CSGProp.NAME_COLUMN_TEXT.toString());
         String emailColumnText = props.getProperty(CSGProp.EMAIL_COLUMN_TEXT.toString());
+        
+        underGradColumn = new TableColumn(undergradColumnText);
+        underGradColumn.setCellValueFactory(
+                new PropertyValueFactory<TeachingAssistant, Boolean>("undergrad")
+        );
+        taTable.getColumns().add(underGradColumn);
+        
         nameColumn = new TableColumn(nameColumnText);
         nameColumn.setCellValueFactory(
                 new PropertyValueFactory<TeachingAssistant, String>("name")
@@ -324,7 +351,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         taEmailTextField = new TextField();
         taEmailTextField.setPromptText(emailPromptText);
         taAddButton = new Button(addButtonText);
-        taClearButton = new Button("Clear");
+        taClearButton = new Button();
+        taClearButton.setText(props.getProperty(CSGProp.CLEAR_TEXT.toString()));
         addBox = new HBox();
         taNameTextField.prefWidthProperty().bind(addBox.widthProperty().multiply(.4));
         taEmailTextField.prefWidthProperty().bind(addBox.widthProperty().multiply(.4));
@@ -334,7 +362,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         addBox.getChildren().add(taEmailTextField);
         addBox.getChildren().add(taAddButton);
         addBox.getChildren().add(taClearButton);
-        taClearButton.setDisable(true);
 
         // INIT THE HEADER ON THE RIGHT
         officeHoursHeaderBox = new HBox();
@@ -393,14 +420,15 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         ComboBox endTime = new ComboBox();
         startTime.getItems().addAll(timeStringList);
         endTime.getItems().addAll(timeStringList);
-        Button submitButton = new Button("Submit");
+        Button submitButton = new Button(props.getProperty
+            (CSGProp.SUBMIT_TEXT.toString()));
         comboBoxPane.getChildren().add(startTime);
         comboBoxPane.getChildren().add(endTime);
         comboBoxPane.getChildren().add(submitButton);
-        startTime.setValue("Start Time");
-        endTime.setValue("End Time");
-        startTime.setPrefWidth(150);
-        endTime.setPrefWidth(150);
+        startTime.setValue(props.getProperty(CSGProp.START_TIME_TEXT.toString()));
+        endTime.setValue(props.getProperty(CSGProp.END_TIME_TEXT.toString()));
+        startTime.setPrefWidth(200);
+        endTime.setPrefWidth(200);
         wholeRightPane.getChildren().add(rightPane);
         wholeRightPane.getChildren().add(comboPane);
         
@@ -524,7 +552,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         Button exportChangeButton = new Button();
         exportChangeButton.setText(changeButtonText);
         exportLabel = new Label();             
-        String exportDirLoc= "Select an export location";
+        String exportDirLoc= props.getProperty(CSGProp
+            .EXPORT_LOCATION_TEXT.toString());
         exportLabel.setText(exportDirLoc);
         
         exportChangeButton.setOnAction(e ->{
@@ -556,7 +585,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseTemplatePane.getChildren().add(courseDirInfoLabel);
         
         //Template Location Label
-        String courseTemplateLocText = "Choose a template location";
+        String courseTemplateLocText = props.getProperty(CSGProp.TEMPLATE_LOCATION_TEXT.toString());;
         courseTemplateLocLabel = new Label();
         courseTemplateLocLabel.setPadding(new Insets(0,0,0,12));
         courseTemplateLocLabel.setText(courseTemplateLocText);
@@ -635,7 +664,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         templateTable.getColumns().add(navColumn);
         templateTable.getColumns().add(fileNameColumn);
         templateTable.getColumns().add(scriptColumn);
-        templateTable.setMinWidth(533);
+        templateTable.setMinWidth(530);
         templateTable.setMaxHeight(170);
         
         
@@ -1434,6 +1463,254 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         
         ((BorderPane) workspace).setCenter(courseTabPane);
+        
+        //This is now the end of the creation of GUIS and now includes
+        // event handlers.
+            
+        startTime.setOnMouseClicked(e ->{
+            int indexOfSplit = 0;
+            String time = (String) endTime.getValue();
+            if(endTime.getValue() == null || endTime.getValue().equals("End Time")){
+                
+            }
+            else{
+            for(int i = 0; i < timeStringList.size(); i++){
+                if(timeStringList.get(i).equals(time)){
+                    indexOfSplit = i;
+                    break;
+                }
+            }
+            List<String> tempList = timeStringList.subList(0, indexOfSplit);
+            startTime.getItems().clear();    
+            startTime.getItems().addAll(tempList);
+            }
+        });
+        
+        endTime.setOnMouseClicked(e ->{
+            int indexOfSplit = 0;
+            String time = (String) startTime.getValue();
+            if(startTime.getValue() == null || startTime.getValue().equals("Start Time")){
+                
+            }
+            else{
+            for(int i = 0; i < timeStringList.size(); i++){
+                if(timeStringList.get(i).equals(time)){
+                    indexOfSplit = i;
+                    break;
+                }
+            }
+            List<String> tempList = timeStringList.subList(indexOfSplit + 1, timeStringList.size());
+            endTime.getItems().clear();    
+            endTime.getItems().addAll(tempList);
+            }
+        });
+        
+       submitButton.setOnAction(e ->{
+           if(startTime.getValue() == null ||startTime.getValue().equals("Start Time") ||
+             endTime.getValue() == null || endTime.getValue().equals("End Time")){
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+	        dialog.show(props.getProperty(GRID_ERROR_TITLE), props.getProperty(GRID_ERROR_MESSAGE));
+           }
+           else{
+               String start = (String)startTime.getValue();
+               String end = (String)endTime.getValue();
+               int startInt;
+               int endInt;
+            if(start.contains("AM")){
+            if(start.equals("12:00 AM")){
+                startInt = 0;
+            }
+            else{
+                start = start.substring(0, 2);
+                start = start.replace(":", "");
+                startInt = Integer.parseInt(start);
+            }
+        }
+        else{
+            if(start.equals("12:00 PM")){
+                startInt = 12;
+            }
+            else{
+             start = start.substring(0, 2);
+             start = start.replace(":", "");
+             startInt = Integer.parseInt(start);
+             startInt += 12;
+            }
+        }
+        if(end.contains("AM")){
+            if(end.equals("12:00 AM")){
+                endInt = 0;
+            }
+            else{
+                end = end.substring(0,2);
+                end = end.replace(":", "");
+                endInt = Integer.parseInt(end);
+            }
+        }
+        else{
+            if(end.equals("12:00 PM")){
+                endInt = 12;
+            }
+            else{
+                end = end.substring(0,2);
+                end = end.replace(":", "");
+                endInt = Integer.parseInt(end);
+                endInt += 12;
+            }
+            }   
+        try{
+            if(startInt > data.getStartHour() || endInt < data.getEndHour() || 
+            (startInt < data.getStartHour() && endInt < data.getStartHour()) || 
+            (startInt > data.getEndHour() && endInt > data.getEndHour())){
+               AppYesNoCancelDialogSingleton yesNoDialog = AppYesNoCancelDialogSingleton.getSingleton();
+               yesNoDialog.show(props.getProperty(GRID_CONFIRMATION_TITLE), props.getProperty(GRID_CONFIRMATION_MESSAGE));
+               String selection = yesNoDialog.getSelection();
+               if(selection.equals(AppYesNoCancelDialogSingleton.NO) ||
+                       selection.equals(AppYesNoCancelDialogSingleton.CANCEL)){
+               }
+               else if (selection.equals(AppYesNoCancelDialogSingleton.YES)) {
+                    editedGrid((String)startTime.getValue(),(String) endTime.getValue());
+               }
+            }
+            else{
+                editedGrid((String)startTime.getValue(),(String) endTime.getValue());
+            }
+        }catch(NullPointerException s){
+        }
+           } 
+       });
+        
+        taTable.setOnMouseClicked(e -> {
+            try{
+                if(taTable.getSelectionModel().getSelectedItem() == null){
+                    
+                }
+                else{
+                    taAddButton.setText(props.getProperty(CSGProp.UPDATE_TA
+                    .toString()));
+                    TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
+                    taNameTextField.setText(clickedName.getName());
+                    taEmailTextField.setText(clickedName.getEmail());
+                }
+            }catch(NullPointerException ex){    
+           }
+        });
+        
+        taTable.setOnKeyPressed(e -> {
+           if(e.getCode() == KeyCode.DELETE)
+            try{
+             
+            String name = taTable.getFocusModel().getFocusedItem().getName();
+            String email = taTable.getFocusModel().getFocusedItem().getEmail();
+            HashMap<String, String> taOfficeHours = new HashMap<String,String>();
+            for(String key: data.getOfficeHours().keySet()){
+                String val = data.getOfficeHours().get(key).getValue();
+                taOfficeHours.put(key, val);   
+            }
+            controller.handleDeleteTA();
+            if(taAddButton.getText().equals("Update TA")){
+                TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
+                taNameTextField.setText(clickedName.getName());
+                taEmailTextField.setText(clickedName.getEmail());
+            }
+            if(taTable.getItems().size() == 0){
+                taAddButton.setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+                    .toString()));
+                taNameTextField.clear();
+                taEmailTextField.clear(); 
+            }
+            }
+           catch(NullPointerException t){
+                taAddButton.setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+                    .toString()));
+                taNameTextField.clear();
+                taEmailTextField.clear();
+                taNameTextField.requestFocus();  
+           }
+        });
+        
+                //eventHandler for clicking rectangle
+        taRectangle.setOnMouseClicked(e ->{
+            try{
+             
+            String name = taTable.getFocusModel().getFocusedItem().getName();
+            String email = taTable.getFocusModel().getFocusedItem().getEmail();
+            HashMap<String, String> taOfficeHours = new HashMap<String,String>();
+            for(String key: data.getOfficeHours().keySet()){
+                String val = data.getOfficeHours().get(key).getValue();
+                taOfficeHours.put(key, val);   
+            }
+            controller.handleDeleteTA();
+            if(taAddButton.getText().equals("Update TA")){
+                TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
+                taNameTextField.setText(clickedName.getName());
+                taEmailTextField.setText(clickedName.getEmail());
+            }  
+            }
+           catch(NullPointerException t){
+                taAddButton.setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+                    .toString()));
+                taNameTextField.clear();
+                taEmailTextField.clear();
+                taNameTextField.requestFocus();  
+           }
+        });
+        // CONTROLS FOR ADDING TAs
+        
+        taNameTextField.setOnAction(e -> {
+            if(taAddButton.getText().equals("Update TA")){
+                TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
+                controller.editTA(clickedName);
+                TeachingAssistant clickedName2 = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
+                taNameTextField.setText(clickedName2.getName());
+                taEmailTextField.setText(clickedName2.getEmail());
+            }
+            else{
+                String name = taNameTextField.getText();
+                String email = taEmailTextField.getText();
+                controller.handleAddTA();
+            }
+        });
+        
+        
+        taEmailTextField.setOnAction(e -> {
+            if(taAddButton.getText().equals("Update TA")){
+                TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
+                controller.editTA(clickedName);
+                TeachingAssistant clickedName2 = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
+                taNameTextField.setText(clickedName2.getName());
+                taEmailTextField.setText(clickedName2.getEmail());
+            }
+            else{
+                String name = taNameTextField.getText();
+                String email = taEmailTextField.getText();
+                controller.handleAddTA();
+            }
+        });
+        
+        taAddButton.setOnAction(e -> {
+            if(taAddButton.getText().equals("Update TA")){
+                TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
+                controller.editTA(clickedName);
+                TeachingAssistant clickedName2 = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
+                taNameTextField.setText(clickedName2.getName());
+                taEmailTextField.setText(clickedName2.getEmail());
+            }
+            else{
+                String name = taNameTextField.getText();
+                String email = taEmailTextField.getText();
+                controller.handleAddTA();
+            }
+        });
+        
+        taClearButton.setOnAction(e -> {
+            taAddButton.setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+                    .toString()));
+            taNameTextField.clear();
+            taEmailTextField.clear();
+            taNameTextField.requestFocus(); 
+
+    });
     }
     
     public HBox getTAsHeaderBox() {
@@ -1905,6 +2182,10 @@ public class CSGWorkspace extends AppWorkspaceComponent{
 
     @Override
     public void resetWorkspace() {
+        // CLEAR OUT THE GRID PANE
+        officeHoursGridPane.getChildren().clear();
+        
+        // AND THEN ALL THE GRID PANES AND LABELS
         officeHoursGridTimeHeaderPanes.clear();
         officeHoursGridTimeHeaderLabels.clear();
         officeHoursGridDayHeaderPanes.clear();
@@ -1920,8 +2201,80 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         TAData taData = (TAData)dataComponent;
         reloadOfficeHoursGrid(taData);
     }
+    
+    public void editedGrid(String start, String end){
+        int startInt;
+        int endInt;
+        TAData data = (TAData) app.getTADataComponent();
+        CSGFiles file = (CSGFiles) app.getFileComponent();
+        if(start.contains("AM")){
+            if(start.equals("12:00 AM")){
+                startInt = 0;
+            }
+            else{
+                start = start.substring(0, 2);
+                start = start.replace(":", "");
+                startInt = Integer.parseInt(start);
+            }
+        }
+        else{
+            if(start.equals("12:00 PM")){
+                startInt = 12;
+            }
+            else{
+             start = start.substring(0, 2);
+             start = start.replace(":", "");
+             startInt = Integer.parseInt(start);
+             startInt += 12;
+            }
+        }
+        if(end.contains("AM")){
+            if(end.equals("12:00 AM")){
+                endInt = 0;
+            }
+            else{
+                end = end.substring(0,2);
+                end = end.replace(":", "");
+                endInt = Integer.parseInt(end);
+            }
+        }
+        else{
+            if(end.equals("12:00 PM")){
+                endInt = 12;
+            }
+            else{
+                end = end.substring(0,2);
+                end = end.replace(":", "");
+                endInt = Integer.parseInt(end);
+                endInt += 12;
+            }
+            }       
+        HashMap<String, StringProperty> taOfficeHours = new HashMap<String,StringProperty>(data.getOfficeHours());
+        for(String key: data.getOfficeHours().keySet()){
+            taOfficeHours.put(key, data.getOfficeHours().get(key));   
+        }
+        int prevStartIndex = data.getStartHour() * 2;
+        int prevStart = data.getStartHour();
+        int prevEnd = data.getEndHour();
+        resetWorkspace(); 
+        data.initOfficeHours(startInt, endInt);
+        for(String key: taOfficeHours.keySet()){
+            String[] keyArr = key.split("_");
+            int hour = Integer.parseInt(keyArr[1]);
+            int startIndex = 2 * startInt;
+            int endIndex = 2 * endInt;
+            hour = (hour - 1) + prevStartIndex;
+            if(hour == prevStartIndex - 1){   
+            }
+            else if(hour >= startIndex && hour < endIndex){
+                hour = hour - startIndex + 1;
+                String newKey = keyArr[0] + "_" + hour;
+                data.addToGrid(newKey, taOfficeHours.get(key).getValue());
+            }
+        }
+    }
 
-    public void reloadOfficeHoursGrid(TAData dataComponent) {        
+        public void reloadOfficeHoursGrid(TAData dataComponent) {        
         ArrayList<String> gridHeaders = dataComponent.getGridHeaders();
 
         // ADD THE TIME HEADERS
@@ -1945,7 +2298,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             dataComponent.getCellTextProperty(col, row).set(buildCellText(i, "00"));
             addCellToGrid(dataComponent, officeHoursGridTimeCellPanes, officeHoursGridTimeCellLabels, col, row+1);
             dataComponent.getCellTextProperty(col, row+1).set(buildCellText(i, "30"));
-
+        
             // END TIME COLUMN
             col++;
             int endHour = i;
@@ -1963,7 +2316,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             }
             row += 2;
         }
-
         // CONTROLS FOR TOGGLING TA OFFICE HOURS
         for (Pane p : officeHoursGridTACellPanes.values()) {
             p.setOnMouseClicked(e -> {
@@ -2007,7 +2359,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     }
     
     public void addCellToGrid(TAData dataComponent, HashMap<String, Pane> panes, HashMap<String, Label> labels, int col, int row) {       
-        // MAKE THE LABEL IN A PANE
+      // MAKE THE LABEL IN A PANE
         Label cellLabel = new Label("");
         HBox cellPane = new HBox();
         cellPane.setAlignment(Pos.CENTER);
@@ -2027,8 +2379,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         // AND FINALLY, GIVE THE TEXT PROPERTY TO THE DATA MANAGER
         // SO IT CAN MANAGE ALL CHANGES
-        dataComponent.setCellProperty(col, row, cellLabel.textProperty());        
+        dataComponent.setCellProperty(col, row, cellLabel.textProperty());          
     }
+    
         public String buildCellText(int militaryHour, String minutes) {
         // FIRST THE START AND END CELLS
         int hour = militaryHour;

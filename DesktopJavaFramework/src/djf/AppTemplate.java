@@ -7,6 +7,11 @@ import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
 import static djf.settings.AppPropertyType.*;
 import static djf.settings.AppStartupConstants.*;
+import java.util.Optional;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import properties_manager.InvalidXMLFileFormatException;
 
 /**
@@ -110,6 +115,31 @@ public abstract class AppTemplate extends Application {
 //	// LET'S START BY INITIALIZING OUR DIALOGS
 	AppMessageDialogSingleton messageDialog = AppMessageDialogSingleton.getSingleton();
 	messageDialog.init(primaryStage);
+        
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Language");
+        alert.setHeaderText("Please Select a Language.");
+        alert.setContentText("Choose your option.");
+
+        ButtonType buttonTypeOne = new ButtonType("English");
+        ButtonType buttonTypeTwo = new ButtonType("Spanish");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        boolean isEnglish = true;
+        if (result.get() == buttonTypeOne){
+            isEnglish = true;
+            
+        } else if (result.get() == buttonTypeTwo) {
+            isEnglish = false;
+            
+        } else {
+            System.exit(0);
+            // ... user chose CANCEL or closed the dialog
+}
+        
 	AppYesNoCancelDialogSingleton yesNoDialog = AppYesNoCancelDialogSingleton.getSingleton();
 	yesNoDialog.init(primaryStage);
 	PropertiesManager props = PropertiesManager.getPropertiesManager();
@@ -117,7 +147,13 @@ public abstract class AppTemplate extends Application {
 	try {
 	    // LOAD APP PROPERTIES, BOTH THE BASIC UI STUFF FOR THE FRAMEWORK
 	    // AND THE CUSTOM UI STUFF FOR THE WORKSPACE
-	    boolean success = loadProperties(APP_PROPERTIES_FILE_NAME);
+            boolean success = true;
+            if(isEnglish){
+	        success = loadProperties(APP_PROPERTIES_FILE_NAME);
+            }
+            else{
+                success = loadProperties(APP_PROPERTIES_OTHER_FILE_NAME); 
+            }
 	    
 	    if (success) {
                 // GET THE TITLE FROM THE XML FILE

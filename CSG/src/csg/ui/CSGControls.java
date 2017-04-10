@@ -52,8 +52,6 @@ public class CSGControls {
         TextField emailTextField = workspace.getEmailTextField();
         String email = emailTextField.getText();
         
-        //change this
-        boolean ug = false;
         
         // WE'LL NEED TO ASK THE DATA SOME QUESTIONS TOO
         TAData data = (TAData)app.getTADataComponent();
@@ -80,7 +78,7 @@ public class CSGControls {
             if(email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")){
                 // ADD THE NEW TA TO THE DATA
-                data.addTA(name, email, ug);
+                data.addTA(name, email, false);
             
             
             // CLEAR THE TEXT FIELDS
