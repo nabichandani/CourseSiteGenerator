@@ -55,6 +55,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -68,6 +69,7 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import properties_manager.PropertiesManager;
 import sun.applet.Main;
 
@@ -87,7 +89,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     
     // For creating the table of Teaching Assistant Tab.
     TableView <TeachingAssistant> taTable;
-    TableColumn<TeachingAssistant, Boolean> underGradColumn;
+    TableColumn<TeachingAssistant, CheckBox> underGradColumn;
     TableColumn<TeachingAssistant, String> nameColumn;
     TableColumn<TeachingAssistant, String> emailColumn;
     
@@ -323,12 +325,21 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         String emailColumnText = props.getProperty(CSGProp.EMAIL_COLUMN_TEXT.toString());
         
         underGradColumn = new TableColumn(undergradColumnText);
+        underGradColumn.setPrefWidth(162);
         underGradColumn.setCellValueFactory(
-                new PropertyValueFactory<TeachingAssistant, Boolean>("undergrad")
+                new PropertyValueFactory<TeachingAssistant, CheckBox>("undergrad")
         );
+        underGradColumn.setCellFactory(new Callback<TableColumn<TeachingAssistant, CheckBox>, TableCell<TeachingAssistant, CheckBox>>(){
+            public TableCell<TeachingAssistant, CheckBox> call(TableColumn<TeachingAssistant, CheckBox> param){
+                return new CheckBoxTableCell<TeachingAssistant,CheckBox>();
+            }
+        });
+        taTable.setEditable(true);
+            
         taTable.getColumns().add(underGradColumn);
         
         nameColumn = new TableColumn(nameColumnText);
+        nameColumn.setPrefWidth(300);
         nameColumn.setCellValueFactory(
                 new PropertyValueFactory<TeachingAssistant, String>("name")
         );
@@ -337,6 +348,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         emailColumn.setCellValueFactory(
                 new PropertyValueFactory<TeachingAssistant, String>("email")
         );
+        emailColumn.setPrefWidth(480);
         taTable.getColumns().add(emailColumn);
         
       
@@ -466,15 +478,16 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox courseSubNum = new HBox();
         String courseSubjectText = props.getProperty(CSGProp.SUBJECT_TEXT.toString());
         courseSubjectLabel = new Label(courseSubjectText);
+        courseSubjectLabel.setPrefWidth(150);
         courseSubjectLabel.setPadding(new Insets(0,0,0,10));
         courseSubNum.getChildren().add(courseSubjectLabel);
         ComboBox subjectCombo = new ComboBox();
         subjectCombo.setPrefWidth(100);
         courseSubNum.getChildren().add(subjectCombo);
         
-        courseSubNum.setSpacing(200);
         String courseNumberText = props.getProperty(CSGProp.NUMBER_TEXT.toString());
         courseNumberLabel = new Label(courseNumberText);
+        courseNumberLabel.setPrefWidth(98);
         courseSubNum.getChildren().add(courseNumberLabel);
         courseSubNum.setSpacing(89);
         ComboBox numCombo = new ComboBox();
@@ -486,6 +499,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox courseSemYear = new HBox();
         String courseSemesterText = props.getProperty(CSGProp.SEMESTER_TEXT.toString());
         courseSemesterLabel = new Label(courseSemesterText);
+        courseSemesterLabel.setPrefWidth(158);
         courseSemesterLabel.setPadding(new Insets(0,0,0,10));
         courseSemYear.getChildren().add(courseSemesterLabel);
         ComboBox semCombo = new ComboBox();
@@ -494,7 +508,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         String courseYearText = props.getProperty(CSGProp.YEAR_TEXT.toString());
         courseYearLabel = new Label(courseYearText);
-        courseYearLabel.setPadding(new Insets(0,26,0,9)); 
+        courseYearLabel.setPrefWidth(118);
+        courseYearLabel.setPadding(new Insets(0,0,0,9)); 
         courseSemYear.getChildren().add(courseYearLabel);
         courseSemYear.setSpacing(80);
         
@@ -507,11 +522,12 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox courseTitle = new HBox();
         courseTitle.setSpacing(106);
         String courseTitleText = props.getProperty(CSGProp.TITLE_TEXT.toString());
-        courseTitleLabel = new Label(courseTitleText);
+        courseTitleLabel = new Label(courseTitleText);       
+        courseTitleLabel.setPrefWidth(130);
         courseTitleLabel.setPadding(new Insets(0,0,0,10));
         courseTitle.getChildren().add(courseTitleLabel);
         TextField titleTextField = new TextField();
-        titleTextField.setMinWidth(443);
+        titleTextField.setMinWidth(480);
         courseTitle.getChildren().add(titleTextField);
         courseDetails.getChildren().add(courseTitle);
         
@@ -520,10 +536,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseInsName.setSpacing(15);
         String courseInsNameText = props.getProperty(CSGProp.INSTRUCTOR_NAME_TEXT.toString());
         courseInsNameLabel = new Label(courseInsNameText);
+        courseInsNameLabel.setPrefWidth(222);
         courseInsNameLabel.setPadding(new Insets(0,0,0,10));
         courseInsName.getChildren().add(courseInsNameLabel);
         TextField insNameTextField = new TextField();
-        insNameTextField.setMinWidth(443);
+        insNameTextField.setMinWidth(480);
         courseInsName.getChildren().add(insNameTextField);
         courseDetails.getChildren().add(courseInsName);
         
@@ -532,9 +549,10 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseInsHome.setSpacing(15);
         String courseInsHomeText = props.getProperty(CSGProp.INSTRUCTOR_HOME_TEXT.toString());
         courseInsHomeLabel = new Label(courseInsHomeText);
+        courseInsHomeLabel.setPrefWidth(220);
         courseInsHome.getChildren().add(courseInsHomeLabel);
         TextField insHomeTextField = new TextField();
-        insHomeTextField.setMinWidth(443);
+        insHomeTextField.setMinWidth(480);
         courseInsHomeLabel.setPadding(new Insets(0,0,0,10));
         courseInsHome.getChildren().add(insHomeTextField);
         courseDetails.getChildren().add(courseInsHome);
@@ -545,13 +563,15 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseExportDir.setPadding(new Insets(5,0,0,0));
         String courseExportDirText = props.getProperty(CSGProp.EXPORT_DIR_TEXT.toString());
         courseExportDirLabel = new Label(courseExportDirText);
-        courseExportDirLabel.setPadding(new Insets(0,37,0,12));
+        courseExportDirLabel.setPrefWidth(220);
+        courseExportDirLabel.setPadding(new Insets(0,0,0,12));
         courseExportDir.getChildren().add(courseExportDirLabel);
         courseDetails.getChildren().add(courseExportDir);
         String changeButtonText = props.getProperty(CSGProp.CHANGE_TEXT.toString());
         Button exportChangeButton = new Button();
         exportChangeButton.setText(changeButtonText);
-        exportLabel = new Label();             
+        exportLabel = new Label();  
+        exportLabel.setPrefWidth(390);
         String exportDirLoc= props.getProperty(CSGProp
             .EXPORT_LOCATION_TEXT.toString());
         exportLabel.setText(exportDirLoc);
@@ -664,8 +684,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         templateTable.getColumns().add(navColumn);
         templateTable.getColumns().add(fileNameColumn);
         templateTable.getColumns().add(scriptColumn);
-        templateTable.setMinWidth(530);
-        templateTable.setMaxHeight(170);
+        //templateTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        templateTable.setPrefSize(570, 168);
         
         
         //Third and last pane in the Course Tab
@@ -684,6 +704,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         pageStylePane.getChildren().add(bannerStylePane);
         String bannerText = props.getProperty(CSGProp.BANNER_IMAGE_TEXT.toString());
         bannerLabel = new Label(bannerText);
+        bannerLabel.setPrefWidth(350);
         Button bannerChangeButton = new Button();
         ImageView bannerImage = new ImageView();
         bannerChangeButton.setText(props.getProperty(CSGProp.CHANGE_TEXT.toString()));
@@ -703,6 +724,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         pageStylePane.getChildren().add(leftFooterPane);
         String leftFooterText = props.getProperty(CSGProp.LEFT_FOOTER_TEXT.toString());
         leftFooterLabel = new Label(leftFooterText);
+        leftFooterLabel.setPrefWidth(350);
         Button leftFooterChangeButton = new Button();
         ImageView leftFooterImage = new ImageView();
         leftFooterChangeButton.setText(props.getProperty(CSGProp.CHANGE_TEXT.toString()));
@@ -723,6 +745,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         pageStylePane.getChildren().add(rightFooterPane);
         String rightFooterText = props.getProperty(CSGProp.RIGHT_FOOTER_TEXT.toString());
         rightFooterLabel = new Label(rightFooterText);
+        rightFooterLabel.setPrefWidth(350);
         Button rightFooterChangeButton = new Button();
         ImageView rightFooterImage = new ImageView();
         rightFooterChangeButton.setText(props.getProperty(CSGProp.CHANGE_TEXT.toString()));
@@ -743,6 +766,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         pageStylePane.getChildren().add(styleSheetPane);
         String styleSheetText = props.getProperty(CSGProp.STYLESHEET_TEXT.toString());
         styleSheetLabel = new Label(styleSheetText);
+        styleSheetLabel.setPrefWidth(210);
         ComboBox styleSheetCombo = new ComboBox();
         styleSheetCombo.setMinWidth(200);
         styleSheetPane.getChildren().add(styleSheetLabel);
@@ -764,7 +788,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         //Recitation Header and delete button
         recitationHeaderPane = new HBox();
-        recitationHeaderPane.setPadding(new Insets(0,0,0, 554));
+        recitationHeaderPane.setMaxWidth(800);
         recitationHeaderPane.setSpacing(15);
         recitationHeaderLabel = new Label();
         String recitationHeaderText = props.getProperty
@@ -845,7 +869,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         //Recitation Section HBox
         HBox recSecBox = new HBox();
         recSection = new Label(props.getProperty(CSGProp.SECTION_COLON_TEXT.toString()));
-        recSection.setPadding(new Insets(0,103,0,20));
+        recSection.setPrefWidth(258);
+        recSection.setPadding(new Insets(0,0,0,20));
         recSectionText = new TextField();
         recSectionText.setMinWidth(200);
         recSecBox.getChildren().add(recSection);
@@ -855,17 +880,19 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         //Recitation Instructor HBox
         HBox recInsBox = new HBox();
         recInstructor = new Label(props.getProperty(CSGProp.INSTRUCTOR_COLON_TEXT.toString()));
-        recInstructor.setPadding(new Insets(0,77,0,19));
+        recInstructor.setPadding(new Insets(0,0,0,19));
+        recInstructor.setMinWidth(258);
         recInstructorText = new TextField();
         recInstructorText.setMinWidth(200);
         recInsBox.getChildren().add(recInstructor);
         recInsBox.getChildren().add(recInstructorText);
         recitationAddPane.getChildren().add(recInsBox);        
-        
+      
         //Recitation DayTime HBox
         HBox recDayTimeBox = new HBox();
         recDayTime = new Label(props.getProperty(CSGProp.DAYTIME_COLON_TEXT.toString()));
-        recDayTime.setPadding(new Insets(0,94,0,20));
+        recDayTime.setPadding(new Insets(0,0,0,20));
+        recDayTime.setMinWidth(258);
         recDayTimeText = new TextField();
         recDayTimeText.setMinWidth(200);
         recDayTimeBox.getChildren().add(recDayTime);
@@ -875,7 +902,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         //Recitation Location HBox
         HBox recLocationBox = new HBox();
         recLocation = new Label(props.getProperty(CSGProp.LOCATION_COLON_TEXT.toString()));
-        recLocation.setPadding(new Insets(0,94,0,20));
+        recLocation.setMinWidth(258);
+        recLocation.setPadding(new Insets(0,0,0,20));
         recLocationText = new TextField();
         recLocationText.setMinWidth(200);
         recLocationBox.getChildren().add(recLocation);
@@ -885,7 +913,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         //Recitation TA1 HBox
         HBox recTA1Box = new HBox();
         recTA1 = new Label(props.getProperty(CSGProp.TA_COLON_TEXT.toString()));
-        recTA1.setPadding(new Insets(0,40,0,20));
+        recTA1.setPadding(new Insets(0,0,0,20));
+        recTA1.setPrefWidth(258);
         recTA1Combo = new ComboBox();
         recTA1Combo.setMinWidth(200);
         recTA1Box.getChildren().add(recTA1);
@@ -895,7 +924,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         //Recitation TA2 HBox
         HBox recTA2Box = new HBox();
         recTA2 = new Label(props.getProperty(CSGProp.TA_COLON_TEXT.toString()));
-        recTA2.setPadding(new Insets(0,40,0,20));
+        recTA2.setPrefWidth(258);
+        recTA2.setPadding(new Insets(0,0,0,20));
         recTA2Combo = new ComboBox();
         recTA2Combo.setMinWidth(200);
         recTA2Box.getChildren().add(recTA2);
@@ -905,11 +935,12 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         // Recitation Buttons 
         HBox recButtonsBox = new HBox();
         recButtonsBox.setPadding(new Insets(0,0,15,19));
-        recButtonsBox.setSpacing(65);
+        recButtonsBox.setSpacing(62);
         Button recAddButton = new Button();
 
         recAddButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT
             .toString()));
+        recAddButton.setPrefWidth(175);
         Button recClearButton = new Button();
         recClearButton.setText(props.getProperty(CSGProp.CLEAR_TEXT.toString()));
         recButtonsBox.getChildren().add(recAddButton);
@@ -924,7 +955,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         //Schedule Header Label
         HBox scheduleHeaderPane = new HBox();
-        scheduleHeaderPane.setPadding(new Insets(0,0,0, 552));
+        scheduleHeaderPane.setMaxWidth(800);
         scheduleHeaderLabel = new Label();
         scheduleHeaderLabel.setText(props.getProperty
             (CSGProp.SCHEDULE_TEXT.toString()));
@@ -1036,10 +1067,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox scheduleTypePane = new HBox();
         scheduleTablePane.getChildren().add(scheduleTypePane);
         scheduleTypeLabel = new Label();
+        scheduleTypeLabel.setPrefWidth(220);
         String scheduleTypeText = props.getProperty(CSGProp.TYPE_COLON_TEXT
             .toString());
         scheduleTypeLabel.setText(scheduleTypeText);
-        scheduleTypeLabel.setPadding(new Insets(0,80,0,30));
+        scheduleTypeLabel.setPadding(new Insets(0,0,0,30));
         scheduleTypeCombo = new ComboBox();
         scheduleTypeCombo.setMinWidth(250);
         scheduleTypePane.getChildren().add(scheduleTypeLabel);
@@ -1053,7 +1085,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         String scheduleDateText = props.getProperty(CSGProp.DATE_COLON_TEXT
             .toString());
         scheduleDateLabel.setText(scheduleDateText);
-        scheduleDateLabel.setPadding(new Insets(0,80,0,30));
+        scheduleDateLabel.setPrefWidth(220);
+        scheduleDateLabel.setPadding(new Insets(0,0,0,30));
         scheduleDatePicker = new DatePicker();
         scheduleDatePicker.setMinWidth(100);
         scheduleDatePane.getChildren().add(scheduleDateLabel);
@@ -1067,7 +1100,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         String scheduleTimeText = props.getProperty(CSGProp.TIME_COLON_TEXT
             .toString());
         scheduleTimeLabel.setText(scheduleTimeText);
-        scheduleTimeLabel.setPadding(new Insets(0,80,0,30));
+        scheduleTimeLabel.setPrefWidth(220);
+        scheduleTimeLabel.setPadding(new Insets(0,0,0,30));
         scheduleTimeTextField = new TextField();
         scheduleTimeTextField.setMinWidth(250);
         scheduleTimePane.getChildren().add(scheduleTimeLabel);
@@ -1077,10 +1111,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox scheduleTitlePane = new HBox();
         scheduleTablePane.getChildren().add(scheduleTitlePane);
         scheduleTitleLabel = new Label();
+        scheduleTitleLabel.setPrefWidth(220);
         String scheduleTitleText = props.getProperty(CSGProp.TITLE_TEXT
             .toString());
         scheduleTitleLabel.setText(scheduleTitleText);
-        scheduleTitleLabel.setPadding(new Insets(0,71,0,30));
+        scheduleTitleLabel.setPadding(new Insets(0,0,0,30));
         scheduleTitleTextField = new TextField();
         scheduleTitleTextField.setMinWidth(500);
         scheduleTitlePane.getChildren().add(scheduleTitleLabel);
@@ -1090,6 +1125,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox scheduleTopicPane = new HBox();
         scheduleTablePane.getChildren().add(scheduleTopicPane);
         scheduleTopicLabel = new Label();
+        scheduleTopicLabel.setPrefWidth(220);
         String scheduleTopicText = props.getProperty(CSGProp.TOPIC_COLON_TEXT
             .toString());
         scheduleTopicLabel.setText(scheduleTopicText);
@@ -1103,6 +1139,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox scheduleLinkPane = new HBox();
         scheduleTablePane.getChildren().add(scheduleLinkPane);
         scheduleLinkLabel = new Label();
+        scheduleLinkLabel.setPrefWidth(220);
         String schedulelLinkText = props.getProperty(CSGProp
             .LINK_COLON_TEXT.toString());
         scheduleLinkLabel.setText(schedulelLinkText);
@@ -1116,10 +1153,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox scheduleCriteriaPane = new HBox();
         scheduleTablePane.getChildren().add(scheduleCriteriaPane);
         scheduleCriteriaLabel = new Label();
+        scheduleCriteriaLabel.setPrefWidth(220);
         String schedulelCriteriaText = props.getProperty(CSGProp.
             CRITERIA_COLON_TEXT.toString());
         scheduleCriteriaLabel.setText(schedulelCriteriaText);
-        scheduleCriteriaLabel.setPadding(new Insets(0,44,0,30));
+        scheduleCriteriaLabel.setPadding(new Insets(0,0,0,30));
         scheduleCriteriaTextField = new TextField();
         scheduleCriteriaTextField.setMinWidth(500);
         scheduleCriteriaPane.getChildren().add(scheduleCriteriaLabel);
@@ -1134,6 +1172,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         Button scheduleAddUpdateButton = new Button();
         scheduleAddUpdateButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT
             .toString()));
+        scheduleAddUpdateButton.setPrefWidth(175);
         Button scheduleClearButton = new Button();
         scheduleClearButton.setText(props.getProperty(CSGProp.CLEAR_TEXT
             .toString()));
@@ -1240,6 +1279,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         teamsPane.getChildren().add(teamNamePane);
         teamNameLabel = new Label(props.getProperty(CSGProp.
            NAME_COLON_TEXT.toString()));
+        teamNameLabel.setPrefWidth(200);
         teamNameLabel.setPadding(new Insets(0,80,0,15));
         teamNamePane.getChildren().add(teamNameLabel);
         teamNameTextField = new TextField();
@@ -1250,7 +1290,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox teamColorPane = new HBox();
         teamColorLabel = new Label(props.getProperty(CSGProp.
            COLOR_COLON_TEXT.toString()));
-        teamColorLabel.setPadding(new Insets(0,68,0,15));
+        teamColorLabel.setPrefWidth(200);
+        teamColorLabel.setPadding(new Insets(0,0,0,15));
         teamColorPane.getChildren().add(teamColorLabel);
         teamsPane.getChildren().add(teamColorPane);
         Circle colorCircle = new Circle(80, Color.WHITE);
@@ -1288,9 +1329,10 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         teamsPane.getChildren().add(teamLinkPane);
         teamLinkLabel = new Label(props.getProperty(CSGProp.
            LINK_COLON_TEXT.toString()));
+        teamLinkLabel.setPrefWidth(200);
         teamLinkPane.getChildren().add(teamLinkLabel);
         teamLinkTextField = new TextField();
-        teamLinkLabel.setPadding(new Insets(0,80,0,15));
+        teamLinkLabel.setPadding(new Insets(0,0,0,15));
         teamLinkPane.getChildren().add(teamLinkTextField);
         teamLinkTextField.setMinWidth(550);
         
@@ -1298,10 +1340,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox teamButtonPane = new HBox();
         teamsPane.getChildren().add(teamButtonPane);
         teamButtonPane.setPadding(new Insets(0, 0, 15, 15));
-        teamButtonPane.setSpacing(15);
+        teamButtonPane.setSpacing(10);
         Button teamAddUpdateButton = new Button();
         teamAddUpdateButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT
             .toString()));
+        teamAddUpdateButton.setPrefWidth(175);
         Button teamClearButton = new Button();
         teamClearButton.setText(props.getProperty(CSGProp.CLEAR_TEXT
             .toString()));
@@ -1397,7 +1440,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 .FIRSTNAME_COLON_TEXT.toString()));
         studentFNameTextField = new TextField();
         studentFNameTextField.setMinWidth(250);
-        studentFNameLabel.setPadding(new Insets(0,27,0,15));
+        studentFNameLabel.setPrefWidth(200);
+        studentFNameLabel.setPadding(new Insets(0,0,0,15));
         studentFNamePane.getChildren().add(studentFNameLabel);
         studentFNamePane.getChildren().add(studentFNameTextField);
         studentPane.getChildren().add(studentFNamePane);
@@ -1407,8 +1451,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         studentLNameLabel = new Label(props.getProperty(CSGProp
                 .LASTNAME_COLON_TEXT.toString()));
         studentLNameTextField = new TextField();
+        studentLNameLabel.setPrefWidth(200);
         studentLNameTextField.setMinWidth(250);
-        studentLNameLabel.setPadding(new Insets(0,36,0,15));
+        studentLNameLabel.setPadding(new Insets(0,0,0,15));
         studentLNamePane.getChildren().add(studentLNameLabel);
         studentLNamePane.getChildren().add(studentLNameTextField);
         studentPane.getChildren().add(studentLNamePane);
@@ -1417,9 +1462,10 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox studentTeamPane = new HBox();
         studentTeamLabel = new Label(props.getProperty(CSGProp
                 .STUDENT_TEAM_COLON_TEXT.toString()));
+        studentTeamLabel.setPrefWidth(200);
         studentTeamTextField = new TextField();
         studentTeamTextField.setMinWidth(250);
-        studentTeamLabel.setPadding(new Insets(0,81,0,15));
+        studentTeamLabel.setPadding(new Insets(0,0,0,15));
         studentTeamPane.getChildren().add(studentTeamLabel);
         studentTeamPane.getChildren().add(studentTeamTextField);
         studentPane.getChildren().add(studentTeamPane);
@@ -1428,9 +1474,10 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox studentRolePane = new HBox();
         studentRoleLabel = new Label(props.getProperty(CSGProp
                 .ROLE_COLON_TEXT.toString()));
+        studentRoleLabel.setPrefWidth(200);
         studentRoleTextField = new TextField();
         studentRoleTextField.setMinWidth(250);
-        studentRoleLabel.setPadding(new Insets(0,81,0,15));
+        studentRoleLabel.setPadding(new Insets(0,0,0,15));
         studentRolePane.getChildren().add(studentRoleLabel);
         studentRolePane.getChildren().add(studentRoleTextField);
         studentPane.getChildren().add(studentRolePane);
@@ -1438,9 +1485,10 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         // Student Buttons Row
         HBox studentButtonPane = new HBox();
         studentPane.getChildren().add(studentButtonPane);
-        studentButtonPane.setPadding(new Insets(0, 0, 15, 15));
+        studentButtonPane.setPadding(new Insets(0, 0, 15, 13));
         studentButtonPane.setSpacing(15);
         Button studentAddUpdateButton = new Button();
+        studentAddUpdateButton.setPrefWidth(175);
         studentAddUpdateButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT
             .toString()));
         Button studentClearButton = new Button();

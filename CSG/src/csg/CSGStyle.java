@@ -63,7 +63,7 @@ public class CSGStyle extends AppStyleComponent{
     public static String CLASS_LEFT_FOOTER_LABEL = "style_left_footer_label";
     public static String CLASS_RIGHT_FOOTER_LABEL = "style_right_footer_label";
     public static String CLASS_STYLE_NOTE_LABEL = "page_style_note_label";
-    public static String CLASS_COURSE_REG_LABEL = "reg_label";
+    public static String CLASS_COURSE_REG_LABEL = "style_left_footer_label";
     
     public static String CLASS_RECITATION_PANE = "recitation_pane";
     public static String CLASS_RECITATION_HEADER = "tab_header";

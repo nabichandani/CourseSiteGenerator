@@ -19,6 +19,8 @@ import djf.controller.AppFileController;
 import djf.ui.AppMessageDialogSingleton;
 import java.util.Collections;
 import java.util.HashMap;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -78,7 +80,9 @@ public class CSGControls {
             if(email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")){
                 // ADD THE NEW TA TO THE DATA
-                data.addTA(name, email, false);
+                BooleanProperty ug = new SimpleBooleanProperty();
+                ug.set(false);
+                data.addTA(name, email, ug);
             
             
             // CLEAR THE TEXT FIELDS
@@ -148,7 +152,9 @@ public class CSGControls {
                     }
                 }
                 //change ug
-                boolean ug = false;
+                BooleanProperty ug = new SimpleBooleanProperty();
+                ug.set(false);
+                
                 TeachingAssistant newTA = new TeachingAssistant(name, email, ug);
                 data.getTeachingAssistants().add(newTA);
                 Collections.sort(data.getTeachingAssistants());

@@ -153,10 +153,17 @@
 }
 .export_label, .course_template_location, .course_site_page_label, 
 .style_banner_label, .style_left_footer_label, .style_right_footer_label, 
-.page_style_note_label, .reg_label{
+.page_style_note_label{
      -fx-font-family:"Courier New", serif;
      -fx-font-style: normal;
      -fx-font-weight:bold;
+     
+}
+.reg_label{
+     -fx-font-family:"Courier New", serif;
+     -fx-font-style: normal;
+     -fx-font-weight:bold;
+     -fx-font-size: 12pt;
 }
 
 .recitation_section_label, .recitation_instructor_label, .recitation_daytime_label,

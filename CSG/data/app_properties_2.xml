@@ -95,7 +95,7 @@
         <property name="TITLE_TEXT"         value="Título:"></property>
         <property name="INSTRUCTOR_NAME_TEXT"         value="Nombre del Instructor:"></property>
         <property name="INSTRUCTOR_HOME_TEXT"         value="Instructor Inicio:"></property>
-        <property name="EXPORT_DIR_TEXT"         value="Dirección de exportación:"></property>
+        <property name="EXPORT_DIR_TEXT"         value="Exportar dir.:"></property>
         <property name="CHANGE_TEXT"         value="Cambio"></property>
         <property name="TEMPLATE_TEXT"         value="Plantilla de sitio"></property>
         <property name="DIR_INFO_TEXT"         value="El directorio seleccionado debe contener la plantilla completa del sitio"></property>

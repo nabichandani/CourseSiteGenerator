@@ -12,6 +12,7 @@ import javafx.beans.property.StringProperty;
 import properties_manager.PropertiesManager;
 import csg.data.TeachingAssistant;
 import csg.ui.CSGWorkspace;
+import javafx.beans.property.BooleanProperty;
 
 /**
  * This is the data component for TAManagerApp. It has all the data needed
@@ -243,7 +244,7 @@ public class TAData implements AppDataComponent {
         return false;
     }
 
-    public void addTA(String initName, String initEmail, boolean ug) {
+    public void addTA(String initName, String initEmail, BooleanProperty ug) {
         // MAKE THE TA
         TeachingAssistant ta = new TeachingAssistant(initName, initEmail, ug);
 

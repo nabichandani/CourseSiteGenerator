@@ -5,6 +5,7 @@
  */
 package csg.data;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -16,11 +17,11 @@ public class TeachingAssistant<E extends Comparable<E>> implements Comparable<E>
     // THE TABLE WILL STORE TA NAMES AND EMAILS
     private final StringProperty name;
     private final StringProperty email;
-    boolean undergrad;
+    BooleanProperty undergrad;
     /**
      * Constructor initializes the TA name
      */
-    public TeachingAssistant(String initName, String initEmail, boolean undergrad) {
+    public TeachingAssistant(String initName, String initEmail, BooleanProperty undergrad) {
         name = new SimpleStringProperty(initName);
         email = new SimpleStringProperty(initEmail);
         this.undergrad = undergrad;
@@ -44,11 +45,11 @@ public class TeachingAssistant<E extends Comparable<E>> implements Comparable<E>
         email.set(initEmail);
     }
 
-    public boolean isUndergrad() {
+    public BooleanProperty isUndergrad() {
         return undergrad;
     }
 
-    public void setUndergrad(boolean undergrad) {
+    public void setUndergrad(BooleanProperty undergrad) {
         this.undergrad = undergrad;
     }
     
