@@ -47,6 +47,7 @@ public class CSGStyle extends AppStyleComponent{
     public static String CLASS_OFFICE_HOURS_GRID_TIME_CELL_LABEL = "office_hours_grid_time_cell_label";
     public static String CLASS_OFFICE_HOURS_GRID_TA_CELL_PANE = "office_hours_grid_ta_cell_pane";
     public static String CLASS_OFFICE_HOURS_GRID_TA_CELL_LABEL = "office_hours_grid_ta_cell_label";
+    public static String CLASS_OFFICE_HOURS_COMBO_BOX = "ta_combo_box";
     
     public static String CLASS_COURSE_INFO_PANE = "course_info_pane";
     public static String CLASS_COURSE_INFO_LABEL = "course_info_header";
@@ -145,6 +146,8 @@ public class CSGStyle extends AppStyleComponent{
         workspaceComponent.getNameTextField().getStyleClass().add(CLASS_ADD_TA_TEXT_FIELD);
         workspaceComponent.getAddButton().getStyleClass().add(CLASS_ADD_TA_BUTTON);
         workspaceComponent.getClearButton().getStyleClass().add(CLASS_CLEAR_BUTTON);
+        workspaceComponent.getStartTime().getStyleClass().add(CLASS_OFFICE_HOURS_COMBO_BOX);
+        workspaceComponent.getEndTime().getStyleClass().add(CLASS_OFFICE_HOURS_COMBO_BOX);
 
         // RIGHT SIDE - THE HEADER
         workspaceComponent.getOfficeHoursSubheaderBox().getStyleClass().add(CLASS_HEADER_PANE);

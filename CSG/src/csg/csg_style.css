@@ -122,7 +122,6 @@
 
 .office_hours_grid_time_cell_pane{
     -fx-background-color: #FFB732;
-    //-fx-background-color:rgb(0,0,205);
     -fx-border-style:dotted;
     -fx-border-color:white;
 }

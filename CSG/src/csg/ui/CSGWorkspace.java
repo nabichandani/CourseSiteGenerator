@@ -46,16 +46,20 @@ import javafx.scene.control.TableColumn;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -89,7 +93,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     
     // For creating the table of Teaching Assistant Tab.
     TableView <TeachingAssistant> taTable;
-    TableColumn<TeachingAssistant, CheckBox> underGradColumn;
+    TableColumn<TeachingAssistant, Boolean> underGradColumn;
     TableColumn<TeachingAssistant, String> nameColumn;
     TableColumn<TeachingAssistant, String> emailColumn;
     
@@ -104,6 +108,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     HBox officeHoursHeaderBox;
     Label officeHoursHeaderLabel;
     VBox comboBoxPane;
+    ComboBox startTime;
+    ComboBox endTime;
     
     //For creating the office hours grid
     GridPane officeHoursGridPane;
@@ -236,10 +242,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     Label teamLinkLabel;
     
     TextField teamNameTextField;
-    Circle colorCircle;
-    TextField colorCircleText;
-    Circle textColorCircle;
-    TextField textColorCircleText;
+    ColorPicker colorPicker;
+    ColorPicker textColorPicker;
     TextField teamLinkTextField;
     
     VBox studentPane;
@@ -326,18 +330,22 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         underGradColumn = new TableColumn(undergradColumnText);
         underGradColumn.setPrefWidth(162);
-        underGradColumn.setCellValueFactory(
-                new PropertyValueFactory<TeachingAssistant, CheckBox>("undergrad")
-        );
-        underGradColumn.setCellFactory(new Callback<TableColumn<TeachingAssistant, CheckBox>, TableCell<TeachingAssistant, CheckBox>>(){
-            public TableCell<TeachingAssistant, CheckBox> call(TableColumn<TeachingAssistant, CheckBox> param){
-                return new CheckBoxTableCell<TeachingAssistant,CheckBox>();
-            }
-        });
+        underGradColumn.setEditable(true);
         taTable.setEditable(true);
+        underGradColumn.setCellValueFactory(
+            new Callback<CellDataFeatures<TeachingAssistant,Boolean>,ObservableValue<Boolean>>(){
+            @Override
+            public ObservableValue<Boolean> call(CellDataFeatures<TeachingAssistant, Boolean> param)
+            {   
+            BooleanProperty ug = param.getValue().isUndergrad();
             
-        taTable.getColumns().add(underGradColumn);
+            return ug;
+            
+            }   
+        });
+        underGradColumn.setCellFactory(CheckBoxTableCell.forTableColumn(underGradColumn));
         
+        taTable.getColumns().add(underGradColumn);
         nameColumn = new TableColumn(nameColumnText);
         nameColumn.setPrefWidth(300);
         nameColumn.setCellValueFactory(
@@ -357,7 +365,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         // ADD BOX FOR ADDING A TA
         String namePromptText = props.getProperty(CSGProp.NAME_PROMPT_TEXT.toString());
         String addButtonText = props.getProperty(CSGProp.ADD_BUTTON_TEXT.toString());
-        String emailPromptText = props.getProperty(CSGProp.EMAIL_PROMPT_TEXT.toString());
+        String emailPromptText = props.getProperty(CSGProp.EMAIL_COLUMN_TEXT.toString());
         taNameTextField = new TextField();
         taNameTextField.setPromptText(namePromptText);
         taEmailTextField = new TextField();
@@ -379,6 +387,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         officeHoursHeaderBox = new HBox();
         String officeHoursGridText = props.getProperty(CSGProp.OFFICE_HOURS_SUBHEADER.toString());
         officeHoursHeaderLabel = new Label(officeHoursGridText);
+        officeHoursHeaderLabel.setPrefWidth(440);
         officeHoursHeaderBox.getChildren().add(officeHoursHeaderLabel);
         
         // THESE WILL STORE PANES AND LABELS FOR OUR OFFICE HOURS GRID
@@ -401,9 +410,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         VBox rightPane = new VBox();
         rightPane.getChildren().add(officeHoursHeaderBox);
         rightPane.getChildren().add(officeHoursGridPane);
-        HBox comboPane = new HBox();
-        comboBoxPane = new VBox();
-        comboPane.getChildren().add(comboBoxPane);
+//        HBox comboPane = new HBox();
+//        comboBoxPane = new VBox();
+//        comboPane.getChildren().add(comboBoxPane);
         ArrayList<String> timeStringList = new ArrayList<>();
         
         for(int i = 0; i < 24; i++){
@@ -428,21 +437,21 @@ public class CSGWorkspace extends AppWorkspaceComponent{
              timeStringList.add(time1);
         }
         
-        ComboBox startTime = new ComboBox();
-        ComboBox endTime = new ComboBox();
+        startTime = new ComboBox();
+        endTime = new ComboBox();
         startTime.getItems().addAll(timeStringList);
         endTime.getItems().addAll(timeStringList);
         Button submitButton = new Button(props.getProperty
             (CSGProp.SUBMIT_TEXT.toString()));
-        comboBoxPane.getChildren().add(startTime);
-        comboBoxPane.getChildren().add(endTime);
-        comboBoxPane.getChildren().add(submitButton);
+        officeHoursHeaderBox.getChildren().add(startTime);
+        officeHoursHeaderBox.getChildren().add(endTime);
+        officeHoursHeaderBox.getChildren().add(submitButton);
         startTime.setValue(props.getProperty(CSGProp.START_TIME_TEXT.toString()));
         endTime.setValue(props.getProperty(CSGProp.END_TIME_TEXT.toString()));
         startTime.setPrefWidth(200);
         endTime.setPrefWidth(200);
         wholeRightPane.getChildren().add(rightPane);
-        wholeRightPane.getChildren().add(comboPane);
+//        wholeRightPane.getChildren().add(comboPane);
         
         // BOTH PANES WILL NOW GO IN A SPLIT PANE
         SplitPane sPane = new SplitPane(leftPane, new ScrollPane(wholeRightPane));        
@@ -1294,35 +1303,17 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         teamColorLabel.setPadding(new Insets(0,0,0,15));
         teamColorPane.getChildren().add(teamColorLabel);
         teamsPane.getChildren().add(teamColorPane);
-        Circle colorCircle = new Circle(80, Color.WHITE);
-        colorCircleText = new TextField();
-        colorCircleText.setMinWidth(50);
-        StackPane colorStackPane = new StackPane();
-        colorStackPane.getChildren().addAll(colorCircle, colorCircleText);
-        teamColorPane.getChildren().add(colorStackPane);
-        colorCircleText.setOnKeyPressed(e ->{
-            if(e.getCode() == KeyCode.ENTER){
-                String textFieldText = colorCircleText.getText();
-                colorCircle.setStyle("-fx-fill:" + textFieldText);
-            }
-        });
+        colorPicker = new ColorPicker();
+        colorPicker.setPrefWidth(130);
+        teamColorPane.getChildren().add(colorPicker);
        
         teamTextColorLabel = new Label(props.getProperty(CSGProp.
            TEXT_COLOR_COLON_TEXT.toString()));
         teamColorPane.getChildren().add(teamTextColorLabel);
         teamTextColorLabel.setPadding(new Insets(0,40,0,50));
-        Circle colorTextCircle = new Circle(80, Color.WHITE);
-        textColorCircleText = new TextField();
-        textColorCircleText.setMinWidth(50);
-        StackPane textColorStackPane = new StackPane();
-        textColorStackPane.getChildren().addAll(colorTextCircle, textColorCircleText);
-        teamColorPane.getChildren().add(textColorStackPane);
-        textColorCircleText.setOnKeyPressed(e ->{
-            if(e.getCode() == KeyCode.ENTER){
-                String textFieldText = textColorCircleText.getText();
-                colorTextCircle.setStyle("-fx-fill:" + textFieldText);
-            }
-        });
+        textColorPicker = new ColorPicker();
+        textColorPicker.setPrefWidth(130);
+        teamColorPane.getChildren().add(textColorPicker);
         
         //Team link row
         HBox teamLinkPane = new HBox();
@@ -1656,16 +1647,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 taOfficeHours.put(key, val);   
             }
             controller.handleDeleteTA();
-            if(taAddButton.getText().equals("Update TA")){
+            if(taAddButton.getText().equals(props.getProperty(CSGProp.UPDATE_TA
+                    .toString()))){
                 TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
                 taNameTextField.setText(clickedName.getName());
                 taEmailTextField.setText(clickedName.getEmail());
-            }
-            if(taTable.getItems().size() == 0){
-                taAddButton.setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
-                    .toString()));
-                taNameTextField.clear();
-                taEmailTextField.clear(); 
             }
             }
            catch(NullPointerException t){
@@ -1689,7 +1675,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 taOfficeHours.put(key, val);   
             }
             controller.handleDeleteTA();
-            if(taAddButton.getText().equals("Update TA")){
+            if(taAddButton.getText().equals(props.getProperty(CSGProp.UPDATE_TA
+                    .toString()))){
                 TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
                 taNameTextField.setText(clickedName.getName());
                 taEmailTextField.setText(clickedName.getEmail());
@@ -1706,7 +1693,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         // CONTROLS FOR ADDING TAs
         
         taNameTextField.setOnAction(e -> {
-            if(taAddButton.getText().equals("Update TA")){
+            if(taAddButton.getText().equals(props.getProperty(CSGProp.UPDATE_TA
+                    .toString()))){
                 TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
                 controller.editTA(clickedName);
                 TeachingAssistant clickedName2 = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
@@ -1722,7 +1710,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         
         taEmailTextField.setOnAction(e -> {
-            if(taAddButton.getText().equals("Update TA")){
+            if(taAddButton.getText().equals(props.getProperty(CSGProp.UPDATE_TA
+                    .toString()))){
                 TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
                 controller.editTA(clickedName);
                 TeachingAssistant clickedName2 = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
@@ -1737,7 +1726,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         });
         
         taAddButton.setOnAction(e -> {
-            if(taAddButton.getText().equals("Update TA")){
+            if(taAddButton.getText().equals(props.getProperty(CSGProp.UPDATE_TA
+                    .toString()))){
                 TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
                 controller.editTA(clickedName);
                 TeachingAssistant clickedName2 = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
@@ -1795,6 +1785,14 @@ public class CSGWorkspace extends AppWorkspaceComponent{
 
     public Label getCourseNumberLabel() {
         return courseNumberLabel;
+    }
+
+    public ComboBox getStartTime() {
+        return startTime;
+    }
+
+    public ComboBox getEndTime() {
+        return endTime;
     }
 
     public Label getCourseSemesterLabel() {
@@ -1934,6 +1932,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         }
         return null;
     }
+    
 
     public Label getTACellLabel(String cellKey) {
         return officeHoursGridTACellLabels.get(cellKey);
@@ -2410,6 +2409,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
       // MAKE THE LABEL IN A PANE
         Label cellLabel = new Label("");
         HBox cellPane = new HBox();
+        cellPane.setMinSize(130.5, 30);
         cellPane.setAlignment(Pos.CENTER);
         cellPane.getChildren().add(cellLabel);
 
