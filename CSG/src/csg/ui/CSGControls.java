@@ -153,7 +153,7 @@ public class CSGControls {
                 }
                 //change ug
                 BooleanProperty ug = new SimpleBooleanProperty();
-                ug.set(false);
+                ug.set(ta.isUndergrad().getValue());
                 
                 TeachingAssistant newTA = new TeachingAssistant(name, email, ug);
                 data.getTeachingAssistants().add(newTA);

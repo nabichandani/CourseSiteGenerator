@@ -425,15 +425,18 @@ public class AppFileController {
 		saveWork(currentWorkFile);
 		saved = true;
 	    }
-        } // IF THE USER SAID CANCEL, THEN WE'LL TELL WHOEVER
+        }
+        // IF THE USER SAID NO, WE JUST GO ON WITHOUT SAVING
+        // BUT FOR BOTH YES AND NO WE DO WHATEVER THE USER
+        // HAD IN MIND IN THE FIRST PLACE
+        else if (selection.equals(AppYesNoCancelDialogSingleton.NO)) {
+        return true;
+        }
+        // IF THE USER SAID CANCEL, THEN WE'LL TELL WHOEVER
         // CALLED THIS THAT THE USER IS NOT INTERESTED ANYMORE
         else if (selection.equals(AppYesNoCancelDialogSingleton.CANCEL)) {
             return false;
         }
-
-        // IF THE USER SAID NO, WE JUST GO ON WITHOUT SAVING
-        // BUT FOR BOTH YES AND NO WE DO WHATEVER THE USER
-        // HAD IN MIND IN THE FIRST PLACE
         return true;
     }
 

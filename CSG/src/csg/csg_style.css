@@ -39,7 +39,6 @@
 }
 
 .bordered_pane {
-    //-fx-background-color: #aaaaff;
     -fx-background-color: #ffdb99;
     -fx-background-radius: 5.0;
     -fx-padding: 15;
@@ -50,7 +49,6 @@
 
 .header_pane{
     -fx-background-color: #ffdb99;
-    //-fx-background-color:rgb(178,178,252);
 }
 
 .header_label, .tab_header {
@@ -92,7 +90,6 @@
 }
 
 .office_hours_grid_time_column_header_pane{
-    //-fx-background-color:rgb(0,0,128);
     -fx-padding: 10;
     -fx-background-color: #FFCF78;
 }
@@ -107,7 +104,6 @@
 
 .office_hours_grid_day_column_header_pane{
     -fx-padding: 10;
-    //-fx-background-color:rgb(0,0,128);
    -fx-background-color: #FFCF78;
 }
 
