@@ -666,17 +666,54 @@
             "name":"Aarin Chase"
         }
     ],
-
     "recitation":[
+        {
+            "section":"sec",
+            "instructor":"color",
+            "day/time":"time",
+            "location":"loc",
+            "firstTa":"em",
+            "secondTa":"em"
+        }
     ],
     "scheduleItems":[
-
+        {
+            "type":"JSON_TYPE",
+            "date":"JSON_DATE",
+            "time":"JSON_TIME",
+            "title":"JSON_TITLE",
+            "topic":"JSON_TOPIC",
+            "link":"JSON_LINK",
+            "criteria":"JSON_CRITERIA"
+        }
     ],
     "teams":[
-
+        {
+            "name":"sa",
+            "color":"asd",
+            "textColor":"asdf",
+            "link":"adsf"
+        },
+        {
+            "name":"adfsdfsa",
+            "color":"asdsdsad",
+            "textColor":"sdfadasdf",
+            "link":"adsfdsf"
+        }
     ],
     "students":[
-
+        {
+            "firstName":"asdf",
+            "lastName":"aasdf",
+            "team":"asdf",
+            "role":"asdf"
+        },
+        {
+            "firstName":"adsdf",
+            "lastName":"aasdsaf",
+            "team":"asasddf",
+            "role":"awsdf"
+        }
     ],
     "courseTemplate":[
         {

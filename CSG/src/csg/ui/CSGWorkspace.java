@@ -6,6 +6,7 @@ import csg.CSGApp;
 import csg.CSGProp;
 import static csg.CSGProp.COURSE_SUBHEADER;
 import csg.CSGStyle;
+import csg.data.CourseData;
 import csg.data.CourseTemplate;
 import csg.data.ProjectData;
 import csg.data.Recitation;
@@ -142,13 +143,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     Label courseSitePageLabel;
     
     
-    //CourseTemplate objects that will go into the template tableview
-    ObservableList<CourseTemplate> templates;
-    CourseTemplate home;
-    CourseTemplate syllabus;
-    CourseTemplate schedule;
-    CourseTemplate hws;
-    CourseTemplate projects;
+
     
     TableView <CourseTemplate> templateTable;
     TableColumn<CourseTemplate, Boolean> useColumn;
@@ -641,21 +636,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseTemplatePane.getChildren().add(courseSitePageLabel);
         
         //Create and initialize the template variables        
-        templates = FXCollections.observableArrayList();
-        home = new CourseTemplate(true, "Home", "index.html", "Homebuilder.js");
-        syllabus = new CourseTemplate(true, "Syllabus", 
-            "syllabus.html", "SyllabusBuilder.js");
-        schedule = new CourseTemplate(true, "Schedule",
-            "schedule.html", "ScheduleBuilder.js");
-        hws = new CourseTemplate(true, "HWs", "hws.html", "HWsBuilder.js");
-        projects = new CourseTemplate(true, "Projects", 
-            "projects.html", "ProjectsBuilder.html");
+        CourseData courseData = (CourseData) app.getCourseDataComponent();
+        ObservableList<CourseTemplate> templateList = courseData.getTemplates();
         
-        templates.add(home);
-        templates.add(syllabus);
-        templates.add(schedule);
-        templates.add(hws);
-        templates.add(projects);
         
         //Creates the tableview for template items
         templateTable = new TableView();
@@ -665,7 +648,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseTemplatePane.getChildren().add(templateTablePane);
         templateTable.getSelectionModel().
             setSelectionMode(SelectionMode.SINGLE);
-        templateTable.setItems(templates);
+        templateTable.setItems(templateList);
         String useColumnText = props.getProperty(CSGProp.USE_TEXT.toString());
         String navbarColumnText = props.getProperty(CSGProp.NAVBAR_TEXT
             .toString());
@@ -674,10 +657,21 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             .toString());
         useColumn = new TableColumn(useColumnText);
         
-        useColumn.setCellValueFactory(new PropertyValueFactory<CourseTemplate,
-            Boolean>("use"));
+        useColumn.setEditable(true);
+        templateTable.setEditable(true);
+        useColumn.setCellValueFactory(
+            new Callback<CellDataFeatures<CourseTemplate,Boolean>,ObservableValue<Boolean>>(){
+            @Override
+            public ObservableValue<Boolean> call(CellDataFeatures<CourseTemplate, Boolean> param)
+            {   
+            BooleanProperty isChecked = param.getValue().isUse();
+            
+            return isChecked;
+            
+            }   
+        });
         useColumn.setCellFactory(CheckBoxTableCell.forTableColumn(useColumn));
-        
+
         navColumn = new TableColumn(navbarColumnText);
         navColumn.setMinWidth(150);
         navColumn.setCellValueFactory(new PropertyValueFactory<CourseTemplate, 

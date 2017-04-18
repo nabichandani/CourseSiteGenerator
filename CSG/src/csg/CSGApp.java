@@ -1,6 +1,7 @@
 
 package csg;
 
+import csg.data.CourseData;
 import csg.data.ProjectData;
 import csg.data.Recitation;
 import csg.data.RecitationData;
@@ -22,7 +23,7 @@ public class CSGApp extends AppTemplate{
    
     
     public void buildAppComponentsHook() {
-        courseDataComponent = new TAData(this);
+        courseDataComponent = new CourseData(this);
         taDataComponent = new TAData(this);
         recitationDataComponent= new RecitationData(this);
         projectDataComponent= new ProjectData(this);

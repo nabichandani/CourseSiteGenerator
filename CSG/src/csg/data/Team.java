@@ -9,7 +9,7 @@ package csg.data;
  *
  * @author Navin
  */
-public class Team {
+public class Team <E extends Comparable<E>> implements Comparable<E>{
     String name;
     String color;
     String textColor;
@@ -54,16 +54,8 @@ public class Team {
         this.link = link;
     }
     
-    public boolean isUnique(Team team){
-        if(this.name.equals(team.getName())){
-            if(this.color.equals(team.getColor())){
-                if(this.textColor.equals(team.getTextColor())){
-                    if(this.link.equals(team.getLink())){
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+    @Override
+    public int compareTo(E otherTeam) {
+        return getName().compareTo(((Team)otherTeam).getName());
     }
 }

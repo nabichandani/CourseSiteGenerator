@@ -7,6 +7,7 @@ package csg.data;
 
 import csg.CSGApp;
 import djf.components.AppDataComponent;
+import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -24,18 +25,49 @@ public class ScheduleData implements AppDataComponent{
         
         schedule = FXCollections.observableArrayList();
         
-        
-        
-        
-        
     }
 
     public ObservableList<ScheduleItem> getSchedule() {
         return schedule;
     }
+     public ScheduleItem getScheduleItem(String date) {
+        for (ScheduleItem schItem : schedule) {
+            if (schItem.getDate().equals(date)) {
+                return schItem;
+            }
+        }
+        return null;
+    }
+    
+    public boolean containsScheduleItem(String time) {
+        for (ScheduleItem schItem: schedule) {
+            if (schItem.getTime().equals(time)) {
+                return true;
+            }  
+        }
+        return false;
+    }
     
     
+    public void addScheduleItem(String type, String date, String time, String title,
+         String topic, String link, String criteria) {
+        // MAKE THE TA
+        ScheduleItem schItem = new ScheduleItem(type, date, time, title,
+         topic, link, criteria);
+
+        // ADD THE TA
+        if (!containsScheduleItem(time)) {
+               schedule.add(schItem);
+            }
+
+        Collections.sort(schedule);
+    }
     
+      public void deleteScheduleItem(ScheduleItem scheduleItem){
+         schedule.remove(scheduleItem);
+        
+    }
+   
     @Override
     public void resetData() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

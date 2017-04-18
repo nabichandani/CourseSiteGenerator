@@ -73,6 +73,7 @@ public abstract class AppTemplate extends Application {
     public AppDataComponent getScheduleDataComponent() {
         return scheduleDataComponent;
     }
+    
 
     /**
      *  Accessor for the data component.

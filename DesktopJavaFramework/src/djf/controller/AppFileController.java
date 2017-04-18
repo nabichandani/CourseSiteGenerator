@@ -43,7 +43,6 @@ import javafx.stage.Stage;
  * that are provided by this framework.
  * 
  * @author Richard McKenna
- * @co-author: Navin Abichandani
  * @version 1.0
  */
 public class AppFileController {
@@ -138,7 +137,6 @@ public class AppFileController {
      * This method lets the user open a Course saved to a file. It will also
      * make sure data for the current Course is not lost.
      * 
-     * @param gui The user interface editing the course.
      */
     public void handleLoadRequest() {
         try {
@@ -160,7 +158,9 @@ public class AppFileController {
 	    PropertiesManager props = PropertiesManager.getPropertiesManager();
 	    dialog.show(props.getProperty(LOAD_ERROR_TITLE), props.getProperty(LOAD_ERROR_MESSAGE));
          }catch(NullPointerException e){
-           
+            AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+	    PropertiesManager props = PropertiesManager.getPropertiesManager();
+	    dialog.show(props.getProperty(LOAD_ERROR_TITLE), props.getProperty(LOAD_ERROR_MESSAGE));
         }
         
     }
@@ -170,7 +170,6 @@ public class AppFileController {
      * know the name of the file, so we won't need to prompt the user.
      * 
      * 
-     * @param courseToSave The course being edited that is to be saved to a file.
      */
     public void handleExportRequest(){
         PropertiesManager props = PropertiesManager.getPropertiesManager();
@@ -182,7 +181,9 @@ public class AppFileController {
             Path destPath = selectedFile.toPath();
          
             String path = "../TAManagerTester/public_html/js/OfficeHoursGridData.json";
-            app.getFileComponent().saveData(app.getTADataComponent(), path);
+            app.getFileComponent().saveData(app.getTADataComponent(), 
+                app.getRecitationDataComponent(), app.getScheduleDataComponent(),
+                app.getProjectDataComponent(), app.getCourseDataComponent(), path);
             
             
             String initPath = "../TAManagerTester/public_html/";
@@ -321,7 +322,9 @@ public class AppFileController {
     // HELPER METHOD FOR SAVING WORK
     private void saveWork(File selectedFile) throws IOException {
 	// SAVE IT TO A FILE
-	app.getFileComponent().saveData(app.getTADataComponent(), selectedFile.getPath());
+	app.getFileComponent().saveData(app.getTADataComponent(), 
+                app.getRecitationDataComponent(), app.getScheduleDataComponent(),
+                app.getProjectDataComponent(), app.getCourseDataComponent(), selectedFile.getPath());
 	
 	// MARK IT AS SAVED
 	currentWorkFile = selectedFile;
@@ -460,12 +463,18 @@ public class AppFileController {
         // ONLY OPEN A NEW FILE IF THE USER SAYS OK
         if (selectedFile != null) {
             try {
-                app.getFileComponent().loadData(app.getTADataComponent(), selectedFile.getAbsolutePath());
+                app.getFileComponent().loadData(app.getTADataComponent(), 
+                app.getRecitationDataComponent(), app.getScheduleDataComponent(),
+                app.getProjectDataComponent(), app.getCourseDataComponent(), 
+                selectedFile.getAbsolutePath());
             }catch (Exception e) {
                 AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
                 selectedFile = origFile;
                 try {
-                    app.getFileComponent().loadData(app.getTADataComponent(), selectedFile.getAbsolutePath());
+                    app.getFileComponent().loadData(app.getTADataComponent(), 
+                app.getRecitationDataComponent(), app.getScheduleDataComponent(),
+                app.getProjectDataComponent(), app.getCourseDataComponent(), 
+                selectedFile.getAbsolutePath());
                 } catch (IOException ex) {
                     Logger.getLogger(AppFileController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -479,7 +488,10 @@ public class AppFileController {
                 app.getTADataComponent().resetData();
                 
                 // LOAD THE FILE INTO THE DATA
-                app.getFileComponent().loadData(app.getTADataComponent(), selectedFile.getAbsolutePath());
+                app.getFileComponent().loadData(app.getTADataComponent(), 
+                app.getRecitationDataComponent(), app.getScheduleDataComponent(),
+                app.getProjectDataComponent(), app.getCourseDataComponent(), 
+                selectedFile.getAbsolutePath());
                 
 		// MAKE SURE THE WORKSPACE IS ACTIVATED
 		app.getWorkspaceComponent().activateWorkspace(app.getGUI().getAppPane());

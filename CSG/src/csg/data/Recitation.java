@@ -9,7 +9,7 @@ package csg.data;
  *
  * @author Navin
  */
-public class Recitation {
+public class Recitation <E extends Comparable<E>> implements Comparable<E>{
    String section;
    String instructor;
    String dayTime;
@@ -18,14 +18,14 @@ public class Recitation {
    String secondTA;
    
    public Recitation(String section, String instructor, String dayTime, 
-        String location, TeachingAssistant taOne, TeachingAssistant taTwo){  
+        String location, String taOne, String taTwo){  
        
        this.section = section;
        this.location = location;
        this.instructor = instructor;
        this.dayTime = dayTime;
-       firstTA = taOne.getName();
-       secondTA = taTwo.getName();
+       firstTA = taOne;
+       secondTA = taTwo;
    }
 
     public String getSection() {
@@ -76,7 +76,9 @@ public class Recitation {
         this.secondTA = secondTA;
     }
 
-
-   
-   
+    @Override
+    public int compareTo(E otherRecitation) {
+        return getInstructor().compareTo(((Recitation)otherRecitation).getInstructor());
+    }
 }
+

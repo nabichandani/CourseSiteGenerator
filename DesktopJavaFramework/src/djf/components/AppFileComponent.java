@@ -16,13 +16,17 @@ public interface AppFileComponent {
      * This function must be overridden in the actual component and would
      * write app data to a file in the necessary format.
      */
-    public void saveData(AppDataComponent data, String filePath) throws IOException;
+    public void saveData(AppDataComponent data, AppDataComponent recData, 
+        AppDataComponent schdata, AppDataComponent projectData, 
+        AppDataComponent courseData, String filePath) throws IOException;
 
     /**
      * This function must be overridden in the actual component and would
      * read app data from a file in the necessary format.
      */
-    public void loadData(AppDataComponent data, String filePath) throws IOException;
+    public void loadData(AppDataComponent data, AppDataComponent recData, 
+        AppDataComponent schData, AppDataComponent projectData, 
+        AppDataComponent courseData, String filePath) throws IOException;
 
     /**
      * This function must be overridden in the actual component and would

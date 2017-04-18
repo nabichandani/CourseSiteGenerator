@@ -9,7 +9,7 @@ package csg.data;
  *
  * @author Navin
  */
-public class Student {
+public class Student <E extends Comparable<E>> implements Comparable<E>{
     String firstName;
     String lastName;
     String team;
@@ -65,5 +65,10 @@ public class Student {
              }
         }
         return false;
+    }
+
+    @Override
+    public int compareTo(E otherStudent) {
+        return getLastName().compareTo(((Student)otherStudent).getLastName());
     }
 }

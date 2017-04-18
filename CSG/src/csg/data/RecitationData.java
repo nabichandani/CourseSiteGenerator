@@ -7,6 +7,8 @@ package csg.data;
 
 import csg.CSGApp;
 import djf.components.AppDataComponent;
+import java.util.Collections;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -30,7 +32,53 @@ public class RecitationData implements AppDataComponent{
         return recitations;
     }
     
+    public Recitation getRecitation(String section) {
+        for (Recitation rec : recitations) {
+            if (rec.getSection().equals(section)) {
+                return rec;
+            }
+        }
+        return null;
+    }
     
+    public boolean containsRecitation(String section) {
+        for (Recitation recitation: recitations) {
+            if (recitation.getSection().equals(section)) {
+                return true;
+            }  
+        }
+        return false;
+    }
+    
+    public boolean containsRecitationTime(String dayTime) {
+        for (Recitation recitation: recitations) {
+            if (recitation.getDayTime().equals(dayTime)) {
+                return true;
+            }  
+        }
+        return false;
+    }
+    
+    public void addRecitation(String section, String instructor, String dayTime, 
+        String location, String taOne, String taTwo) {
+        // MAKE THE TA
+        Recitation rec = new Recitation(section, instructor, dayTime, 
+        location, taOne, taTwo);
+
+        // ADD THE TA
+        if (!containsRecitation(section)) {
+            if(!containsRecitationTime(dayTime)){
+               recitations.add(rec);
+            }
+        }
+
+        // SORT THE TAS
+        Collections.sort(recitations);
+    }
+      public void deleteTA(Recitation rec){
+         recitations.remove(rec);
+        
+    }
 
     @Override
     public void resetData() {
