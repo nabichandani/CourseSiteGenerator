@@ -97,6 +97,7 @@ public class TestSave implements AppFileComponent{
     static final String JSON_FILENAME = "fileName";
     static final String JSON_SCRIPT = "script";
     
+    static final String JSON_EXPORTDIR = "exportDirectory";
     static final String JSON_COURSE = "course";
     static final String JSON_SUBJECT = "subject";
     static final String JSON_NUMBER = "number";
@@ -229,6 +230,12 @@ public class TestSave implements AppFileComponent{
         courseDataManager.setTitle(courseJson.getString(JSON_TITLE));
         courseDataManager.setInsName(courseJson.getString(JSON_INSTRUCTORNAME));
         courseDataManager.setInsHome(courseJson.getString(JSON_INSTRUCTORHOME));
+        courseDataManager.setBannerLink(courseJson.getString(JSON_BANNER));
+        courseDataManager.setLeftFooterLink(courseJson.getString(JSON_LEFTFOOTER));
+        courseDataManager.setRightFooterLink(courseJson.getString(JSON_RIGHTFOOTER));
+        courseDataManager.setTemplateDir(courseJson.getString(JSON_TEMPLATEDIR));
+        courseDataManager.setExportDir(courseJson.getString(JSON_EXPORTDIR));
+        courseDataManager.setStyleSheet(courseJson.getString(JSON_STYLESHEET));
     }
     
     // HELPER METHOD FOR LOADING DATA FROM A JSON FORMAT
@@ -398,6 +405,12 @@ public class TestSave implements AppFileComponent{
         courseDataManager.setTitle("Computer Science III");
         courseDataManager.setInsName("Richard McKenna");
         courseDataManager.setInsHome("http://www3.cs.stonybrook.edu/~richard/");
+        courseDataManager.setBannerLink("C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUDarkRedShieldLogo.png");
+        courseDataManager.setLeftFooterLink("C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\CSLogo.png");
+        courseDataManager.setRightFooterLink("C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUWhiteShieldLogo.jpg");
+        courseDataManager.setTemplateDir("Navin\\CourseSiteGenerator\\CSG\\data");
+        courseDataManager.setExportDir("C:\\Users\\Navin");
+        courseDataManager.setStyleSheet("sea_wolf.css");
         
         JsonObject courseJson = Json.createObjectBuilder()
                 .add(JSON_SUBJECT, courseDataManager.getSubject())
@@ -407,6 +420,12 @@ public class TestSave implements AppFileComponent{
                 .add(JSON_TITLE, courseDataManager.getTitle())
                 .add(JSON_INSTRUCTORNAME, courseDataManager.getInsName())
                 .add(JSON_INSTRUCTORHOME, courseDataManager.getInsHome())
+                .add(JSON_BANNER, courseDataManager.getBannerLink())
+                .add(JSON_LEFTFOOTER, courseDataManager.getLeftFooterLink())
+                .add(JSON_RIGHTFOOTER, courseDataManager.getRightFooterLink())
+                .add(JSON_EXPORTDIR, courseDataManager.getExportDir())
+                .add(JSON_TEMPLATEDIR, courseDataManager.getTemplateDir())
+                .add(JSON_STYLESHEET, courseDataManager.getStyleSheet())
                 .build();
                   
         

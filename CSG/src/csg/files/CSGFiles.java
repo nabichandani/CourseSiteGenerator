@@ -37,6 +37,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
@@ -105,6 +106,7 @@ public class CSGFiles implements AppFileComponent{
     static final String JSON_INSTRUCTORNAME = "instructorName";
     static final String JSON_INSTRUCTORHOME = "instructorHome";
     static final String JSON_TEMPLATEDIR = "templateDirectory";
+    static final String JSON_EXPORTDIR = "exportDirectory";
     static final String JSON_BANNER = "banner";
     static final String JSON_LEFTFOOTER = "leftFooter";
     static final String JSON_RIGHTFOOTER = "rightFooter";
@@ -225,6 +227,13 @@ public class CSGFiles implements AppFileComponent{
         courseDataManager.setTitle(courseJson.getString(JSON_TITLE));
         courseDataManager.setInsName(courseJson.getString(JSON_INSTRUCTORNAME));
         courseDataManager.setInsHome(courseJson.getString(JSON_INSTRUCTORHOME));
+        courseDataManager.setBannerLink(courseJson.getString(JSON_BANNER));
+        courseDataManager.setLeftFooterLink(courseJson.getString(JSON_LEFTFOOTER));
+        courseDataManager.setRightFooterLink(courseJson.getString(JSON_RIGHTFOOTER));
+        courseDataManager.setTemplateDir(courseJson.getString(JSON_TEMPLATEDIR));
+        courseDataManager.setExportDir(courseJson.getString(JSON_EXPORTDIR));
+        courseDataManager.setStyleSheet(courseJson.getString(JSON_STYLESHEET));
+          
         
         workspace.getSubjectCombo().setValue(courseDataManager.getSubject());
         workspace.getNumCombo().setValue(courseDataManager.getNumber());
@@ -233,6 +242,23 @@ public class CSGFiles implements AppFileComponent{
         workspace.getTitleTextField().setText(courseDataManager.getTitle());
         workspace.getInsNameTextField().setText(courseDataManager.getInsName());
         workspace.getInsHomeTextField().setText(courseDataManager.getInsHome());
+        workspace.getStyleSheetCombo().setValue(courseDataManager.getStyleSheet());
+        
+        FileInputStream bannerLocation = new FileInputStream(courseJson.getString(JSON_BANNER));
+        Image newImg = new Image(bannerLocation);
+        workspace.getBannerImage().setImage(newImg);
+
+        FileInputStream leftFooterLocation = new FileInputStream(courseJson.getString(JSON_LEFTFOOTER));
+        Image newImg2 = new Image(leftFooterLocation);
+        workspace.getLeftFooterImage().setImage(newImg2);
+        
+        FileInputStream rightFooterLocation = new FileInputStream(courseJson.getString(JSON_RIGHTFOOTER));
+        Image newImg3 = new Image(rightFooterLocation);
+        workspace.getRightFooterImage().setImage(newImg3);
+        
+        workspace.getCourseTemplateLocLabel().setText(courseJson.getString(JSON_TEMPLATEDIR));
+        workspace.getExportLabel().setText(courseJson.getString(JSON_EXPORTDIR));
+        
     }
     
     // HELPER METHOD FOR LOADING DATA FROM A JSON FORMAT
@@ -368,6 +394,12 @@ public class CSGFiles implements AppFileComponent{
                 .add(JSON_TITLE, courseDataManager.getTitle())
                 .add(JSON_INSTRUCTORNAME, courseDataManager.getInsName())
                 .add(JSON_INSTRUCTORHOME, courseDataManager.getInsHome())
+                .add(JSON_BANNER, courseDataManager.getBannerLink())
+                .add(JSON_LEFTFOOTER, courseDataManager.getLeftFooterLink())
+                .add(JSON_RIGHTFOOTER, courseDataManager.getRightFooterLink())
+                .add(JSON_EXPORTDIR, courseDataManager.getExportDir())
+                .add(JSON_TEMPLATEDIR, courseDataManager.getTemplateDir())
+                .add(JSON_STYLESHEET, courseDataManager.getStyleSheet())
                 .build();
                   
         

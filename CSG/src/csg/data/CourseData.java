@@ -33,6 +33,12 @@ public class CourseData implements AppDataComponent{
     String title;
     String insName;
     String insHome;
+    String bannerLink;
+    String leftFooterLink;
+    String rightFooterLink;
+    String exportDir;
+    String templateDir;
+    String styleSheet;
     
     public CourseData(CSGApp initApp){
         app = initApp;   
@@ -58,6 +64,12 @@ public class CourseData implements AppDataComponent{
         title = "";
         insName = "";
         insHome = "";
+        bannerLink = "";
+        leftFooterLink = "";
+        rightFooterLink = "";
+        exportDir = "";
+        templateDir = "";
+        styleSheet = "";
     }
 
     public String getSubject() {
@@ -112,8 +124,57 @@ public class CourseData implements AppDataComponent{
         this.insName = insName;
     }
 
+    public String getExportDir() {
+        return exportDir;
+    }
+
+    public void setExportDir(String exportDir) {
+        this.exportDir = exportDir;
+    }
+
+    public String getTemplateDir() {
+        return templateDir;
+    }
+
+    public void setTemplateDir(String templateDir) {
+        this.templateDir = templateDir;
+    }
+
+    public String getStyleSheet() {
+        return styleSheet;
+    }
+
+    public void setStyleSheet(String styleSheet) {
+        this.styleSheet = styleSheet;
+    }
+    
+
     public void setInsHome(String insHome) {
         this.insHome = insHome;
+    }
+
+    public String getBannerLink() {
+        return bannerLink;
+    }
+
+    public void setBannerLink(String bannerLink) {
+        this.bannerLink = bannerLink;
+    }
+
+    public String getLeftFooterLink() {
+        return leftFooterLink;
+    }
+
+    public void setLeftFooterLink(String leftFooterLink) {
+        this.leftFooterLink = leftFooterLink;
+    }
+
+    public String getRightFooterLink() {
+        return rightFooterLink;
+    }
+
+    public void setRightFooterLink(String rightFooterLink) {
+        this.rightFooterLink = rightFooterLink;
     }
     
     

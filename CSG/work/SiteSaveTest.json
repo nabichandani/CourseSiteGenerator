@@ -7,7 +7,13 @@
         "year":"2017",
         "title":"Computer Science III",
         "instructorName":"Richard McKenna",
-        "instructorHome":"http://www3.cs.stonybrook.edu/~richard/"
+        "instructorHome":"http://www3.cs.stonybrook.edu/~richard/",
+        "banner":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUDarkRedShieldLogo.png",
+        "leftFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\CSLogo.png",
+        "rightFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUWhiteShieldLogo.jpg",
+        "exportDirectory":"C:\\Users\\Navin",
+        "templateDirectory":"Navin\\CourseSiteGenerator\\CSG\\data",
+        "styleSheet":"sea_wolf.css"
     },
     "courseTemplate":[
         {

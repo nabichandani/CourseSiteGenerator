@@ -29,6 +29,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static test_bed.TestSave.JSON_BANNER;
 import static test_bed.TestSave.JSON_COLOR;
 import static test_bed.TestSave.JSON_COURSE;
 import static test_bed.TestSave.JSON_COURSETEMPLATE;
@@ -37,6 +38,7 @@ import static test_bed.TestSave.JSON_DATE;
 import static test_bed.TestSave.JSON_DAY;
 import static test_bed.TestSave.JSON_DAYTIME;
 import static test_bed.TestSave.JSON_EMAIL;
+import static test_bed.TestSave.JSON_EXPORTDIR;
 import static test_bed.TestSave.JSON_FILENAME;
 import static test_bed.TestSave.JSON_FIRSTNAME;
 import static test_bed.TestSave.JSON_FIRSTTA;
@@ -44,6 +46,7 @@ import static test_bed.TestSave.JSON_INSTRUCTOR;
 import static test_bed.TestSave.JSON_INSTRUCTORHOME;
 import static test_bed.TestSave.JSON_INSTRUCTORNAME;
 import static test_bed.TestSave.JSON_LASTNAME;
+import static test_bed.TestSave.JSON_LEFTFOOTER;
 import static test_bed.TestSave.JSON_LINK;
 import static test_bed.TestSave.JSON_LOCATION;
 import static test_bed.TestSave.JSON_NAME;
@@ -51,6 +54,7 @@ import static test_bed.TestSave.JSON_NAVBAR;
 import static test_bed.TestSave.JSON_NUMBER;
 import static test_bed.TestSave.JSON_OFFICE_HOURS;
 import static test_bed.TestSave.JSON_RECITATION;
+import static test_bed.TestSave.JSON_RIGHTFOOTER;
 import static test_bed.TestSave.JSON_ROLE;
 import static test_bed.TestSave.JSON_SCHEDULEITEM;
 import static test_bed.TestSave.JSON_SCRIPT;
@@ -58,8 +62,10 @@ import static test_bed.TestSave.JSON_SECONDTA;
 import static test_bed.TestSave.JSON_SECTION;
 import static test_bed.TestSave.JSON_SEMESTER;
 import static test_bed.TestSave.JSON_STUDENTS;
+import static test_bed.TestSave.JSON_STYLESHEET;
 import static test_bed.TestSave.JSON_TEAM;
 import static test_bed.TestSave.JSON_TEAMS;
+import static test_bed.TestSave.JSON_TEMPLATEDIR;
 import static test_bed.TestSave.JSON_TEXTCOLOR;
 import static test_bed.TestSave.JSON_TIME;
 import static test_bed.TestSave.JSON_TITLE;
@@ -216,8 +222,14 @@ public class TestSaveTest {
         assertEquals(courseData.getTitle(), courseJson.getString(JSON_TITLE));
         assertEquals(courseData.getInsName(), courseJson.getString(JSON_INSTRUCTORNAME));
         assertEquals(courseData.getInsHome(), courseJson.getString(JSON_INSTRUCTORHOME));
+        assertEquals(courseData.getBannerLink(), courseJson.getString(JSON_BANNER));
+        assertEquals(courseData.getLeftFooterLink(), courseJson.getString(JSON_LEFTFOOTER));
+        assertEquals(courseData.getRightFooterLink(), courseJson.getString(JSON_RIGHTFOOTER));
+        assertEquals(courseData.getExportDir(), courseJson.getString(JSON_EXPORTDIR));
+        assertEquals(courseData.getTemplateDir(),courseJson.getString(JSON_TEMPLATEDIR));
+        assertEquals(courseData.getStyleSheet(), courseJson.getString(JSON_STYLESHEET));
         
-
+        
     }
 
 

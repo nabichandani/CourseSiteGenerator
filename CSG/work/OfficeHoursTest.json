@@ -1,5 +1,49 @@
 
 {
+    "course":{
+        "subject":"",
+        "number":"",
+        "semester":"",
+        "year":"",
+        "title":"",
+        "instructorName":"",
+        "instructorHome":"",
+        "banner":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUDarkRedShieldLogo.png",
+        "leftFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUWhiteShieldLogo.jpg",
+        "rightFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\CSLogo.png"
+    },
+    "courseTemplate":[
+        {
+            "use":false,
+            "navbarTitle":"Home",
+            "fileName":"index.html",
+            "script":"Homebuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"Syllabus",
+            "fileName":"syllabus.html",
+            "script":"SyllabusBuilder.js"
+        },
+        {
+            "use":false,
+            "navbarTitle":"Schedule",
+            "fileName":"schedule.html",
+            "script":"ScheduleBuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"HWs",
+            "fileName":"hws.html",
+            "script":"HWsBuilder.js"
+        },
+        {
+            "use":false,
+            "navbarTitle":"Projects",
+            "fileName":"projects.html",
+            "script":"ProjectsBuilder.html"
+        }
+    ],
     "startHour":"9",
     "endHour":"20",
     "undergrad_tas":[
@@ -689,16 +733,16 @@
     ],
     "teams":[
         {
-            "name":"sa",
-            "color":"asd",
-            "textColor":"asdf",
-            "link":"adsf"
-        },
-        {
             "name":"adfsdfsa",
             "color":"asdsdsad",
             "textColor":"sdfadasdf",
             "link":"adsfdsf"
+        },
+        {
+            "name":"sa",
+            "color":"asd",
+            "textColor":"asdf",
+            "link":"adsf"
         }
     ],
     "students":[
@@ -713,38 +757,6 @@
             "lastName":"aasdsaf",
             "team":"asasddf",
             "role":"awsdf"
-        }
-    ],
-    "courseTemplate":[
-        {
-            "use":false,
-            "navbarTitle":"Home",
-            "fileName":"index.html",
-            "script":"Homebuilder.js"
-        },
-        {
-            "use":true,
-            "navbarTitle":"Syllabus",
-            "fileName":"syllabus.html",
-            "script":"SyllabusBuilder.js"
-        },
-        {
-            "use":false,
-            "navbarTitle":"Schedule",
-            "fileName":"schedule.html",
-            "script":"ScheduleBuilder.js"
-        },
-        {
-            "use":true,
-            "navbarTitle":"HWs",
-            "fileName":"hws.html",
-            "script":"HWsBuilder.js"
-        },
-        {
-            "use":false,
-            "navbarTitle":"Projects",
-            "fileName":"projects.html",
-            "script":"ProjectsBuilder.html"
         }
     ]
 }

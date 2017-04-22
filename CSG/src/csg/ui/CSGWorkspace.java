@@ -30,6 +30,8 @@ import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.scene.shape.Rectangle;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.BorderPane;
@@ -47,6 +49,8 @@ import javafx.scene.control.TableColumn;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -112,6 +116,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     ComboBox startTime;
     ComboBox endTime;
     
+    VBox courseWholePane;
     //For creating the office hours grid
     GridPane officeHoursGridPane;
     HashMap<String, Pane> officeHoursGridTimeHeaderPanes;
@@ -133,6 +138,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     Label courseInsNameLabel;
     Label courseInsHomeLabel;
     Label courseExportDirLabel;
+    ComboBox styleSheetCombo;
     
     Label exportLabel;
     VBox courseDetails;
@@ -149,6 +155,10 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     TextField titleTextField;
     TextField insNameTextField;
     TextField insHomeTextField;
+    
+    ImageView bannerImage;
+    ImageView leftFooterImage;
+    ImageView rightFooterImage;
     
 
     
@@ -273,6 +283,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public CSGWorkspace(CSGApp initApp){
         app = initApp;
         controller = new CSGControls(app);
+        CourseData courseData = (CourseData) app.getCourseDataComponent();
         PropertiesManager props = PropertiesManager.getPropertiesManager();     
         TabPane courseTabPane = new TabPane();
         
@@ -471,12 +482,16 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseDetails = new VBox();
         courseDetails.setPadding(new Insets(0,0,10,0)); 
         courseDetails.setSpacing(15);
-        coursePane.setAlignment(Pos.TOP_CENTER);
         courseDetails.setMaxWidth(900);
        
 
         //FirstBox Header
-        courseTab.setContent(coursePane);
+        ScrollPane courseScroll = new ScrollPane(coursePane);
+        courseWholePane = new VBox();
+        courseWholePane.setAlignment(Pos.TOP_CENTER);
+        courseScroll.setMaxWidth(815);
+        courseWholePane.getChildren().add(courseScroll);
+        courseTab.setContent(courseWholePane);
         coursePane.getChildren().add(courseDetails);
         courseInfoPane = new HBox();
         String courseSubheaderText = props.getProperty(CSGProp.COURSE_SUBHEADER.toString());
@@ -590,7 +605,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         exportChangeButton.setOnAction(e ->{
              String exportDirLocation = pickDirectory();
              exportLabel.setText(exportDirLocation);
-            
+             courseData.setExportDir(exportDirLoc);
+             
         });
         courseExportDir.getChildren().add(exportLabel);
         courseExportDir.getChildren().add(exportChangeButton);
@@ -631,7 +647,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseTemplatePane.getChildren().add(courseTemplateButtonPane);
         courseTemplateButton.setOnAction(e ->{
              String exportDirLocation = pickDirectory();
-             courseTemplateLocLabel.setText(exportDirLocation); 
+             courseTemplateLocLabel.setText(exportDirLocation);
+             courseData.setTemplateDir(exportDirLoc);
         });        
         
 
@@ -643,7 +660,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseTemplatePane.getChildren().add(courseSitePageLabel);
         
         //Create and initialize the template variables        
-        CourseData courseData = (CourseData) app.getCourseDataComponent();
         ObservableList<CourseTemplate> templateList = courseData.getTemplates();
         
         
@@ -714,36 +730,54 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         pageStylePane.getChildren().add(bannerStylePane);
         String bannerText = props.getProperty(CSGProp.BANNER_IMAGE_TEXT.toString());
         bannerLabel = new Label(bannerText);
+        bannerStylePane.setSpacing(5);
         bannerLabel.setPrefWidth(350);
         Button bannerChangeButton = new Button();
-        ImageView bannerImage = new ImageView();
+        bannerImage = new ImageView();
         bannerChangeButton.setText(props.getProperty(CSGProp.CHANGE_TEXT.toString()));
         bannerChangeButton.setOnAction(e ->{
-             String bannerLocation = pickFile();
-             //edit this
-             Image newImg = new Image(Main.class.getResourceAsStream("About.png"));
-             bannerImage.setImage(newImg);        
+             try {
+             String filePath = pickFile();
+             FileInputStream bannerLocation = new FileInputStream(filePath);
+             Image newImg = new Image(bannerLocation);
+             bannerImage.setImage(newImg);
+             courseData.setBannerLink(filePath);
+            
+             } catch (FileNotFoundException ex) {
+                Logger.getLogger(CSGWorkspace.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }); 
+        bannerImage.setPreserveRatio(true);
+        bannerImage.setFitHeight(40);
         bannerStylePane.getChildren().add(bannerLabel);
         bannerStylePane.getChildren().add(bannerImage);
         bannerStylePane.getChildren().add(bannerChangeButton);
         
         //second row in Page Style Pane
         HBox leftFooterPane = new HBox();
+        leftFooterPane.setSpacing(5);
         leftFooterPane.setPadding(new Insets(0,0,0,12));
         pageStylePane.getChildren().add(leftFooterPane);
         String leftFooterText = props.getProperty(CSGProp.LEFT_FOOTER_TEXT.toString());
         leftFooterLabel = new Label(leftFooterText);
         leftFooterLabel.setPrefWidth(350);
         Button leftFooterChangeButton = new Button();
-        ImageView leftFooterImage = new ImageView();
+        leftFooterImage = new ImageView();
         leftFooterChangeButton.setText(props.getProperty(CSGProp.CHANGE_TEXT.toString()));
         leftFooterChangeButton.setOnAction(e ->{
-             String bannerLocation = pickFile();
-             //edit this
-             Image newImg = new Image(Main.class.getResourceAsStream("About.png"));
-             bannerImage.setImage(newImg);        
+            try {
+                String filePath = pickFile();
+                FileInputStream leftFooterLocation = new FileInputStream(filePath);
+                Image newImg = new Image(leftFooterLocation);
+                leftFooterImage.setImage(newImg);
+                courseData.setLeftFooterLink(filePath);
+             } catch (FileNotFoundException ex) {
+                Logger.getLogger(CSGWorkspace.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }); 
+        
+        leftFooterImage.setPreserveRatio(true);
+        leftFooterImage.setFitHeight(40);
         leftFooterPane.getChildren().add(leftFooterLabel);
         leftFooterPane.getChildren().add(leftFooterImage);
         leftFooterPane.getChildren().add(leftFooterChangeButton);
@@ -756,15 +790,23 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         String rightFooterText = props.getProperty(CSGProp.RIGHT_FOOTER_TEXT.toString());
         rightFooterLabel = new Label(rightFooterText);
         rightFooterLabel.setPrefWidth(350);
+        rightFooterPane.setSpacing(5);
         Button rightFooterChangeButton = new Button();
-        ImageView rightFooterImage = new ImageView();
+        rightFooterImage = new ImageView();
         rightFooterChangeButton.setText(props.getProperty(CSGProp.CHANGE_TEXT.toString()));
         rightFooterChangeButton.setOnAction(e ->{
-             String bannerLocation = pickFile();
-             //edit this
-             Image newImg = new Image(Main.class.getResourceAsStream("About.png"));
-             bannerImage.setImage(newImg);        
+            try {
+                String filePath = pickFile();
+                FileInputStream rightFooterLocation = new FileInputStream(filePath);
+                Image newImg = new Image(rightFooterLocation);
+                rightFooterImage.setImage(newImg);
+                courseData.setRightFooterLink(filePath);
+             } catch (FileNotFoundException ex) {
+                Logger.getLogger(CSGWorkspace.class.getName()).log(Level.SEVERE, null, ex);
+            }       
         }); 
+        rightFooterImage.setPreserveRatio(true);
+        rightFooterImage.setFitHeight(40);
         rightFooterPane.getChildren().add(rightFooterLabel);
         rightFooterPane.getChildren().add(rightFooterImage);
         rightFooterPane.getChildren().add(rightFooterChangeButton);
@@ -776,8 +818,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         pageStylePane.getChildren().add(styleSheetPane);
         String styleSheetText = props.getProperty(CSGProp.STYLESHEET_TEXT.toString());
         styleSheetLabel = new Label(styleSheetText);
-        styleSheetLabel.setPrefWidth(210);
-        ComboBox styleSheetCombo = new ComboBox();
+        styleSheetLabel.setPrefWidth(220);
+        styleSheetCombo = new ComboBox();
         styleSheetCombo.setMinWidth(200);
         styleSheetPane.getChildren().add(styleSheetLabel);
         styleSheetPane.getChildren().add(styleSheetCombo);
@@ -1828,6 +1870,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public Label getCourseTemplateLocLabel() {
         return courseTemplateLocLabel;
     }
+    
 
     public Label getCourseSubjectLabel() {
         return courseSubjectLabel;
@@ -2261,6 +2304,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         return teamNameLabel;
     }
 
+    public VBox getCourseWholePane() {
+        return courseWholePane;
+    }
+    
+
     public Label getTeamColorLabel() {
         return teamColorLabel;
     }
@@ -2300,12 +2348,25 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public Label getStudentRoleLabel() {
         return studentRoleLabel;
     }
-    
-    
-    
-    
-    
 
+    public ImageView getBannerImage() {
+        return bannerImage;
+    }
+
+    public ImageView getLeftFooterImage() {
+        return leftFooterImage;
+    }
+
+    public ImageView getRightFooterImage() {
+        return rightFooterImage;
+    }
+
+    public ComboBox getStyleSheetCombo() {
+        return styleSheetCombo;
+    }
+    
+    
+    
     @Override
     public void resetWorkspace() {
         // CLEAR OUT THE GRID PANE

@@ -251,6 +251,8 @@ public class CSGStyle extends AppStyleComponent{
         workspaceComponent.getStudentLNameLabel().getStyleClass().add(CLASS_TEAMS_REG_LABEL);
         workspaceComponent.getStudentRoleLabel().getStyleClass().add(CLASS_TEAMS_REG_LABEL);
         workspaceComponent.getStudentTeamLabel().getStyleClass().add(CLASS_TEAMS_REG_LABEL);
+        
+        workspaceComponent.getCourseWholePane().getStyleClass().add(CLASS_PROJECT_WHOLE_PANE);
     }
     /**
      * This method initializes the style for all UI components in
