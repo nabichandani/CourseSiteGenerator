@@ -6,6 +6,7 @@
 package csg.data;
 
 import csg.CSGApp;
+import csg.ui.CSGWorkspace;
 import djf.components.AppDataComponent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,7 @@ import javafx.collections.ObservableList;
  */
 public class CourseData implements AppDataComponent{
     CSGApp app;
+    CSGWorkspace workspace;
  
     ObservableList<CourseTemplate> templates;
     CourseTemplate home;
@@ -23,6 +25,14 @@ public class CourseData implements AppDataComponent{
     CourseTemplate schedule;
     CourseTemplate hws;
     CourseTemplate projects;
+    
+    String subject;
+    String number;
+    String semester;
+    String year;
+    String title;
+    String insName;
+    String insHome;
     
     public CourseData(CSGApp initApp){
         app = initApp;   
@@ -40,7 +50,73 @@ public class CourseData implements AppDataComponent{
         templates.add(schedule);
         templates.add(hws);
         templates.add(projects);
+        
+        subject = "";
+        number = "";
+        semester = "";
+        year = "";
+        title = "";
+        insName = "";
+        insHome = "";
     }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getInsName() {
+        return insName;
+    }
+
+    public String getInsHome() {
+        return insHome;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setInsName(String insName) {
+        this.insName = insName;
+    }
+
+    public void setInsHome(String insHome) {
+        this.insHome = insHome;
+    }
+    
+    
 
     public ObservableList<CourseTemplate> getTemplates() {
         return templates;

@@ -180,13 +180,13 @@ public class AppFileController {
             File selectedFile = fc.showDialog(app.getGUI().getWindow());
             Path destPath = selectedFile.toPath();
          
-            String path = "../TAManagerTester/public_html/js/OfficeHoursGridData.json";
+            String path = "../CSG/public_html/js/OfficeHoursGridData.json";
             app.getFileComponent().saveData(app.getTADataComponent(), 
                 app.getRecitationDataComponent(), app.getScheduleDataComponent(),
                 app.getProjectDataComponent(), app.getCourseDataComponent(), path);
             
             
-            String initPath = "../TAManagerTester/public_html/";
+            String initPath = "../CSG/public_html/";
             Path initialPath = Paths.get(initPath);
             File initFile= new File(initPath);
            
@@ -459,6 +459,7 @@ public class AppFileController {
         fc.setInitialDirectory(new File(PATH_WORK));
 	fc.setTitle(props.getProperty(LOAD_WORK_TITLE));
         File selectedFile = fc.showOpenDialog(app.getGUI().getWindow());
+        System.out.println(selectedFile.getAbsolutePath());
 
         // ONLY OPEN A NEW FILE IF THE USER SAYS OK
         if (selectedFile != null) {

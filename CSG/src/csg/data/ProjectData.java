@@ -63,10 +63,12 @@ public class ProjectData implements AppDataComponent{
         return false;
     }
     
-    public Student getStudent(String testName) {
+    public Student getStudent(String fName,String lName) {
         for (Student student: students) {
-            if (student.getFirstName().equals(testName)) {
+            if (student.getFirstName().equals(fName)) {
+                if (student.getLastName().equals(lName)) {
                 return student;
+            }
             }
         }
         return null;

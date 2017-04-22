@@ -77,6 +77,7 @@ public class TAData implements AppDataComponent {
         officeHours = new HashMap();
         
         // THESE ARE THE LANGUAGE-DEPENDENT OFFICE HOURS GRID HEADERS
+        /////////////////////////////
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         ArrayList<String> timeHeaders = props.getPropertyOptionsList(CSGProp.OFFICE_HOURS_TABLE_HEADERS);
         ArrayList<String> dowHeaders = props.getPropertyOptionsList(CSGProp.DAYS_OF_WEEK);

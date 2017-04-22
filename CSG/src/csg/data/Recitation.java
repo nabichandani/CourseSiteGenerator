@@ -78,7 +78,7 @@ public class Recitation <E extends Comparable<E>> implements Comparable<E>{
 
     @Override
     public int compareTo(E otherRecitation) {
-        return getInstructor().compareTo(((Recitation)otherRecitation).getInstructor());
+        return getSection().compareTo(((Recitation)otherRecitation).getSection());
     }
 }
 

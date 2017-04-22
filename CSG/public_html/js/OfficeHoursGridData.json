@@ -1,0 +1,159 @@
+
+{
+    "startHour":"0",
+    "endHour":"23",
+    "undergrad_tas":[
+        {
+            "name":"Mr. Krabs",
+            "email":"krabs@stonybrook.edu",
+            "undergrad":false
+        },
+        {
+            "name":"Patrick",
+            "email":"patrick@stonybrook.edu",
+            "undergrad":true
+        },
+        {
+            "name":"Sandy Cheeks",
+            "email":"sandy.cheeks@stonybrook.edu",
+            "undergrad":true
+        },
+        {
+            "name":"SpongeBob",
+            "email":"spongebob@stonybrook.edu",
+            "undergrad":false
+        },
+        {
+            "name":"Squidward",
+            "email":"squidward@stonybrook.edu",
+            "undergrad":false
+        }
+    ],
+    "officeHours":[
+        {
+            "day":"MONDAY",
+            "time":"10_00am",
+            "name":"SpongeBob"
+        },
+        {
+            "day":"FRIDAY",
+            "time":"12_00pm",
+            "name":"Patrick"
+        }
+    ],
+    "recitation":[
+        {
+            "section":"R01",
+            "instructor":"Red",
+            "day/time":"Wed 5:30 pm-6:23pm",
+            "location":"Krusty Krabs",
+            "firstTa":"Mr. Krabs",
+            "secondTa":"SpongeBob"
+        },
+        {
+            "section":"R02",
+            "instructor":"Blue",
+            "day/time":"Mon 4:00 pm-4:53pm",
+            "location":"Squidward's House",
+            "firstTa":"Squidward",
+            "secondTa":"Patrick"
+        },
+        {
+            "section":"R03",
+            "instructor":"Orange",
+            "day/time":"Fri 10:00am-10:53am",
+            "location":"Pineapple",
+            "firstTa":"SpongeBob",
+            "secondTa":"Sandy Cheeks"
+        }
+    ],
+    "scheduleItems":[
+        {
+            "type":"HW",
+            "date":"2/8/2017",
+            "time":"10:00am",
+            "title":"Class",
+            "topic":"UML",
+            "link":"",
+            "criteria":"Homework"
+        },
+        {
+            "type":"Holiday",
+            "date":"2/10/2017",
+            "time":"5:00pm",
+            "title":"Snow Day",
+            "topic":"",
+            "link":"https://en.wikipedia.org/wiki/Snow_day",
+            "criteria":"Break for students"
+        },
+        {
+            "type":"Lecture",
+            "date":"3/13/2017",
+            "time":"12:00pm",
+            "title":"Class",
+            "topic":"Event Programming",
+            "link":"",
+            "criteria":"Class for students"
+        }
+    ],
+    "teams":[
+        {
+            "name":"Team 1",
+            "color":"Orange",
+            "textColor":"White",
+            "link":"www.team1.com"
+        },
+        {
+            "name":"Team 2",
+            "color":"Blue",
+            "textColor":"Black",
+            "link":"www.team2.com"
+        }
+    ],
+    "students":[
+        {
+            "firstName":"Amy",
+            "lastName":"Gupta",
+            "team":"Team 2",
+            "role":"Lead Programmer"
+        },
+        {
+            "firstName":"Joe",
+            "lastName":"Shmoe",
+            "team":"Team 1",
+            "role":"Lead Designer"
+        }
+    ],
+    "courseTemplate":[
+        {
+            "use":true,
+            "navbarTitle":"Home",
+            "fileName":"index.html",
+            "script":"Homebuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"Syllabus",
+            "fileName":"syllabus.html",
+            "script":"SyllabusBuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"Schedule",
+            "fileName":"schedule.html",
+            "script":"ScheduleBuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"HWs",
+            "fileName":"hws.html",
+            "script":"HWsBuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"Projects",
+            "fileName":"projects.html",
+            "script":"ProjectsBuilder.html"
+        }
+    ]
+}

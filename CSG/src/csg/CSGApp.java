@@ -12,6 +12,7 @@ import csg.files.CSGFiles;
 import csg.ui.CSGWorkspace;
 import djf.AppTemplate;
 import javafx.application.Application;
+import test_bed.TestSave;
 
 
 /**
@@ -29,6 +30,7 @@ public class CSGApp extends AppTemplate{
         projectDataComponent= new ProjectData(this);
         scheduleDataComponent= new ScheduleData(this);
         workspaceComponent = new CSGWorkspace(this);
+        //fileComponent = new TestSave(this);
         fileComponent = new CSGFiles(this);
         styleComponent = new CSGStyle(this);
     }

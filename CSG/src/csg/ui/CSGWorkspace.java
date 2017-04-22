@@ -142,6 +142,13 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     Label courseTemplateLocLabel;
     Label courseSitePageLabel;
     
+    ComboBox subjectCombo;
+    ComboBox numCombo;
+    ComboBox semCombo;
+    ComboBox yearCombo;
+    TextField titleTextField;
+    TextField insNameTextField;
+    TextField insHomeTextField;
     
 
     
@@ -485,17 +492,17 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseSubjectLabel.setPrefWidth(150);
         courseSubjectLabel.setPadding(new Insets(0,0,0,10));
         courseSubNum.getChildren().add(courseSubjectLabel);
-        ComboBox subjectCombo = new ComboBox();
-        subjectCombo.setPrefWidth(100);
+        subjectCombo = new ComboBox();
+        subjectCombo.setPrefWidth(130);
         courseSubNum.getChildren().add(subjectCombo);
         
         String courseNumberText = props.getProperty(CSGProp.NUMBER_TEXT.toString());
         courseNumberLabel = new Label(courseNumberText);
-        courseNumberLabel.setPrefWidth(98);
+        courseNumberLabel.setPrefWidth(81);
         courseSubNum.getChildren().add(courseNumberLabel);
         courseSubNum.setSpacing(89);
-        ComboBox numCombo = new ComboBox();
-        numCombo.setPrefWidth(100);
+        numCombo = new ComboBox();
+        numCombo.setPrefWidth(130);
         courseSubNum.getChildren().add(numCombo);
         courseDetails.getChildren().add(courseSubNum);
         
@@ -506,19 +513,19 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseSemesterLabel.setPrefWidth(158);
         courseSemesterLabel.setPadding(new Insets(0,0,0,10));
         courseSemYear.getChildren().add(courseSemesterLabel);
-        ComboBox semCombo = new ComboBox();
-        semCombo.setPrefWidth(100);
+        semCombo = new ComboBox();
+        semCombo.setPrefWidth(130);
         courseSemYear.getChildren().add(semCombo);
         
         String courseYearText = props.getProperty(CSGProp.YEAR_TEXT.toString());
         courseYearLabel = new Label(courseYearText);
-        courseYearLabel.setPrefWidth(118);
+        courseYearLabel.setPrefWidth(100);
         courseYearLabel.setPadding(new Insets(0,0,0,9)); 
         courseSemYear.getChildren().add(courseYearLabel);
         courseSemYear.setSpacing(80);
         
-        ComboBox yearCombo = new ComboBox();
-        yearCombo.setPrefWidth(100);
+        yearCombo = new ComboBox();
+        yearCombo.setPrefWidth(130);
         courseSemYear.getChildren().add(yearCombo);
         courseDetails.getChildren().add(courseSemYear);
         
@@ -530,8 +537,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseTitleLabel.setPrefWidth(130);
         courseTitleLabel.setPadding(new Insets(0,0,0,10));
         courseTitle.getChildren().add(courseTitleLabel);
-        TextField titleTextField = new TextField();
-        titleTextField.setMinWidth(480);
+        titleTextField = new TextField();
+        titleTextField.setMinWidth(523);
         courseTitle.getChildren().add(titleTextField);
         courseDetails.getChildren().add(courseTitle);
         
@@ -543,8 +550,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseInsNameLabel.setPrefWidth(222);
         courseInsNameLabel.setPadding(new Insets(0,0,0,10));
         courseInsName.getChildren().add(courseInsNameLabel);
-        TextField insNameTextField = new TextField();
-        insNameTextField.setMinWidth(480);
+        insNameTextField = new TextField();
+        insNameTextField.setMinWidth(523);
         courseInsName.getChildren().add(insNameTextField);
         courseDetails.getChildren().add(courseInsName);
         
@@ -555,8 +562,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseInsHomeLabel = new Label(courseInsHomeText);
         courseInsHomeLabel.setPrefWidth(220);
         courseInsHome.getChildren().add(courseInsHomeLabel);
-        TextField insHomeTextField = new TextField();
-        insHomeTextField.setMinWidth(480);
+        insHomeTextField = new TextField();
+        insHomeTextField.setMinWidth(525);
         courseInsHomeLabel.setPadding(new Insets(0,0,0,10));
         courseInsHome.getChildren().add(insHomeTextField);
         courseDetails.getChildren().add(courseInsHome);
@@ -575,7 +582,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         Button exportChangeButton = new Button();
         exportChangeButton.setText(changeButtonText);
         exportLabel = new Label();  
-        exportLabel.setPrefWidth(390);
+        exportLabel.setPrefWidth(435);
         String exportDirLoc= props.getProperty(CSGProp
             .EXPORT_LOCATION_TEXT.toString());
         exportLabel.setText(exportDirLoc);
@@ -1491,7 +1498,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         ScrollPane projectScroll = new ScrollPane(projectWholePane);
         projectScroll.setMaxWidth(810);
         projectPane.getChildren().add(projectScroll);
-        
+          
         
         
         
@@ -1627,6 +1634,55 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 }
             }catch(NullPointerException ex){    
            }
+        });
+        
+        subjectCombo.setOnMouseClicked(e -> {
+            if(subjectCombo.getValue() == null){
+                courseData.setSubject("");
+            }
+            else{
+                courseData.setSubject((String) subjectCombo.getValue());
+            }
+        });
+        
+        numCombo.setOnMouseClicked(e -> {
+            if(numCombo.getValue() == null){
+                courseData.setNumber("");
+            }
+            else{
+                courseData.setNumber((String) numCombo.getValue());
+            }
+        });
+        
+        semCombo.setOnMouseClicked(e -> {
+            if(semCombo.getValue() == null){
+                courseData.setSemester("");
+            }
+            else{
+                courseData.setSemester((String) semCombo.getValue());
+            }
+        });
+        
+        
+        yearCombo.setOnMouseClicked(e -> {
+            if(yearCombo.getValue() == null){
+                courseData.setYear("");
+            }
+            else{
+                courseData.setYear((String) yearCombo.getValue());
+            }
+        });
+        
+        titleTextField.setOnKeyPressed(e ->{
+            courseData.setTitle(titleTextField.getText());
+        });
+        
+        insNameTextField.setOnKeyPressed(e ->{
+            courseData.setInsName(insNameTextField.getText());
+        });
+        
+        insHomeTextField.setOnKeyPressed(e ->{
+            courseData.setInsHome(insHomeTextField.getText());
         });
         
         taTable.setOnKeyPressed(e -> {
@@ -2014,6 +2070,35 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public TableColumn<Team, String> getTeamNameColumn() {
         return teamNameColumn;
     }
+
+    public ComboBox getSubjectCombo() {
+        return subjectCombo;
+    }
+
+    public ComboBox getNumCombo() {
+        return numCombo;
+    }
+
+    public ComboBox getSemCombo() {
+        return semCombo;
+    }
+
+    public ComboBox getYearCombo() {
+        return yearCombo;
+    }
+
+    public TextField getTitleTextField() {
+        return titleTextField;
+    }
+
+    public TextField getInsNameTextField() {
+        return insNameTextField;
+    }
+
+    public TextField getInsHomeTextField() {
+        return insHomeTextField;
+    }
+    
 
     public TableColumn<Team, String> getColorColumn() {
         return colorColumn;

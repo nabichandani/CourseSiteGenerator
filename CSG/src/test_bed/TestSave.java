@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package csg.files;
+package test_bed;
 
 import csg.CSGApp;
 import csg.data.CourseData;
@@ -17,11 +17,10 @@ import csg.data.Student;
 import csg.data.TAData;
 import csg.data.TeachingAssistant;
 import csg.data.Team;
+import csg.files.TimeSlot;
 import csg.ui.CSGWorkspace;
 import djf.components.AppDataComponent;
 import djf.components.AppFileComponent;
-import djf.components.AppWorkspaceComponent;
-import djf.controller.AppFileController;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,13 +28,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -50,9 +49,10 @@ import javax.json.stream.JsonGenerator;
  *
  * @author Navin
  */
-public class CSGFiles implements AppFileComponent{
-    CSGApp app;
-    CSGWorkspace workspace;
+public class TestSave implements AppFileComponent{
+    
+    static CSGApp app;
+    ArrayList<TimeSlot> officeHours;
     
     // THESE ARE USED FOR IDENTIFYING JSON TYPES
     static final String JSON_START_HOUR = "startHour";
@@ -110,8 +110,7 @@ public class CSGFiles implements AppFileComponent{
     static final String JSON_RIGHTFOOTER = "rightFooter";
     static final String JSON_STYLESHEET = "styleSheet";
     
-    
-    public CSGFiles(CSGApp initApp){
+    public TestSave(CSGApp initApp){
     app = initApp;
 }
     @Override
@@ -124,7 +123,6 @@ public class CSGFiles implements AppFileComponent{
         RecitationData recDataManager = (RecitationData)recData;
         ProjectData projectDataManager = (ProjectData)projectData;
         CourseData courseDataManager = (CourseData)courseData;
-        workspace = (CSGWorkspace)app.getWorkspaceComponent();
 
 	// LOAD THE JSON FILE WITH ALL THE DATA
 	JsonObject json = loadJSONFile(filePath);
@@ -132,10 +130,12 @@ public class CSGFiles implements AppFileComponent{
 	// LOAD THE START AND END HOURS
 	String startHour = json.getString(JSON_START_HOUR);
         String endHour = json.getString(JSON_END_HOUR);
-        dataManager.initHours(startHour, endHour);
+        //////////////////////////////
+        //dataManager.initHours(startHour, endHour);
 
         // NOW RELOAD THE WORKSPACE WITH THE LOADED DATA
-        app.getWorkspaceComponent().reloadWorkspace(app.getTADataComponent());
+        //////////////////////////
+        //app.getWorkspaceComponent().reloadWorkspace(app.getTADataComponent());
 
         // NOW LOAD ALL THE UNDERGRAD TAs
         JsonArray jsonTAArray = json.getJsonArray(JSON_UNDERGRAD_TAS);
@@ -151,12 +151,16 @@ public class CSGFiles implements AppFileComponent{
 
         // AND THEN ALL THE OFFICE HOURS
         JsonArray jsonOfficeHoursArray = json.getJsonArray(JSON_OFFICE_HOURS);
+        officeHours = new ArrayList();
         for (int i = 0; i < jsonOfficeHoursArray.size(); i++) {
             JsonObject jsonOfficeHours = jsonOfficeHoursArray.getJsonObject(i);
             String day = jsonOfficeHours.getString(JSON_DAY);
             String time = jsonOfficeHours.getString(JSON_TIME);
             String name = jsonOfficeHours.getString(JSON_NAME);
-            dataManager.addOfficeHoursReservation(day, time, name);
+            TimeSlot ts = new TimeSlot(day, time, name);
+            officeHours.add(ts);
+            ///////////////////////////////
+            //dataManager.addOfficeHoursReservation(day, time, name);
         }
         
         JsonArray jsonRecitationArray = json.getJsonArray(JSON_RECITATION);
@@ -225,14 +229,6 @@ public class CSGFiles implements AppFileComponent{
         courseDataManager.setTitle(courseJson.getString(JSON_TITLE));
         courseDataManager.setInsName(courseJson.getString(JSON_INSTRUCTORNAME));
         courseDataManager.setInsHome(courseJson.getString(JSON_INSTRUCTORHOME));
-        
-        workspace.getSubjectCombo().setValue(courseDataManager.getSubject());
-        workspace.getNumCombo().setValue(courseDataManager.getNumber());
-        workspace.getSemCombo().setValue(courseDataManager.getSemester());
-        workspace.getYearCombo().setValue(courseDataManager.getYear());
-        workspace.getTitleTextField().setText(courseDataManager.getTitle());
-        workspace.getInsNameTextField().setText(courseDataManager.getInsName());
-        workspace.getInsHomeTextField().setText(courseDataManager.getInsHome());
     }
     
     // HELPER METHOD FOR LOADING DATA FROM A JSON FORMAT
@@ -251,6 +247,13 @@ public class CSGFiles implements AppFileComponent{
         AppDataComponent courseData, String filePath) throws IOException {
 	// GET THE DATA
 	TAData dataManager = (TAData)data;
+        
+        TeachingAssistant ta1 = new TeachingAssistant("SpongeBob", "spongebob@stonybrook.edu", new SimpleBooleanProperty(false));
+        TeachingAssistant ta2 = new TeachingAssistant("Patrick", "patrick@stonybrook.edu", new SimpleBooleanProperty(true));
+        TeachingAssistant ta3 = new TeachingAssistant("Squidward", "squidward@stonybrook.edu", new SimpleBooleanProperty(false));
+        TeachingAssistant ta4 = new TeachingAssistant("Sandy Cheeks", "sandy.cheeks@stonybrook.edu", new SimpleBooleanProperty(true));
+        TeachingAssistant ta5 = new TeachingAssistant("Mr. Krabs", "krabs@stonybrook.edu", new SimpleBooleanProperty(false));
+        dataManager.getTeachingAssistants().addAll(ta1, ta2, ta3, ta4, ta5);
 
 	// NOW BUILD THE TA JSON OBJCTS TO SAVE
 	JsonArrayBuilder taArrayBuilder = Json.createArrayBuilder();
@@ -264,10 +267,17 @@ public class CSGFiles implements AppFileComponent{
 	    taArrayBuilder.add(taJson);
 	}
 	JsonArray undergradTAsArray = taArrayBuilder.build();
+        
 
 	// NOW BUILD THE TIME SLOT JSON OBJCTS TO SAVE
 	JsonArrayBuilder timeSlotArrayBuilder = Json.createArrayBuilder();
-	ArrayList<TimeSlot> officeHours = TimeSlot.buildOfficeHoursList(dataManager);
+	ArrayList<TimeSlot> officeHours = new ArrayList();
+        
+        TimeSlot timeSlot1 = new TimeSlot("MONDAY", "10_00am", "SpongeBob");
+        TimeSlot timeSlot2 = new TimeSlot("FRIDAY", "12_00am", "Patrick");
+        officeHours.add(timeSlot1);
+        officeHours.add(timeSlot2);
+        
 	for (TimeSlot ts : officeHours) {	    
 	    JsonObject tsJson = Json.createObjectBuilder()
 		    .add(JSON_DAY, ts.getDay())
@@ -283,6 +293,11 @@ public class CSGFiles implements AppFileComponent{
         JsonArrayBuilder recArrayBuilder = Json.createArrayBuilder();
 	ObservableList<Recitation> recitations = recDataManager.getRecitations();
         
+        Recitation rec1 = new Recitation("R01", "Red", "Wed 5:30 pm-6:23pm", "Krusty Krabs", ta5.getName() , ta1.getName());
+        Recitation rec2 = new Recitation("R02", "Blue", "Mon 4:00 pm-4:53pm", "Squidward's House", ta3.getName() , ta2.getName());
+        Recitation rec3 = new Recitation("R03", "Orange", "Fri 10:00am-10:53am", "Pineapple", ta1.getName() , ta4.getName());
+        
+        recitations.addAll(rec1, rec2, rec3);
         
         for (Recitation recitation : recitations) {	    
 	    JsonObject recitationJson = Json.createObjectBuilder()
@@ -301,6 +316,11 @@ public class CSGFiles implements AppFileComponent{
         JsonArrayBuilder schArrayBuilder = Json.createArrayBuilder();
 	ObservableList<ScheduleItem> schedule = schDataManager.getSchedule();
         
+        ScheduleItem schItem1 = new ScheduleItem("Holiday", "2/10/2017", "5:00pm", "Snow Day", "", "https://en.wikipedia.org/wiki/Snow_day", "Break for students");
+        ScheduleItem schItem2 = new ScheduleItem("Lecture", "3/13/2017", "12:00pm", "Class", "Event Programming", "", "Class for students");
+        ScheduleItem schItem3 = new ScheduleItem("HW", "2/8/2017", "10:00am", "Class", "UML", "", "Homework");
+        
+        schedule.addAll(schItem1, schItem2, schItem3);
         
         for (ScheduleItem scheduleItem : schedule) {	    
 	    JsonObject scheduleJson = Json.createObjectBuilder()
@@ -321,6 +341,17 @@ public class CSGFiles implements AppFileComponent{
         JsonArrayBuilder studentArrayBuilder = Json.createArrayBuilder();
 	ObservableList<Team> teams = projectDataManager.getTeams();
         ObservableList<Student> students = projectDataManager.getStudents();
+        
+        Team team1 = new Team("Team 1", "Orange", "White", "www.team1.com");
+        Team team2 = new Team("Team 2", "Blue", "Black", "www.team2.com");
+        teams.add(team1);
+        teams.add(team2);
+        
+        Student student1 = new Student("Joe", "Shmoe", "Team 1", "Lead Designer");
+        Student student2 = new Student("Amy", "Gupta", "Team 2", "Lead Programmer");
+        students.add(student1);
+        students.add(student2);
+        
         
         for (Team team : teams) {	    
 	    JsonObject teamsJson = Json.createObjectBuilder()
@@ -359,7 +390,15 @@ public class CSGFiles implements AppFileComponent{
 	}
         JsonArray courseArray = courseArrayBuilder.build();
         
-        CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+       
+        courseDataManager.setSubject("CSE");
+        courseDataManager.setNumber("219");
+        courseDataManager.setSemester("Fall");
+        courseDataManager.setYear("2017");
+        courseDataManager.setTitle("Computer Science III");
+        courseDataManager.setInsName("Richard McKenna");
+        courseDataManager.setInsHome("http://www3.cs.stonybrook.edu/~richard/");
+        
         JsonObject courseJson = Json.createObjectBuilder()
                 .add(JSON_SUBJECT, courseDataManager.getSubject())
                 .add(JSON_NUMBER, courseDataManager.getNumber())
@@ -371,8 +410,7 @@ public class CSGFiles implements AppFileComponent{
                 .build();
                   
         
-        
-	// THEN PUT IT ALL RECITATIONS IN A JsonObject
+       
 	JsonObject dataManagerJSO = Json.createObjectBuilder()
                 .add(JSON_COURSE, courseJson)
                 .add(JSON_COURSETEMPLATE, courseArray)
@@ -413,6 +451,26 @@ public class CSGFiles implements AppFileComponent{
         
     }
     
+    //Main Method
+    public static void main(String[] args){
+        try {
+            AppDataComponent data = new TAData(app);
+            AppDataComponent recData = new RecitationData(app);
+            AppDataComponent schData = new ScheduleData(app);
+            AppDataComponent projectData = new ProjectData(app);
+            AppDataComponent courseData = new CourseData(app);
+            String filePath = "C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\work\\SiteSaveTest.json";
+            TestSave instance = new TestSave(app);
+            instance.saveData(data, recData, schData, projectData, courseData, filePath);
+        } catch (IOException ex) {
+            Logger.getLogger(TestSave.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public ArrayList<TimeSlot> getOfficeHours() {
+        return officeHours;
+    }
+    
     
     
     // IMPORTING/EXPORTING DATA IS USED WHEN WE READ/WRITE DATA IN AN
@@ -428,3 +486,4 @@ public class CSGFiles implements AppFileComponent{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
+
