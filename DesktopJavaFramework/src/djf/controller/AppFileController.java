@@ -106,6 +106,10 @@ public class AppFileController {
 
                 // RESET THE DATA
                 app.getTADataComponent().resetData();
+                app.getCourseDataComponent().resetData();
+                app.getProjectDataComponent().resetData();
+                app.getScheduleDataComponent().resetData();
+                app.getRecitationDataComponent().resetData();
                 
                 // NOW RELOAD THE WORKSPACE WITH THE RESET DATA
                 app.getWorkspaceComponent().reloadWorkspace(app.getTADataComponent());

@@ -43,6 +43,10 @@ public class TAData implements AppDataComponent {
     // INITIALIZE OUR OFFICE HOURS GRID
     ArrayList<String> gridHeaders;
     
+    //Used to see the index of the col for the grid
+    ArrayList<String> gridHead;
+    
+    
     
     // THESE ARE THE TIME BOUNDS FOR THE OFFICE HOURS GRID. NOTE
     // THAT THESE VALUES CAN BE DIFFERENT FOR DIFFERENT FILES, BUT
@@ -82,6 +86,14 @@ public class TAData implements AppDataComponent {
         ArrayList<String> timeHeaders = props.getPropertyOptionsList(CSGProp.OFFICE_HOURS_TABLE_HEADERS);
         ArrayList<String> dowHeaders = props.getPropertyOptionsList(CSGProp.DAYS_OF_WEEK);
         gridHeaders = new ArrayList();
+        gridHead = new ArrayList();
+        gridHead.add("");
+        gridHead.add("");
+        gridHead.add("MONDAY");
+        gridHead.add("TUESDAY");
+        gridHead.add("WEDNESDAY");
+        gridHead.add("THURSDAY");
+        gridHead.add("FRIDAY");
         gridHeaders.addAll(timeHeaders);
         gridHeaders.addAll(dowHeaders);
     }
@@ -154,7 +166,7 @@ public class TAData implements AppDataComponent {
     }
     
     public String getCellKey(String day, String time) {
-        int col = gridHeaders.indexOf(day);
+        int col = gridHead.indexOf(day);
         int row = 1;
         int hour = Integer.parseInt(time.substring(0, time.indexOf("_")));
         int milHour = hour;

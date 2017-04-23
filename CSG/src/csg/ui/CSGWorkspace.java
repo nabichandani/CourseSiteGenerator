@@ -632,7 +632,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseTemplatePane.getChildren().add(courseDirInfoLabel);
         
         //Template Location Label
-        String courseTemplateLocText = props.getProperty(CSGProp.TEMPLATE_LOCATION_TEXT.toString());;
+        String courseTemplateLocText = props.getProperty(CSGProp.TEMPLATE_LOCATION_TEXT.toString());
         courseTemplateLocLabel = new Label();
         courseTemplateLocLabel.setPadding(new Insets(0,0,0,12));
         courseTemplateLocLabel.setText(courseTemplateLocText);
@@ -2370,7 +2370,27 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     @Override
     public void resetWorkspace() {
         // CLEAR OUT THE GRID PANE
+        PropertiesManager props = PropertiesManager.getPropertiesManager();  
         officeHoursGridPane.getChildren().clear();
+        yearCombo.setValue("");
+        subjectCombo.setValue("");
+        semCombo.setValue("");
+        numCombo.setValue("");
+        titleTextField.clear();
+        insHomeTextField.clear();
+        insNameTextField.clear();
+        bannerImage.setImage(null);
+        leftFooterImage.setImage(null);
+        rightFooterImage.setImage(null);
+        styleSheetCombo.setValue("");
+        String exportDirLoc= props.getProperty(CSGProp
+            .EXPORT_LOCATION_TEXT.toString());
+        exportLabel.setText(exportDirLoc);
+        
+        String courseTemplateLocText = props.getProperty(CSGProp
+            .TEMPLATE_LOCATION_TEXT.toString());
+        courseTemplateLocLabel.setText(courseTemplateLocText);
+        
         
         // AND THEN ALL THE GRID PANES AND LABELS
         officeHoursGridTimeHeaderPanes.clear();

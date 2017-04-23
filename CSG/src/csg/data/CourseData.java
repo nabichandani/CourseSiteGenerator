@@ -193,7 +193,35 @@ public class CourseData implements AppDataComponent{
     
     @Override
     public void resetData() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        templates.clear();
+        
+                home = new CourseTemplate(true, "Home", "index.html", "Homebuilder.js");
+        syllabus = new CourseTemplate(true, "Syllabus", 
+            "syllabus.html", "SyllabusBuilder.js");
+        schedule = new CourseTemplate(true, "Schedule",
+            "schedule.html", "ScheduleBuilder.js");
+        hws = new CourseTemplate(true, "HWs", "hws.html", "HWsBuilder.js");
+        projects = new CourseTemplate(true, "Projects", 
+            "projects.html", "ProjectsBuilder.html");
+        templates.add(home);
+        templates.add(syllabus);
+        templates.add(schedule);
+        templates.add(hws);
+        templates.add(projects);
+        
+        subject = "";
+        number = "";
+        semester = "";
+        year = "";
+        title = "";
+        insName = "";
+        insHome = "";
+        bannerLink = "";
+        leftFooterLink = "";
+        rightFooterLink = "";
+        exportDir = "";
+        templateDir = "";
+        styleSheet = "";
     }
     
 }

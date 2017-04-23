@@ -300,9 +300,9 @@ public class TestSave implements AppFileComponent{
         JsonArrayBuilder recArrayBuilder = Json.createArrayBuilder();
 	ObservableList<Recitation> recitations = recDataManager.getRecitations();
         
-        Recitation rec1 = new Recitation("R01", "Red", "Wed 5:30 pm-6:23pm", "Krusty Krabs", ta5.getName() , ta1.getName());
-        Recitation rec2 = new Recitation("R02", "Blue", "Mon 4:00 pm-4:53pm", "Squidward's House", ta3.getName() , ta2.getName());
-        Recitation rec3 = new Recitation("R03", "Orange", "Fri 10:00am-10:53am", "Pineapple", ta1.getName() , ta4.getName());
+        Recitation rec1 = new Recitation("R01", "McKenna", "Wed 5:30 pm-6:23pm", "Krusty Krabs", ta5.getName() , ta1.getName());
+        Recitation rec2 = new Recitation("R02", "SpongeBob", "Mon 4:00 pm-4:53pm", "Squidward's House", ta3.getName() , ta2.getName());
+        Recitation rec3 = new Recitation("R03", "McKenna", "Fri 10:00am-10:53am", "Pineapple", ta1.getName() , ta4.getName());
         
         recitations.addAll(rec1, rec2, rec3);
         
