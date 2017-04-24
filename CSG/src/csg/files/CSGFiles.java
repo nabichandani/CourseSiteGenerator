@@ -70,13 +70,13 @@ public class CSGFiles implements AppFileComponent{
     static final String JSON_UG = "undergrad";
     static final String JSON_UNDERGRAD_TAS = "undergrad_tas";
     
-    static final String JSON_RECITATION = "recitation";
+    static final String JSON_RECITATION = "recitations";
     static final String JSON_SECTION = "section";
     static final String JSON_INSTRUCTOR = "instructor";
-    static final String JSON_DAYTIME = "day/time"; 
+    static final String JSON_DAYTIME = "day_time"; 
     static final String JSON_LOCATION = "location";
-    static final String JSON_FIRSTTA = "firstTa";
-    static final String JSON_SECONDTA = "secondTa";
+    static final String JSON_FIRSTTA = "ta_1";
+    static final String JSON_SECONDTA = "ta_2";
     
     static final String JSON_SCHEDULEITEM = "scheduleItems";
     static final String JSON_TYPE = "type";
@@ -86,7 +86,7 @@ public class CSGFiles implements AppFileComponent{
 
     static final String JSON_TEAMS = "teams";
     static final String JSON_COLOR = "color";
-    static final String JSON_TEXTCOLOR = "textColor";
+    static final String JSON_TEXTCOLOR = "text_color";
     static final String JSON_LINK = "link";
     
     static final String JSON_STUDENTS = "students";
@@ -586,6 +586,7 @@ public class CSGFiles implements AppFileComponent{
 	String prettyPrinted = sw.toString();
 	PrintWriter pw = new PrintWriter(filePath);
 	pw.write(prettyPrinted);
+	pw.close();
     }
     
     public void saveTeamsAndStudentsData(AppDataComponent projectData, String filePath) throws IOException{
@@ -608,8 +609,8 @@ public class CSGFiles implements AppFileComponent{
         
         for (Student student : students) {	    
 	    JsonObject studentsJson = Json.createObjectBuilder()
-		    .add(JSON_FIRSTNAME, student.getFirstName())
                     .add(JSON_LASTNAME, student.getLastName())
+		    .add(JSON_FIRSTNAME, student.getFirstName())
                     .add(JSON_TEAM, student.getTeam())
                     .add(JSON_ROLE, student.getRole())        
                     .build();
@@ -715,27 +716,27 @@ public class CSGFiles implements AppFileComponent{
             File selectedFile = new File((workspace.getExportLabel().getText()));
             Path destPath = selectedFile.toPath();
          
-            String path = "../CSG/public_html/js/OfficeHoursGridData.json";
+            String path = "../CourseGenTester/public_html/js/OfficeHoursGridData.json";
             saveData(app.getTADataComponent(), 
                 app.getRecitationDataComponent(), app.getScheduleDataComponent(),
                 app.getProjectDataComponent(), app.getCourseDataComponent(), path);
             
-            String pathTA = "../CSG/public_html/js/TAsData.json";
+            String pathTA = "../CourseGenTester/public_html/js/TAsData.json";
             saveTAData( app.getTADataComponent(), pathTA);
             
-            String pathRec = "../CSG/public_html/js/RecitationsData.json";
+            String pathRec = "../CourseGenTester/public_html/js/RecitationsData.json";
             saveRecitationData(app.getRecitationDataComponent(), pathRec);
             
-            String pathSch = "../CSG/public_html/js/ScheduleData.json";
+            String pathSch = "../CourseGenTester/public_html/js/ScheduleData.json";
             saveScheduleData(app.getScheduleDataComponent(), pathSch);
             
-            String pathTeamsStudents =  "../CSG/public_html/js/TeamsAndStudents.json";
+            String pathTeamsStudents =  "../CourseGenTester/public_html/js/TeamsAndStudents.json";
             saveTeamsAndStudentsData(app.getProjectDataComponent(), pathTeamsStudents);
             
-            String pathCourse =  "../CSG/public_html/js/ProjectsData.json";
+            String pathCourse =  "../CourseGenTester/public_html/js/ProjectsData.json";
             saveProjectsData(app.getCourseDataComponent(), pathCourse);
             
-            String initPath = "../CSG/public_html/";
+            String initPath = "../CourseGenTester/public_html/";
             Path initialPath = Paths.get(initPath);
             File initFile= new File(initPath);
             

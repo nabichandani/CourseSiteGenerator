@@ -1,0 +1,32 @@
+
+{
+    "scheduleItems":[
+        {
+            "type":"HW",
+            "date":"2/8/2017",
+            "time":"10:00am",
+            "title":"Class",
+            "topic":"UML",
+            "link":"",
+            "criteria":"Homework"
+        },
+        {
+            "type":"Holiday",
+            "date":"2/10/2017",
+            "time":"5:00pm",
+            "title":"Snow Day",
+            "topic":"",
+            "link":"https://en.wikipedia.org/wiki/Snow_day",
+            "criteria":"Break for students"
+        },
+        {
+            "type":"Lecture",
+            "date":"3/13/2017",
+            "time":"12:00pm",
+            "title":"Class",
+            "topic":"Event Programming",
+            "link":"",
+            "criteria":"Class for students"
+        }
+    ]
+}

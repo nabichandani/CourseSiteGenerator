@@ -26,6 +26,7 @@ public class CSGApp extends AppTemplate{
     public void buildAppComponentsHook() {
         courseDataComponent = new CourseData(this);
         taDataComponent = new TAData(this);
+        ((TAData)taDataComponent).initGridHeaders();
         recitationDataComponent= new RecitationData(this);
         projectDataComponent= new ProjectData(this);
         scheduleDataComponent= new ScheduleData(this);

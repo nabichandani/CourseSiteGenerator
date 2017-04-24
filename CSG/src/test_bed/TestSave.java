@@ -65,13 +65,13 @@ public class TestSave implements AppFileComponent{
     static final String JSON_UG = "undergrad";
     static final String JSON_UNDERGRAD_TAS = "undergrad_tas";
     
-    static final String JSON_RECITATION = "recitation";
+    static final String JSON_RECITATION = "recitations";
     static final String JSON_SECTION = "section";
     static final String JSON_INSTRUCTOR = "instructor";
-    static final String JSON_DAYTIME = "day/time"; 
+    static final String JSON_DAYTIME = "day_time"; 
     static final String JSON_LOCATION = "location";
-    static final String JSON_FIRSTTA = "firstTa";
-    static final String JSON_SECONDTA = "secondTa";
+    static final String JSON_FIRSTTA = "ta_1";
+    static final String JSON_SECONDTA = "ta_2";
     
     static final String JSON_SCHEDULEITEM = "scheduleItems";
     static final String JSON_TYPE = "type";
@@ -81,7 +81,7 @@ public class TestSave implements AppFileComponent{
 
     static final String JSON_TEAMS = "teams";
     static final String JSON_COLOR = "color";
-    static final String JSON_TEXTCOLOR = "textColor";
+    static final String JSON_TEXTCOLOR = "text_color";
     static final String JSON_LINK = "link";
     
     static final String JSON_STUDENTS = "students";
@@ -405,10 +405,10 @@ public class TestSave implements AppFileComponent{
         courseDataManager.setTitle("Computer Science III");
         courseDataManager.setInsName("Richard McKenna");
         courseDataManager.setInsHome("http://www3.cs.stonybrook.edu/~richard/");
-        courseDataManager.setBannerLink("C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUDarkRedShieldLogo.png");
-        courseDataManager.setLeftFooterLink("C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\CSLogo.png");
-        courseDataManager.setRightFooterLink("C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUWhiteShieldLogo.jpg");
-        courseDataManager.setTemplateDir("Navin\\CourseSiteGenerator\\CSG\\data");
+        courseDataManager.setBannerLink("C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\SBUDarkRedShieldLogo.png");
+        courseDataManager.setLeftFooterLink("C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\CSLogo.png");
+        courseDataManager.setRightFooterLink("C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\SBUWhiteShieldLogo.jpg");
+        courseDataManager.setTemplateDir("Navin\\CourseSiteGenerator\\CourseGenTester\\data");
         courseDataManager.setExportDir("C:\\Users\\Navin");
         courseDataManager.setStyleSheet("sea_wolf.css");
         

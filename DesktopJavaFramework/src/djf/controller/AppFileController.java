@@ -185,35 +185,7 @@ public class AppFileController {
         AppFileComponent file = app.getFileComponent();
         try {
               file.exportData();
-//            File selectedFile = new File(app.getWorkspaceComponent())
-//            Path destPath = selectedFile.toPath();
-//         
-//            String path = "../CSG/public_html/js/OfficeHoursGridData.json";
-//            app.getFileComponent().saveData(app.getTADataComponent(), 
-//                app.getRecitationDataComponent(), app.getScheduleDataComponent(),
-//                app.getProjectDataComponent(), app.getCourseDataComponent(), path);
-//            
-//            String pathTA = "../CSG/public_html/js/TAsData.json";
-//            app.getFileComponent().saveTAData( app.getTADataComponent(), pathTA);
-//            
-//            String pathRec = "../CSG/public_html/js/RecitationsData.json";
-//            app.getFileComponent().saveRecitationData(app.getRecitationDataComponent(), pathRec);
-//            
-//            String pathSch = "../CSG/public_html/js/ScheduleData.json";
-//            app.getFileComponent().saveScheduleData(app.getScheduleDataComponent(), pathSch);
-//            
-//            String pathTeamsStudents =  "../CSG/public_html/js/TeamsAndStudents.json";
-//            app.getFileComponent().saveTeamsAndStudentsData(app.getProjectDataComponent(), pathTeamsStudents);
-//            
-//            String pathCourse =  "../CSG/public_html/js/ProjectsData.json";
-//            app.getFileComponent().saveProjectsData(app.getCourseDataComponent(), pathCourse);
-//            
-//            String initPath = "../CSG/public_html/";
-//            Path initialPath = Paths.get(initPath);
-//            File initFile= new File(initPath);
-//            
-//            FileUtils.copyDirectory(initFile, selectedFile);
-           
+
             AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
 	    dialog.show(props.getProperty(EXPORT_COMPLETE_TITLE), props.getProperty(EXPORT_COMPLETE_MESSAGE));
 

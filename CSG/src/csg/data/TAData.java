@@ -82,6 +82,23 @@ public class TAData implements AppDataComponent {
         
         // THESE ARE THE LANGUAGE-DEPENDENT OFFICE HOURS GRID HEADERS
         /////////////////////////////
+//        PropertiesManager props = PropertiesManager.getPropertiesManager();
+//        ArrayList<String> timeHeaders = props.getPropertyOptionsList(CSGProp.OFFICE_HOURS_TABLE_HEADERS);
+//        ArrayList<String> dowHeaders = props.getPropertyOptionsList(CSGProp.DAYS_OF_WEEK);
+//        gridHeaders = new ArrayList();
+//        gridHead = new ArrayList();
+//        gridHead.add("");
+//        gridHead.add("");
+//        gridHead.add("MONDAY");
+//        gridHead.add("TUESDAY");
+//        gridHead.add("WEDNESDAY");
+//        gridHead.add("THURSDAY");
+//        gridHead.add("FRIDAY");
+//        gridHeaders.addAll(timeHeaders);
+//        gridHeaders.addAll(dowHeaders);
+    }
+    
+    public void initGridHeaders(){
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         ArrayList<String> timeHeaders = props.getPropertyOptionsList(CSGProp.OFFICE_HOURS_TABLE_HEADERS);
         ArrayList<String> dowHeaders = props.getPropertyOptionsList(CSGProp.DAYS_OF_WEEK);
