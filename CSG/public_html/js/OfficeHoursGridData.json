@@ -1,5 +1,52 @@
 
 {
+    "course":{
+        "subject":"CSE",
+        "number":"219",
+        "semester":"Fall",
+        "year":"2017",
+        "title":"Computer Science III",
+        "instructorName":"Richard McKenna",
+        "instructorHome":"http://www3.cs.stonybrook.edu/~richard/",
+        "banner":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUDarkRedShieldLogo.png",
+        "leftFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\CSLogo.png",
+        "rightFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUWhiteShieldLogo.jpg",
+        "exportDirectory":"Select an export location",
+        "templateDirectory":"Navin\\CourseSiteGenerator\\CSG\\data",
+        "styleSheet":"sea_wolf.css"
+    },
+    "courseTemplate":[
+        {
+            "use":true,
+            "navbarTitle":"Home",
+            "fileName":"index.html",
+            "script":"Homebuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"Syllabus",
+            "fileName":"syllabus.html",
+            "script":"SyllabusBuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"Schedule",
+            "fileName":"schedule.html",
+            "script":"ScheduleBuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"HWs",
+            "fileName":"hws.html",
+            "script":"HWsBuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"Projects",
+            "fileName":"projects.html",
+            "script":"ProjectsBuilder.html"
+        }
+    ],
     "startHour":"0",
     "endHour":"23",
     "undergrad_tas":[
@@ -44,7 +91,7 @@
     "recitation":[
         {
             "section":"R01",
-            "instructor":"Red",
+            "instructor":"McKenna",
             "day/time":"Wed 5:30 pm-6:23pm",
             "location":"Krusty Krabs",
             "firstTa":"Mr. Krabs",
@@ -52,7 +99,7 @@
         },
         {
             "section":"R02",
-            "instructor":"Blue",
+            "instructor":"SpongeBob",
             "day/time":"Mon 4:00 pm-4:53pm",
             "location":"Squidward's House",
             "firstTa":"Squidward",
@@ -60,7 +107,7 @@
         },
         {
             "section":"R03",
-            "instructor":"Orange",
+            "instructor":"McKenna",
             "day/time":"Fri 10:00am-10:53am",
             "location":"Pineapple",
             "firstTa":"SpongeBob",
@@ -122,38 +169,6 @@
             "lastName":"Shmoe",
             "team":"Team 1",
             "role":"Lead Designer"
-        }
-    ],
-    "courseTemplate":[
-        {
-            "use":true,
-            "navbarTitle":"Home",
-            "fileName":"index.html",
-            "script":"Homebuilder.js"
-        },
-        {
-            "use":true,
-            "navbarTitle":"Syllabus",
-            "fileName":"syllabus.html",
-            "script":"SyllabusBuilder.js"
-        },
-        {
-            "use":true,
-            "navbarTitle":"Schedule",
-            "fileName":"schedule.html",
-            "script":"ScheduleBuilder.js"
-        },
-        {
-            "use":true,
-            "navbarTitle":"HWs",
-            "fileName":"hws.html",
-            "script":"HWsBuilder.js"
-        },
-        {
-            "use":true,
-            "navbarTitle":"Projects",
-            "fileName":"projects.html",
-            "script":"ProjectsBuilder.html"
         }
     ]
 }

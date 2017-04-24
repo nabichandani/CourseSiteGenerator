@@ -43,13 +43,13 @@ public class CourseData implements AppDataComponent{
     public CourseData(CSGApp initApp){
         app = initApp;   
         templates = FXCollections.observableArrayList();
-        home = new CourseTemplate(true, "Home", "index.html", "Homebuilder.js");
-        syllabus = new CourseTemplate(true, "Syllabus", 
+        home = new CourseTemplate(false, "Home", "index.html", "Homebuilder.js");
+        syllabus = new CourseTemplate(false, "Syllabus", 
             "syllabus.html", "SyllabusBuilder.js");
-        schedule = new CourseTemplate(true, "Schedule",
+        schedule = new CourseTemplate(false, "Schedule",
             "schedule.html", "ScheduleBuilder.js");
-        hws = new CourseTemplate(true, "HWs", "hws.html", "HWsBuilder.js");
-        projects = new CourseTemplate(true, "Projects", 
+        hws = new CourseTemplate(false, "HWs", "hws.html", "HWsBuilder.js");
+        projects = new CourseTemplate(false, "Projects", 
             "projects.html", "ProjectsBuilder.html");
         templates.add(home);
         templates.add(syllabus);
@@ -195,13 +195,13 @@ public class CourseData implements AppDataComponent{
     public void resetData() {
         templates.clear();
         
-                home = new CourseTemplate(true, "Home", "index.html", "Homebuilder.js");
-        syllabus = new CourseTemplate(true, "Syllabus", 
+                home = new CourseTemplate(false, "Home", "index.html", "Homebuilder.js");
+        syllabus = new CourseTemplate(false, "Syllabus", 
             "syllabus.html", "SyllabusBuilder.js");
-        schedule = new CourseTemplate(true, "Schedule",
+        schedule = new CourseTemplate(false, "Schedule",
             "schedule.html", "ScheduleBuilder.js");
-        hws = new CourseTemplate(true, "HWs", "hws.html", "HWsBuilder.js");
-        projects = new CourseTemplate(true, "Projects", 
+        hws = new CourseTemplate(false, "HWs", "hws.html", "HWsBuilder.js");
+        projects = new CourseTemplate(false, "Projects", 
             "projects.html", "ProjectsBuilder.html");
         templates.add(home);
         templates.add(syllabus);

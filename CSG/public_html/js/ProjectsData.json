@@ -1,0 +1,50 @@
+
+{
+    "course":{
+        "subject":"CSE",
+        "number":"219",
+        "semester":"Fall",
+        "year":"2017",
+        "title":"Computer Science III",
+        "instructorName":"Richard McKenna",
+        "instructorHome":"http://www3.cs.stonybrook.edu/~richard/",
+        "banner":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUDarkRedShieldLogo.png",
+        "leftFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\CSLogo.png",
+        "rightFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\public_html\\images\\SBUWhiteShieldLogo.jpg",
+        "exportDirectory":"Select an export location",
+        "templateDirectory":"Navin\\CourseSiteGenerator\\CSG\\data",
+        "styleSheet":"sea_wolf.css"
+    },
+    "courseTemplate":[
+        {
+            "use":true,
+            "navbarTitle":"Home",
+            "fileName":"index.html",
+            "script":"Homebuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"Syllabus",
+            "fileName":"syllabus.html",
+            "script":"SyllabusBuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"Schedule",
+            "fileName":"schedule.html",
+            "script":"ScheduleBuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"HWs",
+            "fileName":"hws.html",
+            "script":"HWsBuilder.js"
+        },
+        {
+            "use":true,
+            "navbarTitle":"Projects",
+            "fileName":"projects.html",
+            "script":"ProjectsBuilder.html"
+        }
+    ]
+}

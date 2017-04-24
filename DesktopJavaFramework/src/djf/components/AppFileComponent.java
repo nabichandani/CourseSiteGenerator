@@ -32,11 +32,22 @@ public interface AppFileComponent {
      * This function must be overridden in the actual component and would
      * be used for exporting app data into another format.
      */
-    public void exportData(AppDataComponent data, String filePath) throws IOException;
+    public void exportData() throws IOException;
 
     /**
      * This function must be overridden in the actual component and would
      * be used for importing app data from another format.
      */
     public void importData(AppDataComponent data, String filePath) throws IOException;
+
+
+    public void saveTAData(AppDataComponent data, String filePath) throws IOException;
+
+    public void saveRecitationData(AppDataComponent data, String filePath) throws IOException;
+
+    public void saveScheduleData(AppDataComponent data, String filePath) throws IOException;
+
+    public void saveTeamsAndStudentsData(AppDataComponent data, String filePath) throws IOException;
+
+    public void saveProjectsData(AppDataComponent data, String filePath) throws IOException;
 }

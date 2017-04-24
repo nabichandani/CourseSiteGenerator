@@ -10,6 +10,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import properties_manager.PropertiesManager;
 import djf.AppTemplate;
+import djf.components.AppFileComponent;
+import djf.components.AppWorkspaceComponent;
 import static djf.settings.AppPropertyType.ABOUT_MESSAGE;
 import static djf.settings.AppPropertyType.ABOUT_TITLE;
 import static djf.settings.AppPropertyType.EXPORT_COMPLETE_MESSAGE;
@@ -37,6 +39,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javax.json.JsonObject;
+import org.apache.commons.io.FileUtils;
 
 /**
  * This class provides the event programmed responses for the file controls
@@ -133,7 +137,7 @@ public class AppFileController {
 	    dialog.show(props.getProperty(NEW_ERROR_TITLE), props.getProperty(NEW_ERROR_MESSAGE));
         }
         catch(NullPointerException ex){
-            
+            dialog.show(props.getProperty(NEW_ERROR_TITLE), props.getProperty(NEW_ERROR_MESSAGE));
         }
     }
 
@@ -177,87 +181,39 @@ public class AppFileController {
      */
     public void handleExportRequest(){
         PropertiesManager props = PropertiesManager.getPropertiesManager();
+        AppWorkspaceComponent workspace = app.getWorkspaceComponent();
+        AppFileComponent file = app.getFileComponent();
         try {
-            DirectoryChooser fc = new DirectoryChooser();
-            fc.setInitialDirectory(new File(PATH_WORK));
-            fc.setTitle("Export the file");
-            File selectedFile = fc.showDialog(app.getGUI().getWindow());
-            Path destPath = selectedFile.toPath();
-         
-            String path = "../CSG/public_html/js/OfficeHoursGridData.json";
-            app.getFileComponent().saveData(app.getTADataComponent(), 
-                app.getRecitationDataComponent(), app.getScheduleDataComponent(),
-                app.getProjectDataComponent(), app.getCourseDataComponent(), path);
-            
-            
-            String initPath = "../CSG/public_html/";
-            Path initialPath = Paths.get(initPath);
-            File initFile= new File(initPath);
+              file.exportData();
+//            File selectedFile = new File(app.getWorkspaceComponent())
+//            Path destPath = selectedFile.toPath();
+//         
+//            String path = "../CSG/public_html/js/OfficeHoursGridData.json";
+//            app.getFileComponent().saveData(app.getTADataComponent(), 
+//                app.getRecitationDataComponent(), app.getScheduleDataComponent(),
+//                app.getProjectDataComponent(), app.getCourseDataComponent(), path);
+//            
+//            String pathTA = "../CSG/public_html/js/TAsData.json";
+//            app.getFileComponent().saveTAData( app.getTADataComponent(), pathTA);
+//            
+//            String pathRec = "../CSG/public_html/js/RecitationsData.json";
+//            app.getFileComponent().saveRecitationData(app.getRecitationDataComponent(), pathRec);
+//            
+//            String pathSch = "../CSG/public_html/js/ScheduleData.json";
+//            app.getFileComponent().saveScheduleData(app.getScheduleDataComponent(), pathSch);
+//            
+//            String pathTeamsStudents =  "../CSG/public_html/js/TeamsAndStudents.json";
+//            app.getFileComponent().saveTeamsAndStudentsData(app.getProjectDataComponent(), pathTeamsStudents);
+//            
+//            String pathCourse =  "../CSG/public_html/js/ProjectsData.json";
+//            app.getFileComponent().saveProjectsData(app.getCourseDataComponent(), pathCourse);
+//            
+//            String initPath = "../CSG/public_html/";
+//            Path initialPath = Paths.get(initPath);
+//            File initFile= new File(initPath);
+//            
+//            FileUtils.copyDirectory(initFile, selectedFile);
            
-            //copy html
-            File htmlSrc = new File(initFile, "syllabus.html");
-            File htmlDest = new File(selectedFile,"syllabus.html");
-            Files.copy(htmlSrc.toPath(), htmlDest.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            
-            
-            //copy js folder
-            File jsDest = new File(selectedFile, "js");
-            if(!jsDest.isDirectory()){
-                jsDest.mkdir();
-            }
-            File jsSrc = new File(initFile, "js");
-            String[] jsFiles = jsSrc.list();
-            for(int i = 0; i < jsFiles.length; i++){
-                File jsSr = new File(jsSrc, jsFiles[i]);
-                File jsDs = new File(jsDest, jsFiles[i]);
-                Files.copy(jsSr.toPath(), jsDs.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            }
-            
-            //copy css folder
-            File cssDest = new File(selectedFile, "css");
-            if(!cssDest.isDirectory()){
-                cssDest.mkdir();
-            }
-            File cssSrc = new File(initFile, "css");
-            String[] cssFiles = cssSrc.list();
-            for(int i = 0; i < cssFiles.length; i++){
-                File cssSr = new File(cssSrc, cssFiles[i]);
-                File cssDs = new File(cssDest, cssFiles[i]);
-                Files.copy(cssSr.toPath(), cssDs.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            }
-            
-            //copy images folder
-            File imgDest = new File(selectedFile, "images");
-            if(!imgDest.isDirectory()){
-                imgDest.mkdir();
-            }
-            File imgSrc = new File(initFile, "images");
-            String[] imgFiles = imgSrc.list();
-            for(int i = 0; i < imgFiles.length; i++){
-                File imgSr = new File(imgSrc, imgFiles[i]);
-                File imgDs = new File(imgDest, imgFiles[i]);
-                if(imgSr.equals("tas")){
-                }
-                else{
-                   Files.copy(imgSr.toPath(), imgDs.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                }
-            }
-            
-            //copy TA folder in images
-            File taDest = new File(imgDest, "tas");
-            if(!taDest.isDirectory()){
-                taDest.mkdir();
-            }
-            File taSrc = new File(imgSrc, "tas");
-            String[] taFiles = taSrc.list();
-            for(int i = 1; i < taFiles.length; i++){
-                File taSr = new File(taSrc, taFiles[i]);
-                File taDs = new File(taDest, taFiles[i]);
-                Files.copy(taSr.toPath(), taDs.toPath());
-            }
-           
-            
-            
             AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
 	    dialog.show(props.getProperty(EXPORT_COMPLETE_TITLE), props.getProperty(EXPORT_COMPLETE_MESSAGE));
 
@@ -491,6 +447,10 @@ public class AppFileController {
 
                 // RESET THE DATA
                 app.getTADataComponent().resetData();
+                app.getCourseDataComponent().resetData();
+                app.getProjectDataComponent().resetData();
+                app.getScheduleDataComponent().resetData();
+                app.getRecitationDataComponent().resetData();
                 
                 // LOAD THE FILE INTO THE DATA
                 app.getFileComponent().loadData(app.getTADataComponent(), 

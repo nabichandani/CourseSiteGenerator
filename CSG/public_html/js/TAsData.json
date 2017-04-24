@@ -1,0 +1,44 @@
+
+{
+    "startHour":"0",
+    "endHour":"23",
+    "undergrad_tas":[
+        {
+            "name":"Mr. Krabs",
+            "email":"krabs@stonybrook.edu",
+            "undergrad":false
+        },
+        {
+            "name":"Patrick",
+            "email":"patrick@stonybrook.edu",
+            "undergrad":true
+        },
+        {
+            "name":"Sandy Cheeks",
+            "email":"sandy.cheeks@stonybrook.edu",
+            "undergrad":true
+        },
+        {
+            "name":"SpongeBob",
+            "email":"spongebob@stonybrook.edu",
+            "undergrad":false
+        },
+        {
+            "name":"Squidward",
+            "email":"squidward@stonybrook.edu",
+            "undergrad":false
+        }
+    ],
+    "officeHours":[
+        {
+            "day":"MONDAY",
+            "time":"10_00am",
+            "name":"SpongeBob"
+        },
+        {
+            "day":"FRIDAY",
+            "time":"12_00pm",
+            "name":"Patrick"
+        }
+    ]
+}

@@ -1,5 +1,6 @@
 package djf.components;
 
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
@@ -61,14 +62,13 @@ public abstract class AppWorkspaceComponent {
     
     // THE DEFINITION OF THIS CLASS SHOULD BE PROVIDED
     // BY THE CONCRETE WORKSPACE
-
     /**
      * This function must be defined in the actual workspace
      * component class and should be called before loading
      * new data.
      */
     public abstract void resetWorkspace();
-
+    
     /**
      * This function must be defined in the actual workspace
      * component class and should be called after data has

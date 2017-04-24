@@ -1,0 +1,31 @@
+
+{
+    "teams":[
+        {
+            "name":"Team 1",
+            "color":"Orange",
+            "textColor":"White",
+            "link":"www.team1.com"
+        },
+        {
+            "name":"Team 2",
+            "color":"Blue",
+            "textColor":"Black",
+            "link":"www.team2.com"
+        }
+    ],
+    "students":[
+        {
+            "firstName":"Amy",
+            "lastName":"Gupta",
+            "team":"Team 2",
+            "role":"Lead Programmer"
+        },
+        {
+            "firstName":"Joe",
+            "lastName":"Shmoe",
+            "team":"Team 1",
+            "role":"Lead Designer"
+        }
+    ]
+}
