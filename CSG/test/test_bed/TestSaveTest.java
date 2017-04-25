@@ -18,6 +18,7 @@ import csg.ui.CSGWorkspace;
 import djf.components.AppDataComponent;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -38,6 +39,7 @@ import static test_bed.TestSave.JSON_DATE;
 import static test_bed.TestSave.JSON_DAY;
 import static test_bed.TestSave.JSON_DAYTIME;
 import static test_bed.TestSave.JSON_EMAIL;
+import static test_bed.TestSave.JSON_END_HOUR;
 import static test_bed.TestSave.JSON_EXPORTDIR;
 import static test_bed.TestSave.JSON_FILENAME;
 import static test_bed.TestSave.JSON_FIRSTNAME;
@@ -49,6 +51,7 @@ import static test_bed.TestSave.JSON_LASTNAME;
 import static test_bed.TestSave.JSON_LEFTFOOTER;
 import static test_bed.TestSave.JSON_LINK;
 import static test_bed.TestSave.JSON_LOCATION;
+import static test_bed.TestSave.JSON_MONTH;
 import static test_bed.TestSave.JSON_NAME;
 import static test_bed.TestSave.JSON_NAVBAR;
 import static test_bed.TestSave.JSON_NUMBER;
@@ -61,6 +64,7 @@ import static test_bed.TestSave.JSON_SCRIPT;
 import static test_bed.TestSave.JSON_SECONDTA;
 import static test_bed.TestSave.JSON_SECTION;
 import static test_bed.TestSave.JSON_SEMESTER;
+import static test_bed.TestSave.JSON_START_HOUR;
 import static test_bed.TestSave.JSON_STUDENTS;
 import static test_bed.TestSave.JSON_STYLESHEET;
 import static test_bed.TestSave.JSON_TEAM;
@@ -106,7 +110,8 @@ public class TestSaveTest {
         ScheduleData schData = new ScheduleData(app);
         ProjectData projectData = new ProjectData(app);
         CourseData courseData = new CourseData(app);
-        String filePath = "C:\\Users\\Navin\\CourseSiteGenerator\\CSG\\work\\SiteSaveTest.json";
+        String filePath = "./work/SiteSaveTest.json";
+        
         TestSave instance = new TestSave(app);
         instance.loadData(data, recData, schData, projectData, courseData, filePath);
         
@@ -115,6 +120,9 @@ public class TestSaveTest {
 	JsonObject json = jsonReader.readObject();
 	jsonReader.close();
 	is.close();
+        
+        assertEquals(data.getMIN_START_HOUR(),Integer.parseInt(json.getString(JSON_START_HOUR)));
+        assertEquals(data.getMAX_END_HOUR(),Integer.parseInt(json.getString(JSON_END_HOUR)));
         
         JsonArray jsonTAArray = json.getJsonArray(JSON_UNDERGRAD_TAS);
         for (int i = 0; i < jsonTAArray.size(); i++) {
@@ -162,12 +170,15 @@ public class TestSaveTest {
         for (int i = 0; i < jsonScheduleArray.size(); i++) {
             JsonObject jsonSch = jsonScheduleArray.getJsonObject(i);
             String type = jsonSch.getString(JSON_TYPE);
-            String date = jsonSch.getString(JSON_DATE);
+            int month = jsonSch.getInt(JSON_MONTH);  
+            int day = jsonSch.getInt(JSON_DAY);
+            int year = jsonSch.getInt(JSON_YEAR);
             String time = jsonSch.getString(JSON_TIME);  
             String title = jsonSch.getString(JSON_TITLE);
             String topic = jsonSch.getString(JSON_TOPIC);
             String link = jsonSch.getString(JSON_LINK);
             String criteria = jsonSch.getString(JSON_CRITERIA);
+            LocalDate date = LocalDate.of(year, month, day);
             assertEquals(schData.getScheduleItem(date).getType(), type);
             assertEquals(schData.getScheduleItem(date).getDate(), date);
             assertEquals(schData.getScheduleItem(date).getTime(), time);

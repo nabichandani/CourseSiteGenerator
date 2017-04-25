@@ -116,8 +116,10 @@
     ],
     "scheduleItems":[
         {
-            "type":"Holiday",
-            "date":"2/10/2017",
+            "type":"holiday",
+            "day":25,
+            "month":5,
+            "year":2017,
             "time":"5:00pm",
             "title":"Snow Day",
             "topic":"",
@@ -125,8 +127,10 @@
             "criteria":"Break for students"
         },
         {
-            "type":"Lecture",
-            "date":"3/13/2017",
+            "type":"lecture",
+            "day":13,
+            "month":3,
+            "year":2017,
             "time":"12:00pm",
             "title":"Class",
             "topic":"Event Programming",
@@ -134,8 +138,10 @@
             "criteria":"Class for students"
         },
         {
-            "type":"HW",
-            "date":"2/8/2017",
+            "type":"hw",
+            "day":15,
+            "month":2,
+            "year":2017,
             "time":"10:00am",
             "title":"Class",
             "topic":"UML",
@@ -143,6 +149,12 @@
             "criteria":"Homework"
         }
     ],
+    "startDay":2,
+    "startMonth":1,
+    "startYear":2017,
+    "endDay":10,
+    "endMonth":7,
+    "endYear":2017,
     "teams":[
         {
             "name":"Team 1",

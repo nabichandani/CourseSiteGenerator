@@ -293,6 +293,14 @@ public class TAData implements AppDataComponent {
         
     }
 
+    public static int getMIN_START_HOUR() {
+        return MIN_START_HOUR;
+    }
+
+    public static int getMAX_END_HOUR() {
+        return MAX_END_HOUR;
+    }  
+
     public void addOfficeHoursReservation(String day, String time, String taName) {
         String cellKey = getCellKey(day, time);
         toggleTAOfficeHours(cellKey, taName);

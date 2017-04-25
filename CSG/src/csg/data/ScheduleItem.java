@@ -5,20 +5,21 @@
  */
 package csg.data;
 
+import java.time.LocalDate;
 /**
  *
  * @author Navin
  */
 public class ScheduleItem <E extends Comparable<E>> implements Comparable<E>{
     String type;
-    String date;
+    LocalDate date;
     String time;
     String title;
     String topic;
     String link;
     String criteria;
 
-    public ScheduleItem(String type, String date, String time, String title,
+    public ScheduleItem(String type, LocalDate date, String time, String title,
          String topic, String link, String criteria) {
         this.type = type;
         this.date = date;
@@ -37,12 +38,20 @@ public class ScheduleItem <E extends Comparable<E>> implements Comparable<E>{
         this.type = type;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
+    }
+    
+    public int getDateMon(){
+        return date.getMonth().getValue();
+    }
+    
+    public int getDateDay(){
+        return date.getDayOfMonth();
     }
 
     public String getTime() {

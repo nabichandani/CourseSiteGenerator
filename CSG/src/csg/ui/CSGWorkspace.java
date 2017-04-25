@@ -2162,9 +2162,50 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public VBox getProjectWholePane() {
         return projectWholePane;
     }
+
+    public DatePicker getMonStartDatePicker() {
+        return monStartDatePicker;
+    }
+
+    public DatePicker getFriEndDatePicker() {
+        return friEndDatePicker;
+    }
     
+    public int getMonMonthDate(){
+        try{
+        return monStartDatePicker.getValue().getMonth().getValue();
+        }
+        catch(Exception e){
+            return 0;
+        }
+    }
     
+    public int getFriMonthDate(){
+        try{
+        return friEndDatePicker.getValue().getMonth().getValue();
+        }
+        catch(Exception e){
+            return 0;
+        }
+    }
     
+    public int getMonDayDate(){
+        try{
+        return monStartDatePicker.getValue().getDayOfMonth();
+        }
+        catch(Exception e){
+            return 0;
+        }
+    }
+    
+    public int getFriDayDate(){
+        try{
+        return friEndDatePicker.getValue().getDayOfMonth();
+        }
+        catch(Exception e){
+            return 0;
+        }
+    }
     
 
     public String pickDirectory(){

@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +75,21 @@ public class TestSave implements AppFileComponent{
     static final String JSON_FIRSTTA = "ta_1";
     static final String JSON_SECONDTA = "ta_2";
     
+    static final String JSON_MONDAYMON = "startingMondayMonth";
+    static final String JSON_MONDAYDAY = "startingMondayDay";
+    static final String JSON_FRIDAYMONTH = "endingFridayMonth";
+    static final String JSON_FRIDAYDAY = "endingFridayDay";
+    
+    static final String JSON_MONTH = "month";
+    static final String JSON_HOLIDAYS = "holidays";
+    static final String JSON_LECTURES = "lectures";
+    static final String JSON_REF = "references"; 
+    static final String JSON_HW= "hws";
+    
+    static final String JSON_START = "startDay";
+    static final String JSON_END = "endDay";
+    
+    
     static final String JSON_SCHEDULEITEM = "scheduleItems";
     static final String JSON_TYPE = "type";
     static final String JSON_DATE = "date";
@@ -97,7 +114,6 @@ public class TestSave implements AppFileComponent{
     static final String JSON_FILENAME = "fileName";
     static final String JSON_SCRIPT = "script";
     
-    static final String JSON_EXPORTDIR = "exportDirectory";
     static final String JSON_COURSE = "course";
     static final String JSON_SUBJECT = "subject";
     static final String JSON_NUMBER = "number";
@@ -106,10 +122,18 @@ public class TestSave implements AppFileComponent{
     static final String JSON_INSTRUCTORNAME = "instructorName";
     static final String JSON_INSTRUCTORHOME = "instructorHome";
     static final String JSON_TEMPLATEDIR = "templateDirectory";
+    static final String JSON_EXPORTDIR = "exportDirectory";
     static final String JSON_BANNER = "banner";
     static final String JSON_LEFTFOOTER = "leftFooter";
     static final String JSON_RIGHTFOOTER = "rightFooter";
     static final String JSON_STYLESHEET = "styleSheet";
+    
+    static final String JSON_STARTDAY = "startDay";
+    static final String JSON_STARTMONTH = "startMonth";
+    static final String JSON_STARTYEAR = "startYear";
+    static final String JSON_ENDDAY = "endDay";
+    static final String JSON_ENDMONTH = "endMonth";
+    static final String JSON_ENDYEAR = "endYear";
     
     public TestSave(CSGApp initApp){
     app = initApp;
@@ -131,6 +155,17 @@ public class TestSave implements AppFileComponent{
 	// LOAD THE START AND END HOURS
 	String startHour = json.getString(JSON_START_HOUR);
         String endHour = json.getString(JSON_END_HOUR);
+        
+        
+        int startDay = json.getInt(JSON_STARTDAY);
+        int startMon = json.getInt(JSON_STARTMONTH);
+        int startYear = json.getInt(JSON_STARTYEAR);
+        
+        int endDay = json.getInt(JSON_ENDDAY);
+        int endMon = json.getInt(JSON_ENDMONTH);
+        int endYear = json.getInt(JSON_ENDYEAR);
+        
+        
         //////////////////////////////
         //dataManager.initHours(startHour, endHour);
 
@@ -177,17 +212,19 @@ public class TestSave implements AppFileComponent{
                 location, firstTA, secondTA);   
         }
         
-        JsonArray jsonScheduleArray = json.getJsonArray(JSON_SCHEDULEITEM);
+       JsonArray jsonScheduleArray = json.getJsonArray(JSON_SCHEDULEITEM);
         for (int i = 0; i < jsonScheduleArray.size(); i++) {
             JsonObject jsonSch = jsonScheduleArray.getJsonObject(i);
             String type = jsonSch.getString(JSON_TYPE);
-            String date = jsonSch.getString(JSON_DATE);
+            int month = jsonSch.getInt(JSON_MONTH);  
+            int day = jsonSch.getInt(JSON_DAY);
+            int year = jsonSch.getInt(JSON_YEAR);
             String time = jsonSch.getString(JSON_TIME);  
             String title = jsonSch.getString(JSON_TITLE);
             String topic = jsonSch.getString(JSON_TOPIC);
             String link = jsonSch.getString(JSON_LINK);
             String criteria = jsonSch.getString(JSON_CRITERIA); 
-            schDataManager.addScheduleItem(type, date, time, title, 
+            schDataManager.addScheduleItem(type, LocalDate.of(year, month, day), time, title, 
                 topic, link, criteria);
         }
         
@@ -323,16 +360,18 @@ public class TestSave implements AppFileComponent{
         JsonArrayBuilder schArrayBuilder = Json.createArrayBuilder();
 	ObservableList<ScheduleItem> schedule = schDataManager.getSchedule();
         
-        ScheduleItem schItem1 = new ScheduleItem("Holiday", "2/10/2017", "5:00pm", "Snow Day", "", "https://en.wikipedia.org/wiki/Snow_day", "Break for students");
-        ScheduleItem schItem2 = new ScheduleItem("Lecture", "3/13/2017", "12:00pm", "Class", "Event Programming", "", "Class for students");
-        ScheduleItem schItem3 = new ScheduleItem("HW", "2/8/2017", "10:00am", "Class", "UML", "", "Homework");
+        ScheduleItem schItem1 = new ScheduleItem("holiday", LocalDate.of(2017, 5, 25), "5:00pm", "Snow Day", "", "https://en.wikipedia.org/wiki/Snow_day", "Break for students");
+        ScheduleItem schItem2 = new ScheduleItem("lecture", LocalDate.of(2017, 3, 13), "12:00pm", "Class", "Event Programming", "", "Class for students");
+        ScheduleItem schItem3 = new ScheduleItem("hw", LocalDate.of(2017, 2, 15), "10:00am", "Class", "UML", "", "Homework");
         
         schedule.addAll(schItem1, schItem2, schItem3);
         
         for (ScheduleItem scheduleItem : schedule) {	    
 	    JsonObject scheduleJson = Json.createObjectBuilder()
 		    .add(JSON_TYPE, scheduleItem.getType())
-                    .add(JSON_DATE, scheduleItem.getDate())
+                    .add(JSON_DAY, scheduleItem.getDate().getDayOfMonth())
+                    .add(JSON_MONTH, scheduleItem.getDate().getMonthValue())
+                    .add(JSON_YEAR, scheduleItem.getDate().getYear())
                     .add(JSON_TIME, scheduleItem.getTime())
                     .add(JSON_TITLE, scheduleItem.getTitle())        
                     .add(JSON_TOPIC, scheduleItem.getTopic())
@@ -428,7 +467,6 @@ public class TestSave implements AppFileComponent{
                 .add(JSON_STYLESHEET, courseDataManager.getStyleSheet())
                 .build();
                   
-        
        
 	JsonObject dataManagerJSO = Json.createObjectBuilder()
                 .add(JSON_COURSE, courseJson)
@@ -439,6 +477,13 @@ public class TestSave implements AppFileComponent{
                 .add(JSON_OFFICE_HOURS, timeSlotsArray)
 		.add(JSON_RECITATION, recitaitonArray)
                 .add(JSON_SCHEDULEITEM, scheduleArray)
+                .add(JSON_RECITATION, recitaitonArray)
+                .add(JSON_STARTDAY, 2)
+                .add(JSON_STARTMONTH,1)
+                .add(JSON_STARTYEAR,2017)
+                .add(JSON_ENDDAY, 10)
+                .add(JSON_ENDMONTH, 7)
+                .add(JSON_ENDYEAR,2017)
                 .add(JSON_TEAMS, teamArray)
                 .add(JSON_STUDENTS, studentArray)
 		.build();

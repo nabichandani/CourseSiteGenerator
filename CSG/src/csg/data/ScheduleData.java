@@ -7,6 +7,7 @@ package csg.data;
 
 import csg.CSGApp;
 import djf.components.AppDataComponent;
+import java.time.LocalDate;
 import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,7 +31,7 @@ public class ScheduleData implements AppDataComponent{
     public ObservableList<ScheduleItem> getSchedule() {
         return schedule;
     }
-     public ScheduleItem getScheduleItem(String date) {
+     public ScheduleItem getScheduleItem(LocalDate date) {
         for (ScheduleItem schItem : schedule) {
             if (schItem.getDate().equals(date)) {
                 return schItem;
@@ -49,7 +50,7 @@ public class ScheduleData implements AppDataComponent{
     }
     
     
-    public void addScheduleItem(String type, String date, String time, String title,
+    public void addScheduleItem(String type, LocalDate date, String time, String title,
          String topic, String link, String criteria) {
         // MAKE THE TA
         ScheduleItem schItem = new ScheduleItem(type, date, time, title,

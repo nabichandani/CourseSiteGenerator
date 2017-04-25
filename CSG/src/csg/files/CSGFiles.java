@@ -33,6 +33,7 @@ import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,6 +79,18 @@ public class CSGFiles implements AppFileComponent{
     static final String JSON_FIRSTTA = "ta_1";
     static final String JSON_SECONDTA = "ta_2";
     
+    
+    static final String JSON_MONDAYMON = "startingMondayMonth";
+    static final String JSON_MONDAYDAY = "startingMondayDay";
+    static final String JSON_FRIDAYMONTH = "endingFridayMonth";
+    static final String JSON_FRIDAYDAY = "endingFridayDay";
+    
+    static final String JSON_MONTH = "month";
+    static final String JSON_HOLIDAYS = "holidays";
+    static final String JSON_LECTURES = "lectures";
+    static final String JSON_REF = "references"; 
+    static final String JSON_HW= "hws";
+    
     static final String JSON_SCHEDULEITEM = "scheduleItems";
     static final String JSON_TYPE = "type";
     static final String JSON_DATE = "date";
@@ -117,6 +130,16 @@ public class CSGFiles implements AppFileComponent{
     static final String JSON_STYLESHEET = "styleSheet";
     
     
+    static final String JSON_STARTDAY = "startDay";
+    static final String JSON_STARTMONTH = "startMonth";
+    static final String JSON_STARTYEAR = "startYear";
+    static final String JSON_ENDDAY = "endDay";
+    static final String JSON_ENDMONTH = "endMonth";
+    static final String JSON_ENDYEAR = "endYear";
+                        
+    
+    
+    
     public CSGFiles(CSGApp initApp){
     app = initApp;
 }
@@ -142,6 +165,22 @@ public class CSGFiles implements AppFileComponent{
 
         // NOW RELOAD THE WORKSPACE WITH THE LOADED DATA
         app.getWorkspaceComponent().reloadWorkspace(app.getTADataComponent());
+        
+        
+        int startDay = json.getInt(JSON_STARTDAY);
+        int startMon = json.getInt(JSON_STARTMONTH);
+        int startYear = json.getInt(JSON_STARTYEAR);
+        
+        LocalDate startDate = LocalDate.of(startYear, startMon,startDay);
+        workspace.getMonStartDatePicker().setValue(startDate);
+        
+        
+        int endDay = json.getInt(JSON_ENDDAY);
+        int endMon = json.getInt(JSON_ENDMONTH);
+        int endYear = json.getInt(JSON_ENDYEAR);
+        
+        LocalDate endDate = LocalDate.of(endYear, endMon, endDay);
+        workspace.getFriEndDatePicker().setValue(endDate);
 
         // NOW LOAD ALL THE UNDERGRAD TAs
         JsonArray jsonTAArray = json.getJsonArray(JSON_UNDERGRAD_TAS);
@@ -182,13 +221,15 @@ public class CSGFiles implements AppFileComponent{
         for (int i = 0; i < jsonScheduleArray.size(); i++) {
             JsonObject jsonSch = jsonScheduleArray.getJsonObject(i);
             String type = jsonSch.getString(JSON_TYPE);
-            String date = jsonSch.getString(JSON_DATE);
+            int month = jsonSch.getInt(JSON_MONTH);  
+            int day = jsonSch.getInt(JSON_DAY);
+            int year = jsonSch.getInt(JSON_YEAR);
             String time = jsonSch.getString(JSON_TIME);  
             String title = jsonSch.getString(JSON_TITLE);
             String topic = jsonSch.getString(JSON_TOPIC);
             String link = jsonSch.getString(JSON_LINK);
             String criteria = jsonSch.getString(JSON_CRITERIA); 
-            schDataManager.addScheduleItem(type, date, time, title, 
+            schDataManager.addScheduleItem(type, LocalDate.of(year, month, day), time, title, 
                 topic, link, criteria);
         }
         
@@ -335,7 +376,9 @@ public class CSGFiles implements AppFileComponent{
         for (ScheduleItem scheduleItem : schedule) {	    
 	    JsonObject scheduleJson = Json.createObjectBuilder()
 		    .add(JSON_TYPE, scheduleItem.getType())
-                    .add(JSON_DATE, scheduleItem.getDate())
+                    .add(JSON_DAY, scheduleItem.getDate().getDayOfMonth())
+                    .add(JSON_MONTH, scheduleItem.getDate().getMonthValue())
+                    .add(JSON_YEAR, scheduleItem.getDate().getYear())
                     .add(JSON_TIME, scheduleItem.getTime())
                     .add(JSON_TITLE, scheduleItem.getTitle())        
                     .add(JSON_TOPIC, scheduleItem.getTopic())
@@ -417,6 +460,12 @@ public class CSGFiles implements AppFileComponent{
                 .add(JSON_UNDERGRAD_TAS, undergradTAsArray)
                 .add(JSON_OFFICE_HOURS, timeSlotsArray)
 		.add(JSON_RECITATION, recitaitonArray)
+                .add(JSON_STARTDAY, workspace.getMonStartDatePicker().getValue().getDayOfMonth())
+                .add(JSON_STARTMONTH,workspace.getMonStartDatePicker().getValue().getMonthValue())
+                .add(JSON_STARTYEAR,workspace.getMonStartDatePicker().getValue().getYear())
+                .add(JSON_ENDDAY, workspace.getFriEndDatePicker().getValue().getDayOfMonth())
+                .add(JSON_ENDMONTH,workspace.getFriEndDatePicker().getValue().getMonthValue())
+                .add(JSON_ENDYEAR,workspace.getFriEndDatePicker().getValue().getYear())
                 .add(JSON_SCHEDULEITEM, scheduleArray)
                 .add(JSON_TEAMS, teamArray)
                 .add(JSON_STUDENTS, studentArray)
@@ -551,23 +600,106 @@ public class CSGFiles implements AppFileComponent{
         JsonArrayBuilder schArrayBuilder = Json.createArrayBuilder();
 	ObservableList<ScheduleItem> schedule = schDataManager.getSchedule();
         
+        ArrayList<ScheduleItem> holidays = new ArrayList();
+        ArrayList<ScheduleItem> lectures = new ArrayList();
+        ArrayList<ScheduleItem> references = new ArrayList();
+        ArrayList<ScheduleItem> recitations = new ArrayList();
+        ArrayList<ScheduleItem> hws = new ArrayList();
         
-        for (ScheduleItem scheduleItem : schedule) {	    
-	    JsonObject scheduleJson = Json.createObjectBuilder()
-		    .add(JSON_TYPE, scheduleItem.getType())
-                    .add(JSON_DATE, scheduleItem.getDate())
-                    .add(JSON_TIME, scheduleItem.getTime())
-                    .add(JSON_TITLE, scheduleItem.getTitle())        
+        for (int i = 0; i < schedule.size(); i++) {
+            if(schedule.get(i).getType().equals("holiday")){
+                holidays.add(schedule.get(i));
+            }
+            else if(schedule.get(i).getType().equals("lecture")){
+                lectures.add(schedule.get(i));
+            }
+            else if(schedule.get(i).getType().equals("reference")){
+                references.add(schedule.get(i));
+            }
+            else if(schedule.get(i).getType().equals("recitation")){
+                recitations.add(schedule.get(i));
+            }
+            else if(schedule.get(i).getType().equals("hw")){
+                hws.add(schedule.get(i));
+            }        
+        }
+        
+        JsonArrayBuilder holidayArrayBuilder = Json.createArrayBuilder();
+        for (ScheduleItem scheduleItem : holidays) {
+            JsonObject holidayJson = Json.createObjectBuilder()
+                    .add(JSON_MONTH, scheduleItem.getDateMon())
+                    .add(JSON_DAY, scheduleItem.getDateDay())
+                    .add(JSON_TITLE, scheduleItem.getTitle())
+                    .add(JSON_LINK, scheduleItem.getLink())
+                    .build();
+            holidayArrayBuilder.add(holidayJson);
+        }	
+        JsonArray holidayArray = holidayArrayBuilder.build();
+        
+        JsonArrayBuilder lectureArrayBuilder = Json.createArrayBuilder();
+        for (ScheduleItem scheduleItem : lectures) {
+            JsonObject lecJson = Json.createObjectBuilder()
+                    .add(JSON_MONTH, scheduleItem.getDateMon())
+                    .add(JSON_DAY, scheduleItem.getDateDay())
+                    .add(JSON_TITLE, scheduleItem.getTitle())
                     .add(JSON_TOPIC, scheduleItem.getTopic())
                     .add(JSON_LINK, scheduleItem.getLink())
+                    .build();
+            lectureArrayBuilder.add(lecJson);
+        }
+        JsonArray lectureArray = lectureArrayBuilder.build();
+        
+        JsonArrayBuilder referencesArrayBuilder = Json.createArrayBuilder();
+        for (ScheduleItem scheduleItem : references) {
+            JsonObject lecJson = Json.createObjectBuilder()
+                    .add(JSON_MONTH, scheduleItem.getDateMon())
+                    .add(JSON_DAY, scheduleItem.getDateDay())
+                    .add(JSON_TITLE, scheduleItem.getTitle())
+                    .add(JSON_TOPIC, scheduleItem.getTopic())
+                    .add(JSON_LINK, scheduleItem.getLink())
+                    .build();
+            referencesArrayBuilder.add(lecJson);
+        }
+        JsonArray referenceArray = referencesArrayBuilder.build();
+        
+        JsonArrayBuilder recitationArrayBuilder = Json.createArrayBuilder();
+        for (ScheduleItem scheduleItem : recitations) {
+            JsonObject lecJson = Json.createObjectBuilder()
+                    .add(JSON_MONTH, scheduleItem.getDateMon())
+                    .add(JSON_DAY, scheduleItem.getDateDay())
+                    .add(JSON_TITLE, scheduleItem.getTitle())
+                    .add(JSON_TOPIC, scheduleItem.getTopic())
+                    .build();
+            recitationArrayBuilder.add(lecJson);
+        }
+        JsonArray recitaitonArray = recitationArrayBuilder.build();
+        
+        JsonArrayBuilder hwArrayBuilder = Json.createArrayBuilder();
+        for (ScheduleItem scheduleItem : hws) {
+            JsonObject lecJson = Json.createObjectBuilder()
+                    .add(JSON_MONTH, scheduleItem.getDateMon())
+                    .add(JSON_DAY, scheduleItem.getDateDay())
+                    .add(JSON_TITLE, scheduleItem.getTitle())
+                    .add(JSON_TOPIC, scheduleItem.getTopic())
+                    .add(JSON_LINK, scheduleItem.getLink())
+                    .add(JSON_TIME, scheduleItem.getTime())
                     .add(JSON_CRITERIA, scheduleItem.getCriteria())
                     .build();
-	    schArrayBuilder.add(scheduleJson);
-	}
-        JsonArray scheduleArray = schArrayBuilder.build();
+            hwArrayBuilder.add(lecJson);
+        }
+        JsonArray hwArray = hwArrayBuilder.build();
+        
         
         JsonObject dataManagerJSO = Json.createObjectBuilder()
-                .add(JSON_SCHEDULEITEM, scheduleArray)
+                .add(JSON_MONDAYMON, workspace.getMonMonthDate())
+                .add(JSON_MONDAYDAY, workspace.getMonDayDate())
+                .add(JSON_FRIDAYMONTH, workspace.getFriMonthDate())
+                .add(JSON_FRIDAYDAY, workspace.getFriDayDate())
+                .add(JSON_HOLIDAYS, holidayArray)
+                .add(JSON_LECTURES, lectureArray)
+                .add(JSON_REF, referenceArray)
+                .add(JSON_RECITATION, recitaitonArray)
+                .add(JSON_HW, hwArray)
 		.build();
 	
 	// AND NOW OUTPUT IT TO A JSON FILE WITH PRETTY PRINTING
