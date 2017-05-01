@@ -5,7 +5,6 @@
  */
 package csg.ui;
 
-import CSGTransactions.TransactionStack;
 import com.sun.xml.internal.bind.v2.util.FatalAdapter;
 import csg.CSGApp;
 import static csg.CSGProp.MISSING_TA_EMAIL_MESSAGE;
@@ -51,6 +50,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import jtps.*;
 import properties_manager.PropertiesManager;
 
 /**
@@ -76,6 +76,7 @@ public class CSGControls {
         // WE'LL NEED THE WORKSPACE TO RETRIEVE THE USER INPUT VALUES
         CSGWorkspace workspace = (CSGWorkspace)app.getWorkspaceComponent();
         TextField nameTextField = workspace.getNameTextField();
+        jTPS jtps = workspace.getjTPS();
         String name = nameTextField.getText().trim();
         TextField emailTextField = workspace.getEmailTextField();
         String email = emailTextField.getText().trim();
@@ -109,6 +110,7 @@ public class CSGControls {
                 BooleanProperty ug = new SimpleBooleanProperty();
                 ug.set(false);
                 data.addTA(name, email, ug);
+                jtps.addTransaction(new AddTA_jTPS_Transaction(app, name, email, ug.getValue()));
             
             
             // CLEAR THE TEXT FIELDS
@@ -128,7 +130,7 @@ public class CSGControls {
       public void editTA(TeachingAssistant ta){
           try{
           CSGWorkspace workspace = (CSGWorkspace)app.getWorkspaceComponent();
-          TransactionStack jtps = workspace.getTransactionStack();
+          jTPS jtps = workspace.getjTPS();
           TextField nameTextField = workspace.getNameTextField();
           String name = nameTextField.getText().trim();
           TextField emailTextField = workspace.getEmailTextField();
@@ -162,6 +164,10 @@ public class CSGControls {
                // TeachingAssistant newTA = new TeachingAssistant(name, email);
                 //data.getTeachingAssistants().add(newTA);
                 //data.addTA(name,email);
+                EditTA_jTPS_Transaction edit= new EditTA_jTPS_Transaction
+                    (app, name, email,ta.isUndergrad().get(), ta.getName(),
+                    ta.getEmail(), ta.isUndergrad().get());
+                jtps.addTransaction(edit);
                 HashMap<String, StringProperty> officeHours = data.getOfficeHours();
                 for(String key: officeHours.keySet()){
                     StringProperty nameList = officeHours.get(key);
@@ -501,6 +507,7 @@ public class CSGControls {
                   data.removeTAFromCell(nameList,taName);
               }
           }
+          
           appFileController.markAsEdited(app.getGUI());
 
     }
@@ -516,7 +523,7 @@ public class CSGControls {
         // GET THE TABLE
         CSGWorkspace workspace = (CSGWorkspace)app.getWorkspaceComponent();
         TableView taTable = workspace.getTATable();
-        TransactionStack jtps = workspace.getTransactionStack();
+        jTPS jtps = workspace.getjTPS();
         
         // IS A TA SELECTED IN THE TABLE?
         Object selectedItem = taTable.getSelectionModel().getSelectedItem();
@@ -529,6 +536,7 @@ public class CSGControls {
         String strPropVal = data.getOfficeHours().get(cellKey).getValue();
         // AND TOGGLE THE OFFICE HOURS IN THE CLICKED CELL
         data.toggleTAOfficeHours(cellKey, taName);
+        jtps.addTransaction(new CellToggle_jTPS_Transaction(app, cellKey, taName));
         appFileController.markAsEdited(app.getGUI());
         }
         catch(NullPointerException e){

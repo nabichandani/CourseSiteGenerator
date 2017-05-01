@@ -1,23 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package CSGTransactions;
+package jtps;
 
 import java.util.ArrayList;
 
 /**
  *
- * @author Navin
+ * @author McKillaGorilla
  */
-public class TransactionStack {
-    private ArrayList<Transaction> transactions = new ArrayList();
+public class jTPS {
+    private ArrayList<jTPS_Transaction> transactions = new ArrayList();
     private int mostRecentTransaction = -1;
     
-    public TransactionStack() {}
+    public jTPS() {}
     
-    public void addTransaction(Transaction transaction) {
+    public void addTransaction(jTPS_Transaction transaction) {
         // IS THIS THE FIRST TRANSACTION?
         if (mostRecentTransaction < 0) {
             // DO WE HAVE TO CHOP THE LIST?
@@ -42,7 +37,7 @@ public class TransactionStack {
     
     public void doTransaction() {
         if (mostRecentTransaction < (transactions.size()-1)) {
-            Transaction transaction = transactions.get(mostRecentTransaction+1);
+            jTPS_Transaction transaction = transactions.get(mostRecentTransaction+1);
             transaction.doTransaction();
             mostRecentTransaction++;
         }
@@ -50,7 +45,7 @@ public class TransactionStack {
     
     public void undoTransaction() {
         if (mostRecentTransaction >= 0) {
-            Transaction transaction = transactions.get(mostRecentTransaction);
+            jTPS_Transaction transaction = transactions.get(mostRecentTransaction);
             transaction.undoTransaction();
             mostRecentTransaction--;
         }
@@ -61,10 +56,9 @@ public class TransactionStack {
         text += "--Current Index on Stack: " + mostRecentTransaction + "\n";
         text += "--Current Transaction Stack:\n";
         for (int i = 0; i <= mostRecentTransaction; i++) {
-            Transaction t = transactions.get(i);
-            text += "----" + t.toString() + "\n";
+            jTPS_Transaction jT = transactions.get(i);
+            text += "----" + jT.toString() + "\n";
         }
         return text;
     }
 }
-

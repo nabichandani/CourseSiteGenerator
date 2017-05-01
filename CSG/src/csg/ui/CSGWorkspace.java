@@ -1,7 +1,7 @@
 
 package csg.ui;
 
-import CSGTransactions.TransactionStack;
+import jtps.*;
 import csg.CSGApp;
 import csg.CSGProp;
 import static csg.CSGProp.COURSE_SUBHEADER;
@@ -71,6 +71,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
@@ -91,7 +94,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     CSGApp app;
     TAData data;
     CSGControls controller;
-    TransactionStack stack = new TransactionStack();
+    jTPS jtps;
     
     // FOR THE HEADER ON THE LEFT
     HBox tasHeaderBox;
@@ -283,6 +286,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                  
     public CSGWorkspace(CSGApp initApp){
         app = initApp;
+        jtps = new jTPS();
         controller = new CSGControls(app);
         CourseData courseData = (CourseData) app.getCourseDataComponent();
         PropertiesManager props = PropertiesManager.getPropertiesManager();     
@@ -1550,6 +1554,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
 
         //This is now the end of the creation of GUIS and now includes
         // event handlers.
+
+        
         studentAddUpdateButton.setOnAction(e -> {
             if (studentAddUpdateButton.getText().equals(props.getProperty(CSGProp.ADDEDIT_TEXT
                     .toString()))) {
@@ -2114,14 +2120,17 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         taTable.setOnKeyPressed(e -> {
            if(e.getCode() == KeyCode.DELETE)
             try{
-             
             String name = taTable.getFocusModel().getFocusedItem().getName();
             String email = taTable.getFocusModel().getFocusedItem().getEmail();
+            boolean isUG = taTable.getFocusModel().getFocusedItem().isUndergrad().get();
             HashMap<String, String> taOfficeHours = new HashMap<String,String>();
             for(String key: data.getOfficeHours().keySet()){
                 String val = data.getOfficeHours().get(key).getValue();
                 taOfficeHours.put(key, val);   
             }
+            DeleteTA_jTPS_Transaction del = new DeleteTA_jTPS_Transaction
+                (app, name, email, isUG, taOfficeHours);
+            jtps.addTransaction(del);
             controller.handleDeleteTA();
             if(taAddButton.getText().equals(props.getProperty(CSGProp.UPDATE_TA
                     .toString()))){
@@ -2225,7 +2234,23 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             taNameTextField.requestFocus(); 
 
     });
+        
+          KeyCombination undoCombo = new KeyCodeCombination(KeyCode.Z,KeyCombination.CONTROL_DOWN);
+          KeyCombination redoCombo = new KeyCodeCombination(KeyCode.Y,KeyCombination.CONTROL_DOWN); 
+          
+          app.getGUI().getWindow().addEventHandler(KeyEvent.KEY_PRESSED, (handler)->{
+              if (undoCombo.match(handler)){
+                jtps.undoTransaction();
+                }
+              });
+          app.getGUI().getWindow().addEventHandler(KeyEvent.KEY_PRESSED, (handler2)->{
+              if (redoCombo.match(handler2)){
+                jtps.doTransaction();
+                }
+              });
     }
+    
+    
     
     public HBox getTAsHeaderBox() {
         return tasHeaderBox;
@@ -2463,8 +2488,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         return "" + col + "_" + row;
     }
     
-    public TransactionStack getTransactionStack(){
-        return stack;
+    public jTPS getjTPS(){
+        return jtps;
     }
     
     public Label getCourseInfoLabel(){
@@ -3001,6 +3026,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 String newKey = keyArr[0] + "_" + hour;
                 data.addToGrid(newKey, taOfficeHours.get(key).getValue());
             }
+        EditGrid_jTPS_Transaction editGrid = new EditGrid_jTPS_Transaction
+          (app, startInt, endInt, prevStart, prevEnd, taOfficeHours);
+        jtps.addTransaction(editGrid);
         }
     }
 
