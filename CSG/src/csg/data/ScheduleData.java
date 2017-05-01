@@ -40,15 +40,6 @@ public class ScheduleData implements AppDataComponent{
         return null;
     }
     
-    public boolean containsScheduleItem(String time) {
-        for (ScheduleItem schItem: schedule) {
-            if (schItem.getTime().equals(time)) {
-                return true;
-            }  
-        }
-        return false;
-    }
-    
     
     public void addScheduleItem(String type, LocalDate date, String time, String title,
          String topic, String link, String criteria) {
@@ -56,10 +47,38 @@ public class ScheduleData implements AppDataComponent{
         ScheduleItem schItem = new ScheduleItem(type, date, time, title,
          topic, link, criteria);
 
-        // ADD THE TA
-        if (!containsScheduleItem(time)) {
-               schedule.add(schItem);
+        schedule.add(schItem);
+           
+
+        Collections.sort(schedule);
+    }
+    
+    public boolean isInSchedule(ScheduleItem sch){
+        for(ScheduleItem scheduleItem : schedule){
+            if(scheduleItem.getType().equals(sch.getType())){
+               if(scheduleItem.getTopic().equals(sch.getTopic())){
+                   if(scheduleItem.getTitle().equals(sch.getTitle())){
+                      if(scheduleItem.getTime().equals(sch.getTime())){
+                          if(scheduleItem.getLink().equals(sch.getLink())){
+                              if(scheduleItem.getDate().equals(sch.getDate())){
+                                  if(scheduleItem.getCriteria().equals(sch.getCriteria())){
+                                     return true; 
+                                  }
+                              }
+                          }
+                      } 
+                   }
+               }
             }
+        }
+        return false;
+    }
+    
+    
+    public void addScheduleItem(ScheduleItem schItem) {
+        // MAKE THE TA
+        schedule.add(schItem);
+           
 
         Collections.sort(schedule);
     }

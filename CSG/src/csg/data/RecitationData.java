@@ -75,7 +75,7 @@ public class RecitationData implements AppDataComponent{
         // SORT THE TAS
         Collections.sort(recitations);
     }
-      public void deleteTA(Recitation rec){
+      public void deleteRec(Recitation rec){
          recitations.remove(rec);
         
     }

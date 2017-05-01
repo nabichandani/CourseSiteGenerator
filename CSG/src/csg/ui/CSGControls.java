@@ -6,17 +6,37 @@
 package csg.ui;
 
 import CSGTransactions.TransactionStack;
+import com.sun.xml.internal.bind.v2.util.FatalAdapter;
 import csg.CSGApp;
 import static csg.CSGProp.MISSING_TA_EMAIL_MESSAGE;
 import static csg.CSGProp.MISSING_TA_EMAIL_TITLE;
 import static csg.CSGProp.MISSING_TA_NAME_MESSAGE;
 import static csg.CSGProp.MISSING_TA_NAME_TITLE;
+import static csg.CSGProp.REC_MISSING_MESSAGE;
+import static csg.CSGProp.REC_MISSING_TITLE;
+import static csg.CSGProp.REC_NOT_UNIQUE_MESSAGE;
+import static csg.CSGProp.REC_NOT_UNIQUE_TITLE;
+import static csg.CSGProp.SCH_MISSING_MESSAGE;
+import static csg.CSGProp.SCH_MISSING_TITLE;
+import static csg.CSGProp.SCH_NOT_UNIQUE_MESSAGE;
+import static csg.CSGProp.SCH_NOT_UNIQUE_TITLE;
 import static csg.CSGProp.TA_NAME_AND_EMAIL_NOT_UNIQUE_MESSAGE;
 import static csg.CSGProp.TA_NAME_AND_EMAIL_NOT_UNIQUE_TITLE;
+import static csg.CSGProp.TEAM_MISSING_MESSAGE;
+import static csg.CSGProp.TEAM_MISSING_TITLE;
+import static csg.CSGProp.TEAM_NOT_UNIQUE_MESSAGE;
+import static csg.CSGProp.TEAM_NOT_UNIQUE_TITLE;
+import csg.data.ProjectData;
+import csg.data.Recitation;
+import csg.data.RecitationData;
+import csg.data.ScheduleData;
+import csg.data.ScheduleItem;
 import csg.data.TAData;
 import csg.data.TeachingAssistant;
+import csg.data.Team;
 import djf.controller.AppFileController;
 import djf.ui.AppMessageDialogSingleton;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import javafx.beans.property.BooleanProperty;
@@ -25,6 +45,7 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import properties_manager.PropertiesManager;
 
 /**
@@ -46,7 +67,7 @@ public class CSGControls {
     }
     
     
-        public void handleAddTA() {
+    public void handleAddTA() {
         // WE'LL NEED THE WORKSPACE TO RETRIEVE THE USER INPUT VALUES
         CSGWorkspace workspace = (CSGWorkspace)app.getWorkspaceComponent();
         TextField nameTextField = workspace.getNameTextField();
@@ -168,6 +189,206 @@ public class CSGControls {
           }
           catch(Exception e){
           }
+      }
+      
+      public void handleAddTeam(){
+          PropertiesManager props = PropertiesManager.getPropertiesManager();
+          try{
+              CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+              ProjectData data = (ProjectData) app.getProjectDataComponent();
+              String name = workspace.getTeamNameTextField().getText();
+              String color = workspace.getColorPicker().getValue().toString();
+              String textColor = workspace.getTextColorPicker().getValue().toString();
+              String link = workspace.getTeamLinkTextField().getText();
+              
+              if(name.isEmpty() || color.isEmpty() || textColor.isEmpty() || 
+                link.isEmpty()){
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(TEAM_MISSING_TITLE), props.getProperty(TEAM_MISSING_MESSAGE));
+            }
+            else if(!data.containsTeam(name)){
+               data.addTeam(name, color, textColor, link);
+               appFileController.markAsEdited(app.getGUI()); 
+            }
+            else{
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(TEAM_NOT_UNIQUE_TITLE), props.getProperty(TEAM_NOT_UNIQUE_MESSAGE));
+            }
+          
+          }catch(Exception e){
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(TEAM_NOT_UNIQUE_TITLE), props.getProperty(TEAM_NOT_UNIQUE_MESSAGE));
+          }
+      }
+      
+     public void handleEditTeam(Team team) {
+        try {
+            PropertiesManager props = PropertiesManager.getPropertiesManager();
+            CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+            ProjectData data = (ProjectData) app.getProjectDataComponent();
+            String name = workspace.getTeamNameTextField().getText();
+            String color = workspace.getColorPicker().getValue().toString();
+            String textColor = workspace.getTextColorPicker().getValue().toString();
+            String link = workspace.getTeamLinkTextField().getText();
+            Team newTeam = new Team(name, color, textColor, link);
+            if (data.containsTeam(name) && !team.getName().equals(name)) {
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(TEAM_NOT_UNIQUE_TITLE), props.getProperty(TEAM_NOT_UNIQUE_MESSAGE));
+            }
+            else if(team.getColor().equals(color) && team.getLink().equals(link)
+              && team.getName().equals(name) && team.getTextColor().
+              equals(textColor)){
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(TEAM_NOT_UNIQUE_TITLE), props.getProperty(TEAM_NOT_UNIQUE_MESSAGE));
+            }
+            else if (name.isEmpty() || color.isEmpty()|| textColor.isEmpty()
+                  || link.isEmpty()) {
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(TEAM_MISSING_TITLE), props.getProperty(TEAM_MISSING_MESSAGE)); 
+           }
+           else{
+                data.getTeams().remove(team);
+                data.addTeam(name, color, textColor, link);
+                appFileController.markAsEdited(app.getGUI()); 
+           }
+          }catch(Exception e){
+          }
+      }
+      
+      
+      public void handleAddScheduleItem(){
+          PropertiesManager props = PropertiesManager.getPropertiesManager();
+          try{
+           CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+           ScheduleData data = (ScheduleData)app.getScheduleDataComponent();
+           String type = (String) workspace.getScheduleTypeCombo().getValue();
+           LocalDate date = workspace.getScheduleDatePicker().getValue();
+           String time = workspace.getScheduleTimeTextField().getText().trim();
+           String title = workspace.getScheduleTitleTextField().getText().trim();
+           String topic = workspace.getScheduleTopicTextField().getText().trim();
+           String link = workspace.getScheduleLinkTextField().getText().trim();
+           String criteria = workspace.getScheduleCriteriaTextField().getText().trim();
+           ScheduleItem schItem = new ScheduleItem(type, date, time, title, topic, link, criteria);
+           if(type.isEmpty() || date.equals(null) || time.isEmpty() || 
+                title.isEmpty()){
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(SCH_MISSING_TITLE), props.getProperty(SCH_MISSING_MESSAGE));
+           }
+          else if(!data.isInSchedule(schItem)){
+              data.addScheduleItem(schItem);
+              appFileController.markAsEdited(app.getGUI()); 
+          }
+          else{
+              AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+              dialog.show(props.getProperty(SCH_NOT_UNIQUE_TITLE), props.getProperty(SCH_NOT_UNIQUE_MESSAGE));
+           }
+          }catch(Exception e){
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(SCH_NOT_UNIQUE_TITLE), props.getProperty(SCH_NOT_UNIQUE_MESSAGE));
+          }
+           
+      }
+      
+      public void handleEditScheduleItem(ScheduleItem sch){
+          PropertiesManager props = PropertiesManager.getPropertiesManager();
+          try{
+           CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+           ScheduleData data = (ScheduleData)app.getScheduleDataComponent();
+           String type = (String) workspace.getScheduleTypeCombo().getValue();
+           LocalDate date = workspace.getScheduleDatePicker().getValue();
+           String time = workspace.getScheduleTimeTextField().getText().trim();
+           String title = workspace.getScheduleTitleTextField().getText().trim();
+           String topic = workspace.getScheduleTopicTextField().getText().trim();
+           String link = workspace.getScheduleLinkTextField().getText().trim();
+           String criteria = workspace.getScheduleCriteriaTextField().getText().trim();
+           ScheduleItem newSch = new ScheduleItem(type, date, time, title, topic, link, criteria);
+           if(data.isInSchedule(newSch)){
+               AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+               dialog.show(props.getProperty(REC_NOT_UNIQUE_TITLE), props.getProperty(REC_NOT_UNIQUE_MESSAGE));
+               return;
+           }
+           else if (type.isEmpty() || date.equals(null)|| time.isEmpty()
+                  || title.isEmpty()) {
+              AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+              dialog.show(props.getProperty(REC_MISSING_TITLE), props.getProperty(REC_MISSING_MESSAGE));   
+          }
+           else{
+                data.getSchedule().remove(sch);
+                data.addScheduleItem(newSch);
+                appFileController.markAsEdited(app.getGUI()); 
+           }
+          }catch(Exception e){
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(REC_NOT_UNIQUE_TITLE), props.getProperty(REC_NOT_UNIQUE_MESSAGE));    
+          }
+      }
+      
+      public void handleAddRecitation(){
+          PropertiesManager props = PropertiesManager.getPropertiesManager();
+          try{
+           CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+           RecitationData data = (RecitationData)app.getRecitationDataComponent();
+           String section = workspace.getRecSectionText().getText().trim();
+           String instructor = workspace.getRecInstructorText().getText().trim();
+           String dayTime = workspace.getRecDayTimeText().getText().trim();
+           String location = workspace.getRecLocationText().getText().trim();
+           String ta1 = workspace.getRecTA1Combo().getValue().toString();
+           String ta2 = workspace.getRecTA2Combo().getValue().toString();
+           if(section.isEmpty() || instructor.isEmpty() || dayTime.isEmpty() || 
+                location.isEmpty() || ta1.isEmpty() || ta2.isEmpty()){
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(REC_MISSING_TITLE), props.getProperty(REC_MISSING_MESSAGE));
+           }
+           else if(!data.containsRecitation(section)){
+                data.addRecitation(section, instructor, dayTime, 
+                    location, ta1, ta2);
+                appFileController.markAsEdited(app.getGUI()); 
+           }
+           else{
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(REC_NOT_UNIQUE_TITLE), props.getProperty(REC_NOT_UNIQUE_MESSAGE));
+           }
+          }
+          catch(Exception e){
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(REC_NOT_UNIQUE_TITLE), props.getProperty(REC_NOT_UNIQUE_MESSAGE));             
+          }
+      }
+      
+      public void handleEditRecitation(Recitation rec){
+           PropertiesManager props = PropertiesManager.getPropertiesManager();
+           CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+           RecitationData data = (RecitationData)app.getRecitationDataComponent();
+           String section = workspace.getRecSectionText().getText().trim();
+           String instructor = workspace.getRecInstructorText().getText().trim();
+           String dayTime = workspace.getRecDayTimeText().getText().trim();
+           String location = workspace.getRecLocationText().getText().trim();
+           String ta1 = workspace.getRecTA1Combo().getValue().toString();
+           String ta2 = workspace.getRecTA2Combo().getValue().toString();          
+           if(data.containsRecitation(section) && !rec.getSection().equals(section)){
+               AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+               dialog.show(props.getProperty(REC_NOT_UNIQUE_TITLE), props.getProperty(REC_NOT_UNIQUE_MESSAGE));
+               return;
+           }
+           else if (section.isEmpty() || instructor.isEmpty() || dayTime.isEmpty()
+                  || location.isEmpty() || ta1.isEmpty() || ta2.isEmpty()) {
+              AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+              dialog.show(props.getProperty(REC_MISSING_TITLE), props.getProperty(REC_MISSING_MESSAGE));   
+          }
+          else if (rec.getDayTime().equals(dayTime) && rec.getFirstTA().equals(ta1)
+                  && rec.getInstructor().equals(instructor) && rec.getLocation().equals(location)
+                  && rec.getSecondTA().equals(ta2) && rec.getSection().equals(section)) {
+               
+               AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+               dialog.show(props.getProperty(REC_NOT_UNIQUE_TITLE), props.getProperty(REC_NOT_UNIQUE_MESSAGE));
+               
+           }
+           else{
+                data.getRecitations().remove(rec);
+                data.addRecitation(section, instructor, dayTime, 
+                    location, ta1, ta2);
+                appFileController.markAsEdited(app.getGUI()); 
+           }
       }
     
       public void handleDeleteTA(){

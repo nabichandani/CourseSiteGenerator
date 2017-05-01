@@ -118,7 +118,8 @@
         <property name="DAYTIME_TEXT"         value="Day/Time"></property>
         <property name="LOCATION_TEXT"         value="Location"></property>
         <property name="TA_TEXT"         value="TA"></property>
-        <property name="ADDEDIT_TEXT"         value="Add/Edit"></property>
+        <property name="ADDEDIT_TEXT"         value="Add"></property>
+        <property name="ADDEDIT2_TEXT"         value="Edit"></property>
 
         <property name="SECTION_COLON_TEXT"         value="Section:"></property>
         <property name="INSTRUCTOR_COLON_TEXT"         value="Instructor:"></property>
@@ -188,6 +189,23 @@
         <property name="MISSING_TA_EMAIL_MESSAGE"       value="You must provide a TA Email"></property>
         <property name="TA_NAME_AND_EMAIL_NOT_UNIQUE_TITLE"     value="TA Name and Email Not Unique"></property>
         <property name="TA_NAME_AND_EMAIL_NOT_UNIQUE_MESSAGE"   value="You must provide a unique TA Name and Email"></property>
+
+        <property name="REC_NOT_UNIQUE_TITLE"     value="Recitation Not Unique"></property>
+        <property name="REC_NOT_UNIQUE_MESSAGE"   value="You must provide a unique Recitaiton section."></property>
+        <property name="REC_MISSING_TITLE"     value="Missing Recitation Field"></property>
+        <property name="REC_MISSING_MESSAGE"   value="You must provide all Recitation attributes."></property>
+
+        <property name="SCH_NOT_UNIQUE_TITLE"     value="Schedule Not Unique"></property>
+        <property name="SCH_NOT_UNIQUE_MESSAGE"   value="You must provide a unique Schedule Item."></property>
+        <property name="SCH_MISSING_TITLE"     value="Missing Schedule Field"></property>
+        <property name="SCH_MISSING_MESSAGE"   value="You must provide all Schedule Item attributes."></property>
+
+        <property name="TEAM_NOT_UNIQUE_TITLE"   value="Team Not Unique"></property>
+        <property name="TEAM_NOT_UNIQUE_MESSAGE"   value="You must provide a unique Team name."></property>
+        <property name="TEAM_MISSING_TITLE"   value="Missing Team Field"></property>
+        <property name="TEAM_MISSING_MESSAGE"   value="You must provide all Team attributes."></property>
+
+
     </property_list>
     <property_options_list>
         <property_options name="OFFICE_HOURS_TABLE_HEADERS">

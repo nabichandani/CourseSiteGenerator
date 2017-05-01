@@ -48,6 +48,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -968,6 +969,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         recTA1.setPadding(new Insets(0,0,0,20));
         recTA1.setPrefWidth(258);
         recTA1Combo = new ComboBox();
+        recTA1Combo.setItems(taTable.getItems());
         recTA1Combo.setMinWidth(200);
         recTA1Box.getChildren().add(recTA1);
         recTA1Box.getChildren().add(recTA1Combo);
@@ -979,6 +981,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         recTA2.setPrefWidth(258);
         recTA2.setPadding(new Insets(0,0,0,20));
         recTA2Combo = new ComboBox();
+        recTA2Combo.setItems(tableData);
         recTA2Combo.setMinWidth(200);
         recTA2Box.getChildren().add(recTA2);
         recTA2Box.getChildren().add(recTA2Combo);
@@ -990,7 +993,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         recButtonsBox.setSpacing(62);
         Button recAddButton = new Button();
 
-        recAddButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT
+        recAddButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
             .toString()));
         recAddButton.setPrefWidth(175);
         Button recClearButton = new Button();
@@ -1125,6 +1128,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         scheduleTypeLabel.setText(scheduleTypeText);
         scheduleTypeLabel.setPadding(new Insets(0,0,0,30));
         scheduleTypeCombo = new ComboBox();
+        ObservableList<String> schItems = FXCollections.observableArrayList();
+        schItems.addAll("holiday", "lecture", "reference", "recitation", "hw");
+        scheduleTypeCombo.setItems(schItems);
         scheduleTypeCombo.setMinWidth(250);
         scheduleTypePane.getChildren().add(scheduleTypeLabel);
         scheduleTypePane.getChildren().add(scheduleTypeCombo);
@@ -1222,7 +1228,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         scheduleButtonPane.setPadding(new Insets(5, 0, 10, 30));
         scheduleButtonPane.setSpacing(14);
         Button scheduleAddUpdateButton = new Button();
-        scheduleAddUpdateButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT
+        scheduleAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
             .toString()));
         scheduleAddUpdateButton.setPrefWidth(175);
         Button scheduleClearButton = new Button();
@@ -1376,7 +1382,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         teamButtonPane.setPadding(new Insets(0, 0, 15, 15));
         teamButtonPane.setSpacing(10);
         Button teamAddUpdateButton = new Button();
-        teamAddUpdateButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT
+        teamAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
             .toString()));
         teamAddUpdateButton.setPrefWidth(175);
         Button teamClearButton = new Button();
@@ -1402,10 +1408,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         StackPane studentRectPane = new StackPane();
         studentRectPane.getChildren().addAll(studentRectangle, studentText);
         
-        //eventHandler for clicking rectangle
-        studentRectangle.setOnMouseClicked(e ->{
-
-        });
         
         studentHeaderPane.getChildren().add(studentHeaderLabel);
         studentHeaderPane.getChildren().add(studentRectPane);
@@ -1523,7 +1525,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         studentButtonPane.setSpacing(15);
         Button studentAddUpdateButton = new Button();
         studentAddUpdateButton.setPrefWidth(175);
-        studentAddUpdateButton.setText(props.getProperty(CSGProp.ADDUPDATE_TEXT
+        studentAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
             .toString()));
         Button studentClearButton = new Button();
         studentClearButton.setText(props.getProperty(CSGProp.CLEAR_TEXT
@@ -1543,12 +1545,305 @@ public class CSGWorkspace extends AppWorkspaceComponent{
           
         
         
-        
         ((BorderPane) workspace).setCenter(courseTabPane);
-        
+
         //This is now the end of the creation of GUIS and now includes
         // event handlers.
-            
+        teamAddUpdateButton.setOnAction(e -> {
+            if (teamAddUpdateButton.getText().equals(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()))) {
+                controller.handleAddTeam();
+            } else {
+                Team clickedTeam = (Team) teamsTable.getFocusModel().getFocusedItem();
+                controller.handleEditTeam(clickedTeam);
+                Team clickedTeam2 = (Team) teamsTable.getFocusModel().getFocusedItem();
+                teamNameTextField.setText(clickedTeam2.getName());
+                colorPicker.setValue(Color.valueOf(clickedTeam2.getColor()));
+                textColorPicker.setValue(Color.valueOf(clickedTeam2.getTextColor()));
+                teamLinkTextField.setText(clickedTeam2.getLink());
+            }
+        });
+
+        teamClearButton.setOnAction(e -> {
+            teamAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()));
+            teamLinkTextField.setText("");
+            colorPicker.setValue(Color.WHITE);
+            textColorPicker.setValue(Color.WHITE);
+            teamNameTextField.setText("");
+        });
+
+        teamsTable.setOnMouseClicked(e ->{
+             try {
+                if (teamsTable.getSelectionModel().getSelectedItem() == null) {
+
+                } else {
+                    teamAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                            .toString()));
+                    Team team = (Team) teamsTable
+                            .getFocusModel().getFocusedItem();
+                    teamNameTextField.setText(team.getName());
+                    colorPicker.setValue(Color.valueOf(team.getColor()));
+                    textColorPicker.setValue(Color.valueOf(team.getTextColor()));
+                    teamLinkTextField.setText(team.getLink());
+                }
+            } catch (NullPointerException ex) {
+
+            }
+        });
+        
+        teamsTable.setOnKeyPressed(e->{
+            if(e.getCode() == KeyCode.DELETE){
+                try{
+                    String name = teamNameTextField.getText();
+                    projectData.deleteTeam(projectData.getTeam(name));
+                    Team clickedName = (Team) teamsTable
+                        .getFocusModel().getFocusedItem();
+                    teamNameTextField.setText(clickedName.getName());
+                    colorPicker.setValue(Color.valueOf(clickedName.getColor()));
+                    textColorPicker.setValue(Color.valueOf(clickedName.getTextColor()));
+                    teamLinkTextField.setText(clickedName.getLink());
+                }
+                catch(NullPointerException t){
+            teamAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()));
+            teamLinkTextField.setText("");
+            colorPicker.setValue(Color.WHITE);
+            textColorPicker.setValue(Color.WHITE);
+            teamNameTextField.setText("");
+                }
+        }});
+        
+        teamsRectPane.setOnMouseClicked(e->{
+                try{
+                    String name = teamNameTextField.getText();
+                    projectData.deleteTeam(projectData.getTeam(name));
+                    Team clickedName = (Team) teamsTable
+                        .getFocusModel().getFocusedItem();
+                    teamNameTextField.setText(clickedName.getName());
+                    colorPicker.setValue(Color.valueOf(clickedName.getColor()));
+                    textColorPicker.setValue(Color.valueOf(clickedName.getTextColor()));
+                    teamLinkTextField.setText(clickedName.getLink());
+                }
+                catch(NullPointerException t){
+            teamAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()));
+            teamLinkTextField.setText("");
+            colorPicker.setValue(Color.WHITE);
+            textColorPicker.setValue(Color.WHITE);
+            teamNameTextField.setText("");
+                }
+        });
+        
+        scheduleAddUpdateButton.setOnAction(e -> {
+            if (scheduleAddUpdateButton.getText().equals(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()))) {
+                controller.handleAddScheduleItem();
+            } else {
+                ScheduleItem sch = scheduleTable
+                        .getFocusModel().getFocusedItem();
+                controller.handleEditScheduleItem(sch);
+                ScheduleItem clickedName = scheduleTable
+                        .getFocusModel().getFocusedItem();
+                scheduleCriteriaTextField.setText(clickedName.getCriteria());
+                scheduleDatePicker.setValue(clickedName.getDate());
+                scheduleLinkTextField.setText(clickedName.getLink());
+                scheduleTimeTextField.setText(clickedName.getTime());
+                scheduleTitleTextField.setText(clickedName.getTitle());
+                scheduleTopicTextField.setText(clickedName.getTopic());
+                scheduleTypeCombo.setValue(clickedName.getType());
+            }
+        });
+
+        scheduleClearButton.setOnAction(e -> {
+            scheduleAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()));
+            scheduleCriteriaTextField.setText("");
+            scheduleDatePicker.setValue(null);
+            scheduleLinkTextField.setText("");
+            scheduleTimeTextField.setText("");
+            scheduleTitleTextField.setText("");
+            scheduleTopicTextField.setText("");
+            scheduleTypeCombo.setValue("");
+        });
+
+        scheduleTable.setOnMouseClicked(e -> {
+            try {
+                if (scheduleTable.getSelectionModel().getSelectedItem() == null) {
+
+                } else {
+                    scheduleAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                            .toString()));
+                    ScheduleItem clickedName = (ScheduleItem) scheduleTable
+                            .getFocusModel().getFocusedItem();
+                    scheduleCriteriaTextField.setText(clickedName.getCriteria());
+                    scheduleDatePicker.setValue(clickedName.getDate());
+                    scheduleLinkTextField.setText(clickedName.getLink());
+                    scheduleTimeTextField.setText(clickedName.getTime());
+                    scheduleTitleTextField.setText(clickedName.getTitle());
+                    scheduleTopicTextField.setText(clickedName.getTopic());
+                    scheduleTypeCombo.setValue(clickedName.getType());
+                }
+            } catch (NullPointerException ex) {
+
+            }
+        });
+
+        scheduleTable.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.DELETE) {
+                try {
+                    ScheduleItem sch = scheduleTable.getFocusModel().getFocusedItem();
+                    scheduleData.getSchedule().remove(sch);
+                    ScheduleItem clickedName = scheduleTable
+                            .getFocusModel().getFocusedItem();
+                    scheduleCriteriaTextField.setText(clickedName.getCriteria());
+                    scheduleDatePicker.setValue(clickedName.getDate());
+                    scheduleLinkTextField.setText(clickedName.getLink());
+                    scheduleTimeTextField.setText(clickedName.getTime());
+                    scheduleTitleTextField.setText(clickedName.getTitle());
+                    scheduleTopicTextField.setText(clickedName.getTopic());
+                    scheduleTypeCombo.setValue(clickedName.getType());
+                } catch (NullPointerException t) {
+                    scheduleAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                            .toString()));
+                    scheduleCriteriaTextField.clear();
+                    scheduleLinkTextField.clear();
+                    scheduleTimeTextField.clear();
+                    scheduleTitleTextField.clear();
+                    scheduleTopicTextField.clear();
+                    scheduleDatePicker.setValue(null);
+                    scheduleTypeCombo.setValue("");
+                }
+            }
+        });
+
+        schRectPane.setOnMouseClicked(e -> {
+                try {
+                    ScheduleItem sch = scheduleTable.getFocusModel().getFocusedItem();
+                    scheduleData.getSchedule().remove(sch);
+                    ScheduleItem clickedName = scheduleTable
+                            .getFocusModel().getFocusedItem();
+                    scheduleCriteriaTextField.setText(clickedName.getCriteria());
+                    scheduleDatePicker.setValue(clickedName.getDate());
+                    scheduleLinkTextField.setText(clickedName.getLink());
+                    scheduleTimeTextField.setText(clickedName.getTime());
+                    scheduleTitleTextField.setText(clickedName.getTitle());
+                    scheduleTopicTextField.setText(clickedName.getTopic());
+                    scheduleTypeCombo.setValue(clickedName.getType());
+                } catch (NullPointerException t) {
+                    scheduleAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                            .toString()));
+                    scheduleCriteriaTextField.clear();
+                    scheduleLinkTextField.clear();
+                    scheduleTimeTextField.clear();
+                    scheduleTitleTextField.clear();
+                    scheduleTopicTextField.clear();
+                    scheduleDatePicker.setValue(null);
+                    scheduleTypeCombo.setValue("");
+                }
+        });
+
+        
+        recAddButton.setOnAction(e -> {
+            if (recAddButton.getText().equals(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()))) {
+                controller.handleAddRecitation();
+            } else {
+                Recitation rec = recitationTable.getSelectionModel().getSelectedItem();
+                controller.handleEditRecitation(rec);
+                Recitation clickedName = (Recitation) recitationTable
+                        .getFocusModel().getFocusedItem();
+                recDayTimeText.setText(clickedName.getDayTime());
+                recInstructorText.setText(clickedName.getInstructor());
+                recLocationText.setText(clickedName.getLocation());
+                recSectionText.setText(clickedName.getSection());
+                recTA1Combo.setValue(clickedName.getFirstTA());
+                recTA2Combo.setValue(clickedName.getSecondTA());
+            }
+        });
+        
+        recClearButton.setOnAction(e ->{
+           recAddButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+             .toString()));
+           recLocationText.setText(""); 
+           recInstructorText.setText("");
+           recSectionText.setText("");
+           recDayTimeText.setText("");
+           recTA1Combo.setValue("");
+           recTA2Combo.setValue("");
+        });
+        
+        recitationTable.setOnKeyPressed(e->{
+            if(e.getCode() == KeyCode.DELETE){
+                try{
+                    String sec = recSectionText.getText();
+                    recData.deleteRec(recData.getRecitation(sec));
+                    Recitation clickedName = (Recitation) recitationTable
+                        .getFocusModel().getFocusedItem();
+                    recDayTimeText.setText(clickedName.getDayTime());
+                    recInstructorText.setText(clickedName.getInstructor());
+                    recLocationText.setText(clickedName.getLocation());
+                    recSectionText.setText(clickedName.getSection());
+                    recTA1Combo.setValue(clickedName.getFirstTA());
+                    recTA2Combo.setValue(clickedName.getSecondTA());
+                }
+                catch(NullPointerException t){
+                    recAddButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()));
+                    recDayTimeText.clear();
+                    recInstructorText.clear();
+                    recLocationText.clear();
+                    recSectionText.clear();
+                    recTA1Combo.setValue("");
+                    recTA2Combo.setValue("");
+                }
+        }});
+        
+        recRectPane.setOnMouseClicked(e ->{
+                try{
+                    String sec = recSectionText.getText();
+                    recData.deleteRec(recData.getRecitation(sec));
+                    Recitation clickedName = (Recitation) recitationTable
+                        .getFocusModel().getFocusedItem();
+                    recDayTimeText.setText(clickedName.getDayTime());
+                    recInstructorText.setText(clickedName.getInstructor());
+                    recLocationText.setText(clickedName.getLocation());
+                    recSectionText.setText(clickedName.getSection());
+                    recTA1Combo.setValue(clickedName.getFirstTA());
+                    recTA2Combo.setValue(clickedName.getSecondTA());
+                }
+                catch(NullPointerException t){
+                    recAddButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()));
+                    recDayTimeText.clear();
+                    recInstructorText.clear();
+                    recLocationText.clear();
+                    recSectionText.clear();
+                    recTA1Combo.setValue("");
+                    recTA2Combo.setValue("");
+                }
+        });
+        
+        recitationTable.setOnMouseClicked(e -> {
+            try {
+                if (recitationTable.getSelectionModel().getSelectedItem() == null) {
+
+                } else {
+                    recAddButton.setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                        .toString()));
+                    Recitation clickedName = (Recitation) recitationTable
+                        .getFocusModel().getFocusedItem();
+                    recDayTimeText.setText(clickedName.getDayTime());
+                    recInstructorText.setText(clickedName.getInstructor());
+                    recLocationText.setText(clickedName.getLocation());
+                    recSectionText.setText(clickedName.getSection());
+                    recTA1Combo.setValue(clickedName.getFirstTA());
+                    recTA2Combo.setValue(clickedName.getSecondTA());
+                }
+            } catch (NullPointerException ex) {
+            }
+
+        });
         startTime.setOnMouseClicked(e ->{
             int indexOfSplit = 0;
             String time = (String) endTime.getValue();
@@ -1677,6 +1972,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             }catch(NullPointerException ex){    
            }
         });
+        
         
         subjectCombo.setOnMouseClicked(e -> {
             if(subjectCombo.getValue() == null){
@@ -1870,8 +2166,48 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public Label getCourseTemplateLocLabel() {
         return courseTemplateLocLabel;
     }
-    
 
+    public TableView<TeachingAssistant> getTaTable() {
+        return taTable;
+    }
+
+    public TableView<Recitation> getRecitationTable() {
+        return recitationTable;
+    }
+
+    public TableView<ScheduleItem> getScheduleTable() {
+        return scheduleTable;
+    }
+
+    public TableView<Student> getStudentTable() {
+        return studentTable;
+    }
+
+    public TextField getRecSectionText() {
+        return recSectionText;
+    }
+
+    public TextField getRecInstructorText() {
+        return recInstructorText;
+    }
+
+    public TextField getRecDayTimeText() {
+        return recDayTimeText;
+    }
+
+    public TextField getRecLocationText() {
+        return recLocationText;
+    }
+
+    public ComboBox getRecTA1Combo() {
+        return recTA1Combo;
+    }
+
+    public ComboBox getRecTA2Combo() {
+        return recTA2Combo;
+    }
+    
+    
     public Label getCourseSubjectLabel() {
         return courseSubjectLabel;
     }
@@ -2405,6 +2741,52 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public ComboBox getStyleSheetCombo() {
         return styleSheetCombo;
     }
+
+    public ComboBox getScheduleTypeCombo() {
+        return scheduleTypeCombo;
+    }
+
+    public DatePicker getScheduleDatePicker() {
+        return scheduleDatePicker;
+    }
+
+    public TextField getScheduleTimeTextField() {
+        return scheduleTimeTextField;
+    }
+
+    public TextField getScheduleTitleTextField() {
+        return scheduleTitleTextField;
+    }
+
+    public TextField getScheduleTopicTextField() {
+        return scheduleTopicTextField;
+    }
+
+    public TextField getScheduleLinkTextField() {
+        return scheduleLinkTextField;
+    }
+
+    public TextField getScheduleCriteriaTextField() {
+        return scheduleCriteriaTextField;
+    }
+
+    public TextField getTeamNameTextField() {
+        return teamNameTextField;
+    }
+
+    public ColorPicker getColorPicker() {
+        return colorPicker;
+    }
+
+    public ColorPicker getTextColorPicker() {
+        return textColorPicker;
+    }
+
+    public TextField getTeamLinkTextField() {
+        return teamLinkTextField;
+    }
+    
+    
     
     
     

@@ -145,6 +145,15 @@ public class TAData implements AppDataComponent {
         return teachingAssistants;
     }
     
+    public ObservableList getTeachingAssistantNames() {
+         ObservableList<String> teachingAssistantsNames = FXCollections
+            .observableArrayList();
+         for (TeachingAssistant ta: teachingAssistants){
+             teachingAssistantsNames.add(ta.getName());
+         }
+         return teachingAssistantsNames;
+    }
+    
     public String getCellKey(int col, int row) {
         return col + "_" + row;
     }

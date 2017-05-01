@@ -50,7 +50,7 @@ public class CourseData implements AppDataComponent{
             "schedule.html", "ScheduleBuilder.js");
         hws = new CourseTemplate(false, "HWs", "hws.html", "HWsBuilder.js");
         projects = new CourseTemplate(false, "Projects", 
-            "projects.html", "ProjectsBuilder.html");
+            "projects.html", "ProjectsBuilder.js");
         templates.add(home);
         templates.add(syllabus);
         templates.add(schedule);
@@ -202,7 +202,7 @@ public class CourseData implements AppDataComponent{
             "schedule.html", "ScheduleBuilder.js");
         hws = new CourseTemplate(false, "HWs", "hws.html", "HWsBuilder.js");
         projects = new CourseTemplate(false, "Projects", 
-            "projects.html", "ProjectsBuilder.html");
+            "projects.html", "ProjectsBuilder.js");
         templates.add(home);
         templates.add(syllabus);
         templates.add(schedule);

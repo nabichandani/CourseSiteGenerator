@@ -118,7 +118,8 @@
         <property name="DAYTIME_TEXT"         value="Día/Hora"></property>
         <property name="LOCATION_TEXT"         value="Ubicación"></property>
         <property name="TA_TEXT"         value="TA"></property>
-        <property name="ADDEDIT_TEXT"         value="Añadir/Editar"></property>
+        <property name="ADDEDIT_TEXT"         value="Añadir"></property>
+        <property name="ADDEDIT2_TEXT"         value="Editar"></property>
 
         <property name="SECTION_COLON_TEXT"         value="Sección:"></property>
         <property name="INSTRUCTOR_COLON_TEXT"         value="Instructor:"></property>
@@ -188,6 +189,21 @@
         <property name="MISSING_TA_EMAIL_MESSAGE"       value="Debe proporcionar un correo electrónico de TA"></property>
         <property name="TA_NAME_AND_EMAIL_NOT_UNIQUE_TITLE"     value="Nombre y correo electrónico de TA no son únicos"></property>
         <property name="TA_NAME_AND_EMAIL_NOT_UNIQUE_MESSAGE"   value="Debe proporcionar un nombre y correo electrónico exclusivo de TA"></property>
+
+        <property name="REC_NOT_UNIQUE_TITLE"     value="Recitación no única"></property>
+        <property name="REC_NOT_UNIQUE_MESSAGE"   value="Debe proporcionar una sección de recitalización única"></property>
+        <property name="REC_MISSING_TITLE"     value="Falta campo de recitación"></property>
+        <property name="REC_MISSING_MESSAGE"   value="Debe proporcionar todos los atributos de Recitación."></property>
+
+        <property name="SCH_NOT_UNIQUE_TITLE"     value="El horario no es único"></property>
+        <property name="SCH_NOT_UNIQUE_MESSAGE"   value="Debe proporcionar un elemento de programa único."></property>
+        <property name="SCH_MISSING_TITLE"     value="Campo de horario ausente"></property>
+        <property name="SCH_MISSING_MESSAGE"   value="Debe proporcionar todos los atributos de Schedule.."></property>
+
+        <property name="TEAM_NOT_UNIQUE_TITLE"   value="El equipo no es único"></property>
+        <property name="TEAM_NOT_UNIQUE_MESSAGE"   value="Debe proporcionar un nombre de equipo único."></property>
+        <property name="TEAM_MISSING_TITLE"   value="Campo de equipo ausente"></property>
+        <property name="TEAM_MISSING_MESSAGE"   value="Debe proporcionar todos los atributos del equipo."></property>
     </property_list>
     <property_options_list>
         <property_options name="OFFICE_HOURS_TABLE_HEADERS">
