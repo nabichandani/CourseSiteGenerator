@@ -74,6 +74,17 @@ public class ProjectData implements AppDataComponent{
         return null;
     }
     
+    public boolean isUniqueStudent(Student s){
+        for(Student student: students){
+            if(s.getFirstName().equals(student.getFirstName())){
+                if(s.getLastName().equals(student.getLastName())){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     public boolean containsStudentFirstName(String testName) {
         for (Student student: students) {
             if (student.getFirstName().equals(testName)) {
@@ -112,23 +123,27 @@ public class ProjectData implements AppDataComponent{
         
     }
     
+    public ObservableList<String> getTeamNames(){
+        ObservableList<String> teamName = FXCollections.observableArrayList();
+        for(Team team: teams){
+            teamName.add(team.getName());
+        }
+        return teamName;
+    }
+    
     public void addStudent(String firstName, String lastName, String team, String role) {
         // MAKE THE TA
         Student student = new Student(firstName, lastName, team, role);
 
         // ADD THE TA
-        if (!containsStudentFirstName(firstName)) {
-            if(!containsStudentLastName(lastName)){
-            students.add(student);
-            }
-        }
+        students.add(student);
 
         // SORT THE TAS
         Collections.sort(students);
     }
     
-    public void deleteStudents(Student student){
-         teams.remove(student);
+    public void deleteStudent(Student student){
+         students.remove(student);
         
     }
       

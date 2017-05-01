@@ -205,6 +205,11 @@
         <property name="TEAM_MISSING_TITLE"   value="Missing Team Field"></property>
         <property name="TEAM_MISSING_MESSAGE"   value="You must provide all Team attributes."></property>
 
+        <property name="STUDENT_NOT_UNIQUE_TITLE"   value="Student Not Unique"></property>
+        <property name="STUDENT_NOT_UNIQUE_MESSAGE"   value="You must provide a unique Student name."></property>
+        <property name="STUDENT_MISSING_TITLE"   value="Missing Student Field"></property>
+        <property name="STUDENT_MISSING_MESSAGE"   value="You must provide all Student attributes."></property>
+
 
     </property_list>
     <property_options_list>

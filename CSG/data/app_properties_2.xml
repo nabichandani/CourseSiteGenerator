@@ -204,6 +204,11 @@
         <property name="TEAM_NOT_UNIQUE_MESSAGE"   value="Debe proporcionar un nombre de equipo único."></property>
         <property name="TEAM_MISSING_TITLE"   value="Campo de equipo ausente"></property>
         <property name="TEAM_MISSING_MESSAGE"   value="Debe proporcionar todos los atributos del equipo."></property>
+
+        <property name="STUDENT_NOT_UNIQUE_TITLE"   value="Estudiante no es único"></property>
+        <property name="STUDENT_NOT_UNIQUE_MESSAGE"   value="Debe proporcionar un nombre de estudiante único."></property>
+        <property name="STUDENT_MISSING_TITLE"   value="Falta el campo del estudiante"></property>
+        <property name="STUDENT_MISSING_MESSAGE"   value="Debe proporcionar todos los atributos del Estudiante."></property>
     </property_list>
     <property_options_list>
         <property_options name="OFFICE_HOURS_TABLE_HEADERS">

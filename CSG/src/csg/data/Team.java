@@ -58,4 +58,8 @@ public class Team <E extends Comparable<E>> implements Comparable<E>{
     public int compareTo(E otherTeam) {
         return getName().compareTo(((Team)otherTeam).getName());
     }
+    
+    public String toString() {
+        return name;
+    }
 }

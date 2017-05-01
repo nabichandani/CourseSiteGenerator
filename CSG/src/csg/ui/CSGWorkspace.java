@@ -276,7 +276,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     Label studentRoleLabel;
     TextField studentFNameTextField;
     TextField studentLNameTextField;
-    TextField studentTeamTextField;
+    ComboBox studentTeamCombo;
     TextField studentRoleTextField;
     
     VBox projectWholePane;
@@ -969,7 +969,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         recTA1.setPadding(new Insets(0,0,0,20));
         recTA1.setPrefWidth(258);
         recTA1Combo = new ComboBox();
-        recTA1Combo.setItems(taTable.getItems());
+        recTA1Combo.setItems(tableData);
         recTA1Combo.setMinWidth(200);
         recTA1Box.getChildren().add(recTA1);
         recTA1Box.getChildren().add(recTA1Combo);
@@ -1499,11 +1499,12 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         studentTeamLabel = new Label(props.getProperty(CSGProp
                 .STUDENT_TEAM_COLON_TEXT.toString()));
         studentTeamLabel.setPrefWidth(200);
-        studentTeamTextField = new TextField();
-        studentTeamTextField.setMinWidth(250);
+        studentTeamCombo = new ComboBox();
+        studentTeamCombo.setItems(teamsData);
+        studentTeamCombo.setMinWidth(250);
         studentTeamLabel.setPadding(new Insets(0,0,0,15));
         studentTeamPane.getChildren().add(studentTeamLabel);
-        studentTeamPane.getChildren().add(studentTeamTextField);
+        studentTeamPane.getChildren().add(studentTeamCombo);
         studentPane.getChildren().add(studentTeamPane);
         
         //student team row
@@ -1549,6 +1550,93 @@ public class CSGWorkspace extends AppWorkspaceComponent{
 
         //This is now the end of the creation of GUIS and now includes
         // event handlers.
+        studentAddUpdateButton.setOnAction(e -> {
+            if (studentAddUpdateButton.getText().equals(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()))) {
+                controller.handleAddStudent();
+            } else {
+                Student clickedStudent = (Student) studentTable.getFocusModel().getFocusedItem();
+                controller.handleEditStudent(clickedStudent);
+                    Student student = (Student) studentTable
+                            .getFocusModel().getFocusedItem();
+                    studentFNameTextField.setText(student.getFirstName());
+                    studentLNameTextField.setText(student.getLastName());
+                    studentTeamCombo.setValue(student.getTeam());
+                    studentRoleTextField.setText(student.getRole());
+            }
+        });
+        
+        studentClearButton.setOnAction(e -> {
+            studentAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()));
+            studentFNameTextField.clear();
+            studentLNameTextField.clear();
+            studentTeamCombo.setValue(null);
+            studentRoleTextField.clear();
+        });
+        
+        studentTable.setOnMouseClicked(e ->{
+             try {
+                if (studentTable.getSelectionModel().getSelectedItem() == null) {
+
+                } else {
+                    studentAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                            .toString()));
+                    Student student = (Student) studentTable
+                            .getFocusModel().getFocusedItem();
+                    studentFNameTextField.setText(student.getFirstName());
+                    studentLNameTextField.setText(student.getLastName());
+                    studentTeamCombo.setValue(student.getTeam());
+                    studentRoleTextField.setText(student.getRole());
+                }
+            } catch (NullPointerException ex) {
+
+            }
+        });
+        
+        studentTable.setOnKeyPressed(e->{
+            if(e.getCode() == KeyCode.DELETE){
+                try{
+                    projectData.deleteStudent((Student)studentTable
+                            .getFocusModel().getFocusedItem());
+                    Student student = (Student) studentTable
+                        .getFocusModel().getFocusedItem();
+                    studentFNameTextField.setText(student.getFirstName());
+                    studentLNameTextField.setText(student.getLastName());
+                    studentTeamCombo.setValue(student.getTeam());
+                    studentRoleTextField.setText(student.getRole());
+                }
+                catch(NullPointerException t){
+            studentAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()));
+            studentFNameTextField.clear();
+            studentLNameTextField.clear();
+            studentTeamCombo.setValue(null);
+            studentRoleTextField.clear();
+                }
+        }});
+        
+        studentRectPane.setOnMousePressed(e ->{
+            try{
+                    projectData.deleteStudent((Student)studentTable
+                            .getFocusModel().getFocusedItem());
+                    Student student = (Student) studentTable
+                        .getFocusModel().getFocusedItem();
+                    studentFNameTextField.setText(student.getFirstName());
+                    studentLNameTextField.setText(student.getLastName());
+                    studentTeamCombo.setValue(student.getTeam());
+                    studentRoleTextField.setText(student.getRole());
+                }
+                catch(NullPointerException t){
+            studentAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()));
+            studentFNameTextField.clear();
+            studentLNameTextField.clear();
+            studentTeamCombo.setValue(null);
+            studentRoleTextField.clear();
+                }
+        });
+        
         teamAddUpdateButton.setOnAction(e -> {
             if (teamAddUpdateButton.getText().equals(props.getProperty(CSGProp.ADDEDIT_TEXT
                     .toString()))) {
@@ -2785,11 +2873,23 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public TextField getTeamLinkTextField() {
         return teamLinkTextField;
     }
-    
-    
-    
-    
-    
+
+    public TextField getStudentFNameTextField() {
+        return studentFNameTextField;
+    }
+
+    public TextField getStudentLNameTextField() {
+        return studentLNameTextField;
+    }
+
+    public ComboBox getStudentTeamCombo() {
+        return studentTeamCombo;
+    }
+
+    public TextField getStudentRoleTextField() {
+        return studentRoleTextField;
+    }
+       
     @Override
     public void resetWorkspace() {
         // CLEAR OUT THE GRID PANE
