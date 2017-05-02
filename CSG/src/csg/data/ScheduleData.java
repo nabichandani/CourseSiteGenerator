@@ -39,6 +39,29 @@ public class ScheduleData implements AppDataComponent{
         }
         return null;
     }
+     
+     public ScheduleItem getScheduleItem(String type, LocalDate date, String time, String title,
+        String topic, String link, String criteria){
+         
+        for (ScheduleItem schItem : schedule) {
+            if (schItem.getDate().equals(date)) {
+                if(schItem.getType().equals(type)){
+                    if(schItem.getTime().equals(time)){
+                        if(schItem.getTitle().equals(title)){
+                            if(schItem.getTopic().equals(topic)){
+                                if(schItem.getLink().equals(link)){
+                                    if(schItem.getCriteria().equals(criteria)){
+                                        return schItem;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null; 
+    }
     
     
     public void addScheduleItem(String type, LocalDate date, String time, String title,

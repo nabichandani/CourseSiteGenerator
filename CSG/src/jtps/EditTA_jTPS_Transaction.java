@@ -4,22 +4,25 @@
  * and open the template in the editor.
  */
 package jtps;
+
 import java.util.Collections;
 import java.util.HashMap;
 import javafx.beans.property.StringProperty;
 import csg.CSGApp;
+import csg.CSGProp;
 import csg.data.TeachingAssistant;
 import csg.data.TAData;
 import csg.ui.CSGWorkspace;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import properties_manager.PropertiesManager;
 
 /**
  *
  * @author Navin
  */
+public class EditTA_jTPS_Transaction implements jTPS_Transaction {
 
-public class EditTA_jTPS_Transaction implements jTPS_Transaction{
     CSGApp app;
     TAData data;
     CSGWorkspace workspace;
@@ -29,12 +32,12 @@ public class EditTA_jTPS_Transaction implements jTPS_Transaction{
     String oldName;
     String oldEmail;
     BooleanProperty newUG;
-    
-    public EditTA_jTPS_Transaction(CSGApp application, String newN, String newE, 
-        boolean newUndergrad, String oldN, String oldE, boolean oldUndergrad){
+
+    public EditTA_jTPS_Transaction(CSGApp application, String newN, String newE,
+            boolean newUndergrad, String oldN, String oldE, boolean oldUndergrad) {
         app = application;
-        data = (TAData)app.getTADataComponent();
-        workspace = (CSGWorkspace)app.getWorkspaceComponent();
+        data = (TAData) app.getTADataComponent();
+        workspace = (CSGWorkspace) app.getWorkspaceComponent();
         newName = newN;
         newEmail = newE;
         newUG = new SimpleBooleanProperty();
@@ -48,46 +51,58 @@ public class EditTA_jTPS_Transaction implements jTPS_Transaction{
     @Override
     public void doTransaction() {
         HashMap<String, StringProperty> officeHours = data.getOfficeHours();
-            for(String key: officeHours.keySet()){
-                StringProperty nameList = officeHours.get(key);
-                if(nameList.getValue().contains(oldName)){
-                    String replace = nameList.getValue().replace(oldName, newName);
-                        nameList.setValue(replace);
-                    }
-                }   
-        for(int i = 0; i < data.getTeachingAssistants().size(); i++){
-                    if(((TeachingAssistant)data.getTeachingAssistants().get(i)).getName().equals(oldName)){
-                        if(((TeachingAssistant)data.getTeachingAssistants().get(i)).getEmail().equals(oldEmail)){
-                            data.getTeachingAssistants().remove(i);
-                        }
-                    }
+        for (String key : officeHours.keySet()) {
+            StringProperty nameList = officeHours.get(key);
+            if (nameList.getValue().contains(oldName)) {
+                String replace = nameList.getValue().replace(oldName, newName);
+                nameList.setValue(replace);
+            }
+        }
+        for (int i = 0; i < data.getTeachingAssistants().size(); i++) {
+            if (((TeachingAssistant) data.getTeachingAssistants().get(i)).getName().equals(oldName)) {
+                if (((TeachingAssistant) data.getTeachingAssistants().get(i)).getEmail().equals(oldEmail)) {
+                    data.getTeachingAssistants().remove(i);
                 }
-                TeachingAssistant newTA = new TeachingAssistant(newName, newEmail, newUG);
-                data.getTeachingAssistants().add(newTA);
-                Collections.sort(data.getTeachingAssistants());
-        
+            }
+        }
+        TeachingAssistant newTA = new TeachingAssistant(newName, newEmail, newUG);
+        data.getTeachingAssistants().add(newTA);
+        Collections.sort(data.getTeachingAssistants());
+        CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        workspace.getTaAddButton().setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+                .toString()));
+        workspace.getTaNameTextField().clear();
+        workspace.getEmailTextField().clear();
+
     }
 
     @Override
     public void undoTransaction() {
         HashMap<String, StringProperty> officeHours = data.getOfficeHours();
-            for(String key: officeHours.keySet()){
-                StringProperty nameList = officeHours.get(key);
-                if(nameList.getValue().contains(newName)){
-                    String replace = nameList.getValue().replace(newName, oldName);
-                        nameList.setValue(replace);
-                    }
+        for (String key : officeHours.keySet()) {
+            StringProperty nameList = officeHours.get(key);
+            if (nameList.getValue().contains(newName)) {
+                String replace = nameList.getValue().replace(newName, oldName);
+                nameList.setValue(replace);
+            }
+        }
+        for (int i = 0; i < data.getTeachingAssistants().size(); i++) {
+            if (((TeachingAssistant) data.getTeachingAssistants().get(i)).getName().equals(newName)) {
+                if (((TeachingAssistant) data.getTeachingAssistants().get(i)).getEmail().equals(newEmail)) {
+                    data.getTeachingAssistants().remove(i);
                 }
-        for(int i = 0; i < data.getTeachingAssistants().size(); i++){
-                    if(((TeachingAssistant)data.getTeachingAssistants().get(i)).getName().equals(newName)){
-                        if(((TeachingAssistant)data.getTeachingAssistants().get(i)).getEmail().equals(newEmail)){
-                            data.getTeachingAssistants().remove(i);
-                        }
-                    }
-                }
+            }
+        }
         TeachingAssistant newTA = new TeachingAssistant(oldName, oldEmail, oldUG);
         data.getTeachingAssistants().add(newTA);
         Collections.sort(data.getTeachingAssistants());
+        CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        workspace.getTaAddButton().setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+                .toString()));
+        workspace.getTaNameTextField().clear();
+        workspace.getEmailTextField().clear();
     }
-    
+
 }

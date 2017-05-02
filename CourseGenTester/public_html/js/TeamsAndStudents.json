@@ -3,14 +3,14 @@
     "teams":[
         {
             "name":"Team 1",
-            "color":"Orange",
-            "text_color":"White",
+            "color":"0x66ff00ff",
+            "text_color":"0x0000ffff",
             "link":"www.team1.com"
         },
         {
             "name":"Team 2",
-            "color":"Blue",
-            "text_color":"Black",
+            "color":"0x6633ffff",
+            "text_color":"0x0099ffff",
             "link":"www.team2.com"
         }
     ],

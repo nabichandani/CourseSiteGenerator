@@ -219,6 +219,8 @@ public class CSGControls {
             }
             else if(data.isUniqueStudent(s)){
                 data.addStudent(firstName, lastName, team, role);
+                workspace.getjTPS().addTransaction(new 
+                  AddStudent_jTPS_Transaction(app, firstName, lastName, team, role));
                 workspace.getStudentFNameTextField().clear();
                 workspace.getStudentLNameTextField().clear();
                 workspace.getStudentTeamCombo().setValue(null);
@@ -264,6 +266,8 @@ public class CSGControls {
            else{
                 data.deleteStudent(student);
                 data.addStudent(firstName, lastName, team, role);
+                workspace.getjTPS().addTransaction
+                   (new EditStudent_jTPS_Transaction(app, student, s));
                 appFileController.markAsEdited(app.getGUI()); 
            }
           }catch(Exception e){
@@ -290,10 +294,12 @@ public class CSGControls {
             }
             else if(!data.containsTeam(name)){
                data.addTeam(name, color, textColor, link);
-                workspace.getTeamNameTextField().setText("");
-                workspace.getColorPicker().setValue(Color.WHITE);
-                workspace.getTextColorPicker().setValue(Color.WHITE);
-                workspace.getTeamLinkTextField().setText("");
+               workspace.getjTPS().addTransaction(new AddTeam_jTPS_Transaction
+                (app, name, color, textColor, link));
+               workspace.getTeamNameTextField().setText("");
+               workspace.getColorPicker().setValue(Color.WHITE);
+               workspace.getTextColorPicker().setValue(Color.WHITE);
+               workspace.getTeamLinkTextField().setText("");
                appFileController.markAsEdited(app.getGUI()); 
             }
             else{
@@ -337,6 +343,7 @@ public class CSGControls {
            else{
                 data.getTeams().remove(team);
                 data.addTeam(name, color, textColor, link);
+                workspace.getjTPS().addTransaction(new EditTeam_jTPS_Transaction(app, team, newTeam));
                 appFileController.markAsEdited(app.getGUI()); 
            }
           }catch(Exception e){
@@ -363,7 +370,9 @@ public class CSGControls {
                 dialog.show(props.getProperty(SCH_MISSING_TITLE), props.getProperty(SCH_MISSING_MESSAGE));
            }
           else if(!data.isInSchedule(schItem)){
-              data.addScheduleItem(schItem);
+                workspace.getjTPS().addTransaction(new AddSchItem_jTPS_Transaction
+                  (app, type, date, time, title, topic, link, criteria));
+                data.addScheduleItem(schItem);
                 workspace.getScheduleCriteriaTextField().setText("");
                 workspace.getScheduleDatePicker().setValue(null);
                 workspace.getScheduleLinkTextField().setText("");
@@ -411,6 +420,7 @@ public class CSGControls {
            else{
                 data.getSchedule().remove(sch);
                 data.addScheduleItem(newSch);
+                workspace.getjTPS().addTransaction(new EditSchItem_jTPS_Transaction(app, sch, newSch));
                 appFileController.markAsEdited(app.getGUI()); 
            }
           }catch(Exception e){
@@ -438,6 +448,9 @@ public class CSGControls {
            else if(!data.containsRecitation(section)){
                 data.addRecitation(section, instructor, dayTime, 
                     location, ta1, ta2);
+                jTPS jtps = workspace.getjTPS();
+                jtps.addTransaction(new AddRecitation_jTPS_Transaction(app, 
+                    section, instructor, dayTime, location, ta1, ta2));               
                 workspace.getRecLocationText().setText(""); 
                 workspace.getRecInstructorText().setText("");
                 workspace.getRecSectionText().setText("");
@@ -466,14 +479,15 @@ public class CSGControls {
            String dayTime = workspace.getRecDayTimeText().getText().trim();
            String location = workspace.getRecLocationText().getText().trim();
            String ta1 = workspace.getRecTA1Combo().getValue().toString();
-           String ta2 = workspace.getRecTA2Combo().getValue().toString();          
+           String ta2 = workspace.getRecTA2Combo().getValue().toString();
+           Recitation newRec = new Recitation(section, instructor, dayTime, location, ta1, ta2);
            if(data.containsRecitation(section) && !rec.getSection().equals(section)){
                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
                dialog.show(props.getProperty(REC_NOT_UNIQUE_TITLE), props.getProperty(REC_NOT_UNIQUE_MESSAGE));
                return;
            }
            else if (section.isEmpty() || instructor.isEmpty() || dayTime.isEmpty()
-                  || location.isEmpty() || ta1.isEmpty() || ta2.isEmpty()) {
+                  || location.isEmpty() || ta1.isEmpty()) {
               AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
               dialog.show(props.getProperty(REC_MISSING_TITLE), props.getProperty(REC_MISSING_MESSAGE));   
           }
@@ -487,6 +501,7 @@ public class CSGControls {
            }
            else{
                 data.getRecitations().remove(rec);
+                workspace.getjTPS().addTransaction(new EditRecitation_jTPS_Transaction(app, rec, newRec));
                 data.addRecitation(section, instructor, dayTime, 
                     location, ta1, ta2);
                 appFileController.markAsEdited(app.getGUI()); 

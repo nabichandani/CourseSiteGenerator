@@ -7,11 +7,13 @@ package jtps;
 import java.util.HashMap;
 import javafx.beans.property.StringProperty;
 import csg.CSGApp;
+import csg.CSGProp;
 import csg.data.TeachingAssistant;
 import csg.data.TAData;
 import csg.ui.CSGWorkspace;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import properties_manager.PropertiesManager;
 /**
  *
  * @author Navin
@@ -50,6 +52,11 @@ import javafx.beans.property.SimpleBooleanProperty;
                   data.removeTAFromCell(nameList,name);
               }
           }
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        workspace.getTaAddButton().setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+                        .toString()));
+        workspace.getTaNameTextField().clear();
+        workspace.getEmailTextField().clear();
      
     }
 
@@ -60,7 +67,11 @@ import javafx.beans.property.SimpleBooleanProperty;
         for(String key: taOfficeHours.keySet()){
             data.addToGrid(key, taOfficeHours.get(key));
          }
-        
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        workspace.getTaAddButton().setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+                        .toString()));
+        workspace.getTaNameTextField().clear();
+        workspace.getEmailTextField().clear();
         
     }
     

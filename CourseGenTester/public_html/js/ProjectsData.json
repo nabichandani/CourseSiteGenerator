@@ -44,7 +44,7 @@
             "use":false,
             "navbarTitle":"Projects",
             "fileName":"projects.html",
-            "script":"ProjectsBuilder.html"
+            "script":"ProjectsBuilder.js"
         }
     ]
 }

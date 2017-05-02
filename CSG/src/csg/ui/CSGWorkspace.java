@@ -32,6 +32,7 @@ import javafx.scene.shape.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.BorderPane;
@@ -205,6 +206,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     TextField recLocationText;
     ComboBox recTA1Combo;
     ComboBox recTA2Combo;
+    Button recAddButton;
     
     VBox schedulePane;
     Label scheduleHeaderLabel;
@@ -238,7 +240,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     Label scheduleLinkLabel;    
     TextField scheduleLinkTextField; 
     Label scheduleCriteriaLabel;
-    TextField scheduleCriteriaTextField; 
+    TextField scheduleCriteriaTextField;
+    Button scheduleAddUpdateButton;
     
     VBox projectPane;
     Label projectHeaderLabel;
@@ -256,6 +259,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     Label teamColorLabel;
     Label teamTextColorLabel;
     Label teamLinkLabel;
+    Button teamAddUpdateButton;
     
     TextField teamNameTextField;
     ColorPicker colorPicker;
@@ -281,6 +285,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     TextField studentLNameTextField;
     ComboBox studentTeamCombo;
     TextField studentRoleTextField;
+    Button studentAddUpdateButton;
     
     VBox projectWholePane;
                  
@@ -608,11 +613,18 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         exportLabel.setText(exportDirLoc);
         
         exportChangeButton.setOnAction(e ->{
-             String exportDirLocation = pickDirectory();
-             exportLabel.setText(exportDirLocation);
-             courseData.setExportDir(exportDirLoc);
-             
+            try{
+            String oldString = exportLabel.getText();
+            String exportDirLocation = pickDirectory();
+            exportLabel.setText(exportDirLocation);
+            jtps.addTransaction(new ChangeExportText_jTPS_Transaction
+               (app, oldString, exportDirLocation));
+            courseData.setExportDir(exportDirLoc); 
+            }catch(NullPointerException exe){
+            }
         });
+        
+        
         courseExportDir.getChildren().add(exportLabel);
         courseExportDir.getChildren().add(exportChangeButton);
         
@@ -650,12 +662,18 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         Button courseTemplateButton = new Button(courseTemplateButtonString);
         courseTemplateButtonPane.getChildren().add(courseTemplateButton);
         courseTemplatePane.getChildren().add(courseTemplateButtonPane);
-        courseTemplateButton.setOnAction(e ->{
-             String exportDirLocation = pickDirectory();
-             courseTemplateLocLabel.setText(exportDirLocation);
-             courseData.setTemplateDir(exportDirLoc);
-        });        
         
+        courseTemplateButton.setOnAction(e -> {
+            try {
+                String oldString = courseTemplateLocLabel.getText();
+                String exportDirLocation = pickDirectory();
+                courseTemplateLocLabel.setText(exportDirLocation);
+                jtps.addTransaction(new ChangeTemplateText_jTPS_Transaction(app, oldString, exportDirLocation));
+                courseData.setTemplateDir(exportDirLoc);
+            } catch (NullPointerException exe) {
+
+            }
+        });
 
         //Site Pages Label
         String courseSitePageText = props.getProperty(CSGProp.SITE_PAGE_TEXT.toString());
@@ -995,7 +1013,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         HBox recButtonsBox = new HBox();
         recButtonsBox.setPadding(new Insets(0,0,15,19));
         recButtonsBox.setSpacing(62);
-        Button recAddButton = new Button();
+        recAddButton = new Button();
 
         recAddButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
             .toString()));
@@ -1082,7 +1100,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         scheduleTable = new TableView();
         scheduleTableHolderPane.getChildren().add(scheduleTable);
         scheduleTableHolderPane.setPadding(new Insets(0,0,0,10));
-        scheduleTablePane.getChildren().add(scheduleTableHolderPane);  
+        scheduleTablePane.getChildren().add(scheduleTableHolderPane);
         scheduleTable.getSelectionModel().setSelectionMode
             (SelectionMode.SINGLE);
         ScheduleData scheduleData= (ScheduleData)app.getScheduleDataComponent();
@@ -1113,7 +1131,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         titleColumn.setMinWidth(200);
         topicColumn.setMinWidth(280);
         scheduleTable.setMaxWidth(780);
-        scheduleTable.setMaxHeight(300);
+        scheduleTable.setMinHeight(300);
         scheduleTable.setPadding(new Insets(0,0,40,0));
         
         //Add Edit Label in Schedule
@@ -1231,7 +1249,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         scheduleTablePane.getChildren().add(scheduleButtonPane);
         scheduleButtonPane.setPadding(new Insets(5, 0, 10, 30));
         scheduleButtonPane.setSpacing(14);
-        Button scheduleAddUpdateButton = new Button();
+        scheduleAddUpdateButton = new Button();
         scheduleAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
             .toString()));
         scheduleAddUpdateButton.setPrefWidth(175);
@@ -1385,7 +1403,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         teamsPane.getChildren().add(teamButtonPane);
         teamButtonPane.setPadding(new Insets(0, 0, 15, 15));
         teamButtonPane.setSpacing(10);
-        Button teamAddUpdateButton = new Button();
+        teamAddUpdateButton = new Button();
         teamAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
             .toString()));
         teamAddUpdateButton.setPrefWidth(175);
@@ -1528,7 +1546,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         studentPane.getChildren().add(studentButtonPane);
         studentButtonPane.setPadding(new Insets(0, 0, 15, 13));
         studentButtonPane.setSpacing(15);
-        Button studentAddUpdateButton = new Button();
+        studentAddUpdateButton = new Button();
         studentAddUpdateButton.setPrefWidth(175);
         studentAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
             .toString()));
@@ -1603,8 +1621,10 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         studentTable.setOnKeyPressed(e->{
             if(e.getCode() == KeyCode.DELETE){
                 try{
-                    projectData.deleteStudent((Student)studentTable
-                            .getFocusModel().getFocusedItem());
+                    Student s = (Student)studentTable.getFocusModel().getFocusedItem();
+                    projectData.deleteStudent(s);
+                    jtps.addTransaction(new DeleteStudent_jTPS_Transaction(app, 
+                      s.getFirstName(), s.getLastName(), s.getTeam(), s.getRole()));
                     Student student = (Student) studentTable
                         .getFocusModel().getFocusedItem();
                     studentFNameTextField.setText(student.getFirstName());
@@ -1624,8 +1644,12 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         studentRectPane.setOnMousePressed(e ->{
             try{
-                    projectData.deleteStudent((Student)studentTable
-                            .getFocusModel().getFocusedItem());
+                    Student s = projectData.getStudent
+                     (studentFNameTextField.getText(), 
+                      studentLNameTextField.getText());
+                    projectData.deleteStudent(s);
+                    jtps.addTransaction(new DeleteStudent_jTPS_Transaction(app, 
+                      s.getFirstName(), s.getLastName(), s.getTeam(), s.getRole()));
                     Student student = (Student) studentTable
                         .getFocusModel().getFocusedItem();
                     studentFNameTextField.setText(student.getFirstName());
@@ -1690,7 +1714,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             if(e.getCode() == KeyCode.DELETE){
                 try{
                     String name = teamNameTextField.getText();
-                    projectData.deleteTeam(projectData.getTeam(name));
+                    Team team = projectData.getTeam(name);
+                    projectData.deleteTeam(team);
+                    jtps.addTransaction(new DeleteTeam_jTPS_Transaction(app, 
+                        name, team.getColor(), team.getTextColor(), 
+                        team.getLink()));
                     Team clickedName = (Team) teamsTable
                         .getFocusModel().getFocusedItem();
                     teamNameTextField.setText(clickedName.getName());
@@ -1708,17 +1736,21 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 }
         }});
         
-        teamsRectPane.setOnMouseClicked(e->{
-                try{
-                    String name = teamNameTextField.getText();
-                    projectData.deleteTeam(projectData.getTeam(name));
-                    Team clickedName = (Team) teamsTable
+        teamsRectPane.setOnMouseClicked(e -> {
+            try {
+                String name = teamNameTextField.getText();
+                Team team = projectData.getTeam(name);
+                projectData.deleteTeam(team);
+                jtps.addTransaction(new DeleteTeam_jTPS_Transaction(app,
+                        name, team.getColor(), team.getTextColor(),
+                        team.getLink()));
+                Team clickedName = (Team) teamsTable
                         .getFocusModel().getFocusedItem();
-                    teamNameTextField.setText(clickedName.getName());
-                    colorPicker.setValue(Color.valueOf(clickedName.getColor()));
-                    textColorPicker.setValue(Color.valueOf(clickedName.getTextColor()));
-                    teamLinkTextField.setText(clickedName.getLink());
-                }
+                teamNameTextField.setText(clickedName.getName());
+                colorPicker.setValue(Color.valueOf(clickedName.getColor()));
+                textColorPicker.setValue(Color.valueOf(clickedName.getTextColor()));
+                teamLinkTextField.setText(clickedName.getLink());
+            }
                 catch(NullPointerException t){
             teamAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
                     .toString()));
@@ -1788,6 +1820,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 try {
                     ScheduleItem sch = scheduleTable.getFocusModel().getFocusedItem();
                     scheduleData.getSchedule().remove(sch);
+                    jtps.addTransaction(new DeleteSchItem_jTPS_Transaction(app, sch.getType(), 
+                        sch.getDate(), sch.getTime(), sch.getTitle(), sch.getTopic(), 
+                        sch.getLink(), sch.getCriteria()));
                     ScheduleItem clickedName = scheduleTable
                             .getFocusModel().getFocusedItem();
                     scheduleCriteriaTextField.setText(clickedName.getCriteria());
@@ -1815,6 +1850,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 try {
                     ScheduleItem sch = scheduleTable.getFocusModel().getFocusedItem();
                     scheduleData.getSchedule().remove(sch);
+                    jtps.addTransaction(new DeleteSchItem_jTPS_Transaction(app, sch.getType(), 
+                        sch.getDate(), sch.getTime(), sch.getTitle(), sch.getTopic(), 
+                        sch.getLink(), sch.getCriteria()));
                     ScheduleItem clickedName = scheduleTable
                             .getFocusModel().getFocusedItem();
                     scheduleCriteriaTextField.setText(clickedName.getCriteria());
@@ -1871,7 +1909,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             if(e.getCode() == KeyCode.DELETE){
                 try{
                     String sec = recSectionText.getText();
-                    recData.deleteRec(recData.getRecitation(sec));
+                    Recitation rec = recData.getRecitation(sec);
+                    jtps.addTransaction(new DeleteRecitation_jTPS_Transaction
+                        (app, sec, rec.getInstructor(), rec.getDayTime(), 
+                         rec.getLocation(), rec.getFirstTA(), rec.getSecondTA()));
+                    recData.deleteRec(rec);
                     Recitation clickedName = (Recitation) recitationTable
                         .getFocusModel().getFocusedItem();
                     recDayTimeText.setText(clickedName.getDayTime());
@@ -1896,7 +1938,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         recRectPane.setOnMouseClicked(e ->{
                 try{
                     String sec = recSectionText.getText();
-                    recData.deleteRec(recData.getRecitation(sec));
+                    Recitation rec = recData.getRecitation(sec);
+                    jtps.addTransaction(new DeleteRecitation_jTPS_Transaction
+                        (app, sec, rec.getInstructor(), rec.getDayTime(), 
+                         rec.getLocation(), rec.getFirstTA(), rec.getSecondTA()));
+                    recData.deleteRec(rec);
                     Recitation clickedName = (Recitation) recitationTable
                         .getFocusModel().getFocusedItem();
                     recDayTimeText.setText(clickedName.getDayTime());
@@ -2491,6 +2537,10 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public jTPS getjTPS(){
         return jtps;
     }
+
+    public Button getStudentAddUpdateButton() {
+        return studentAddUpdateButton;
+    }
     
     public Label getCourseInfoLabel(){
         return courseInfoLabel;
@@ -2655,8 +2705,13 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             return 0;
         }
     }
-    
 
+    public Button getTaAddButton() {
+        return taAddButton;
+    }
+    
+    
+    
     public String pickDirectory(){
         DirectoryChooser dc = new DirectoryChooser();
         File file = dc.showDialog(app.getGUI().getWindow());
@@ -2762,6 +2817,22 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         return scheduleTopicLabel;
     }
 
+    public Button getRecAddButton() {
+        return recAddButton;
+    }
+
+    public TextField getTaNameTextField() {
+        return taNameTextField;
+    }
+
+    public TextField getTaEmailTextField() {
+        return taEmailTextField;
+    }
+
+    public Button getTeamAddUpdateButton() {
+        return teamAddUpdateButton;
+    }
+    
     public Label getScheduleLinkLabel() {
         return scheduleLinkLabel;
     }
@@ -2914,6 +2985,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public TextField getStudentRoleTextField() {
         return studentRoleTextField;
     }
+
+    public Button getScheduleAddUpdateButton() {
+        return scheduleAddUpdateButton;
+    }
+    
        
     @Override
     public void resetWorkspace() {

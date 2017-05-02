@@ -51,6 +51,10 @@ public class jTPS {
         }
     }
     
+    public void clearTransactions(){
+        transactions.clear();
+    }
+    
     public String toString() {
         String text = "--Number of Transactions: " + transactions.size() + "\n";
         text += "--Current Index on Stack: " + mostRecentTransaction + "\n";
