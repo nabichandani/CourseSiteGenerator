@@ -53,6 +53,7 @@ public class jTPS {
     
     public void clearTransactions(){
         transactions.clear();
+        mostRecentTransaction = -1;
     }
     
     public String toString() {

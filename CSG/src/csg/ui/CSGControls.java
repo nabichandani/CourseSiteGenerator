@@ -410,7 +410,6 @@ public class CSGControls {
            if(data.isInSchedule(newSch)){
                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
                dialog.show(props.getProperty(REC_NOT_UNIQUE_TITLE), props.getProperty(REC_NOT_UNIQUE_MESSAGE));
-               return;
            }
            else if (type.isEmpty() || date.equals(null)|| time.isEmpty()
                   || title.isEmpty()) {

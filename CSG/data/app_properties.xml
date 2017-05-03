@@ -38,7 +38,7 @@
         <!-- ERROR MESSAGES -->
         <property name="CLOSE_BUTTON_TEXT"              value="Close"></property>
 
-        <property name="NEW_ERROR_MESSAGE"              value="An error occured creating New work."></property>
+        <property name="NEW_ERROR_MESSAGE"              value="An error occured creating New Work."></property>
         <property name="NEW_ERROR_TITLE"		value="New Work Error"></property>
         <property name="LOAD_ERROR_MESSAGE"             value="An error occured loading work."></property>
         <property name="LOAD_ERROR_TITLE"		value="Load Work Error"></property>

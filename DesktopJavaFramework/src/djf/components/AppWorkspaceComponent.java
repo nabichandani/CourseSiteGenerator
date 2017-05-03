@@ -76,4 +76,8 @@ public abstract class AppWorkspaceComponent {
      * controls.
      */
     public abstract void reloadWorkspace(AppDataComponent dataComponent);
+    
+    public abstract void jTPSDoTransaction();
+    
+    public abstract void jTPSUndoTransaction();
 }

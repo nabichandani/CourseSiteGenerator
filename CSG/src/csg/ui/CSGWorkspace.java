@@ -20,6 +20,7 @@ import csg.data.Team;
 import csg.files.CSGFiles;
 import djf.components.AppDataComponent;
 import djf.components.AppWorkspaceComponent;
+import djf.controller.AppFileController;
 import static djf.settings.AppPropertyType.GRID_CONFIRMATION_MESSAGE;
 import static djf.settings.AppPropertyType.GRID_CONFIRMATION_TITLE;
 import static djf.settings.AppPropertyType.GRID_ERROR_MESSAGE;
@@ -96,6 +97,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     TAData data;
     CSGControls controller;
     jTPS jtps;
+    AppFileController appFileController;
     
     // FOR THE HEADER ON THE LEFT
     HBox tasHeaderBox;
@@ -293,6 +295,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         app = initApp;
         jtps = new jTPS();
         controller = new CSGControls(app);
+        appFileController = app.getGUI().getAppFileController();
         CourseData courseData = (CourseData) app.getCourseDataComponent();
         PropertiesManager props = PropertiesManager.getPropertiesManager();     
         TabPane courseTabPane = new TabPane();
@@ -795,7 +798,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 leftFooterImage.setImage(newImg);
                 courseData.setLeftFooterLink(filePath);
              } catch (FileNotFoundException ex) {
-                Logger.getLogger(CSGWorkspace.class.getName()).log(Level.SEVERE, null, ex);
             }
         }); 
         
@@ -1623,6 +1625,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 try{
                     Student s = (Student)studentTable.getFocusModel().getFocusedItem();
                     projectData.deleteStudent(s);
+                    appFileController.markAsEdited(app.getGUI());
                     jtps.addTransaction(new DeleteStudent_jTPS_Transaction(app, 
                       s.getFirstName(), s.getLastName(), s.getTeam(), s.getRole()));
                     Student student = (Student) studentTable
@@ -1648,6 +1651,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                      (studentFNameTextField.getText(), 
                       studentLNameTextField.getText());
                     projectData.deleteStudent(s);
+                    appFileController.markAsEdited(app.getGUI());
                     jtps.addTransaction(new DeleteStudent_jTPS_Transaction(app, 
                       s.getFirstName(), s.getLastName(), s.getTeam(), s.getRole()));
                     Student student = (Student) studentTable
@@ -1716,6 +1720,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                     String name = teamNameTextField.getText();
                     Team team = projectData.getTeam(name);
                     projectData.deleteTeam(team);
+                    appFileController.markAsEdited(app.getGUI());
                     jtps.addTransaction(new DeleteTeam_jTPS_Transaction(app, 
                         name, team.getColor(), team.getTextColor(), 
                         team.getLink()));
@@ -1741,6 +1746,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 String name = teamNameTextField.getText();
                 Team team = projectData.getTeam(name);
                 projectData.deleteTeam(team);
+                appFileController.markAsEdited(app.getGUI());
                 jtps.addTransaction(new DeleteTeam_jTPS_Transaction(app,
                         name, team.getColor(), team.getTextColor(),
                         team.getLink()));
@@ -1818,11 +1824,23 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         scheduleTable.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE) {
                 try {
-                    ScheduleItem sch = scheduleTable.getFocusModel().getFocusedItem();
-                    scheduleData.getSchedule().remove(sch);
-                    jtps.addTransaction(new DeleteSchItem_jTPS_Transaction(app, sch.getType(), 
-                        sch.getDate(), sch.getTime(), sch.getTitle(), sch.getTopic(), 
-                        sch.getLink(), sch.getCriteria()));
+                       String type = (String)scheduleTypeCombo.getValue();
+                       LocalDate date = scheduleDatePicker.getValue();
+                       String title = scheduleTitleTextField.getText();
+                       String time = scheduleTimeTextField.getText();
+                       if(type.isEmpty() || date == null || title.isEmpty() || time.isEmpty()){
+                           throw new NullPointerException();
+                       }
+                       scheduleData.getSchedule().remove(scheduleData.getScheduleItem
+                      (type, date,  time, title,
+                       scheduleTopicTextField.getText(), scheduleLinkTextField.getText(),
+                       scheduleCriteriaTextField.getText()));
+                    appFileController.markAsEdited(app.getGUI());
+                    jtps.addTransaction(new DeleteSchItem_jTPS_Transaction(app, 
+                      (String)scheduleTypeCombo.getValue(), scheduleDatePicker.getValue(), 
+                       scheduleTimeTextField.getText(), scheduleTitleTextField.getText(),
+                       scheduleTopicTextField.getText(), scheduleLinkTextField.getText(),
+                       scheduleCriteriaTextField.getText()));
                     ScheduleItem clickedName = scheduleTable
                             .getFocusModel().getFocusedItem();
                     scheduleCriteriaTextField.setText(clickedName.getCriteria());
@@ -1848,11 +1866,23 @@ public class CSGWorkspace extends AppWorkspaceComponent{
 
         schRectPane.setOnMouseClicked(e -> {
                 try {
-                    ScheduleItem sch = scheduleTable.getFocusModel().getFocusedItem();
-                    scheduleData.getSchedule().remove(sch);
-                    jtps.addTransaction(new DeleteSchItem_jTPS_Transaction(app, sch.getType(), 
-                        sch.getDate(), sch.getTime(), sch.getTitle(), sch.getTopic(), 
-                        sch.getLink(), sch.getCriteria()));
+                       String type = (String)scheduleTypeCombo.getValue();
+                       LocalDate date = scheduleDatePicker.getValue();
+                       String title = scheduleTitleTextField.getText();
+                       String time = scheduleTimeTextField.getText();
+                       if(type.isEmpty() || date == null || title.isEmpty() || time.isEmpty()){
+                           throw new NullPointerException();
+                       }
+                       scheduleData.getSchedule().remove(scheduleData.getScheduleItem
+                      (type, date,  time, title,
+                       scheduleTopicTextField.getText(), scheduleLinkTextField.getText(),
+                       scheduleCriteriaTextField.getText()));
+                    appFileController.markAsEdited(app.getGUI());
+                    jtps.addTransaction(new DeleteSchItem_jTPS_Transaction(app, 
+                      (String)scheduleTypeCombo.getValue(), scheduleDatePicker.getValue(), 
+                       scheduleTimeTextField.getText(), scheduleTitleTextField.getText(),
+                       scheduleTopicTextField.getText(), scheduleLinkTextField.getText(),
+                       scheduleCriteriaTextField.getText()));
                     ScheduleItem clickedName = scheduleTable
                             .getFocusModel().getFocusedItem();
                     scheduleCriteriaTextField.setText(clickedName.getCriteria());
@@ -1910,10 +1940,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 try{
                     String sec = recSectionText.getText();
                     Recitation rec = recData.getRecitation(sec);
+                    recData.deleteRec(rec);
+                    appFileController.markAsEdited(app.getGUI());
                     jtps.addTransaction(new DeleteRecitation_jTPS_Transaction
                         (app, sec, rec.getInstructor(), rec.getDayTime(), 
                          rec.getLocation(), rec.getFirstTA(), rec.getSecondTA()));
-                    recData.deleteRec(rec);
                     Recitation clickedName = (Recitation) recitationTable
                         .getFocusModel().getFocusedItem();
                     recDayTimeText.setText(clickedName.getDayTime());
@@ -1939,10 +1970,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 try{
                     String sec = recSectionText.getText();
                     Recitation rec = recData.getRecitation(sec);
+                    recData.deleteRec(rec);
+                    appFileController.markAsEdited(app.getGUI());
                     jtps.addTransaction(new DeleteRecitation_jTPS_Transaction
                         (app, sec, rec.getInstructor(), rec.getDayTime(), 
                          rec.getLocation(), rec.getFirstTA(), rec.getSecondTA()));
-                    recData.deleteRec(rec);
                     Recitation clickedName = (Recitation) recitationTable
                         .getFocusModel().getFocusedItem();
                     recDayTimeText.setText(clickedName.getDayTime());
@@ -2994,7 +3026,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     @Override
     public void resetWorkspace() {
         // CLEAR OUT THE GRID PANE
-        PropertiesManager props = PropertiesManager.getPropertiesManager();  
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        jtps.clearTransactions();
         officeHoursGridPane.getChildren().clear();
         yearCombo.setValue("");
         subjectCombo.setValue("");
@@ -3007,15 +3040,49 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         leftFooterImage.setImage(null);
         rightFooterImage.setImage(null);
         styleSheetCombo.setValue("");
-        String exportDirLoc= props.getProperty(CSGProp
-            .EXPORT_LOCATION_TEXT.toString());
+        String exportDirLoc = props.getProperty(CSGProp.EXPORT_LOCATION_TEXT.toString());
         exportLabel.setText(exportDirLoc);
-        
-        String courseTemplateLocText = props.getProperty(CSGProp
-            .TEMPLATE_LOCATION_TEXT.toString());
+
+        String courseTemplateLocText = props.getProperty(CSGProp.TEMPLATE_LOCATION_TEXT.toString());
         courseTemplateLocLabel.setText(courseTemplateLocText);
+
+        recAddButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                .toString()));
+        recLocationText.setText("");
+        recInstructorText.setText("");
+        recSectionText.setText("");
+        recDayTimeText.setText("");
+        recTA1Combo.setValue("");
+        recTA2Combo.setValue("");
+        taAddButton.setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+                .toString()));
+        taNameTextField.clear();
+        taEmailTextField.clear();
+        scheduleAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                .toString()));
+        scheduleCriteriaTextField.setText("");
+        scheduleDatePicker.setValue(null);
+        scheduleLinkTextField.setText("");
+        scheduleTimeTextField.setText("");
+        scheduleTitleTextField.setText("");
+        scheduleTopicTextField.setText("");
+        scheduleTypeCombo.setValue("");
+        studentAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                .toString()));
+        studentFNameTextField.clear();
+        studentLNameTextField.clear();
+        studentTeamCombo.setValue(null);
+        studentRoleTextField.clear();
+        teamAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                .toString()));
+        teamLinkTextField.setText("");
+        colorPicker.setValue(Color.WHITE);
+        textColorPicker.setValue(Color.WHITE);
+        teamNameTextField.setText("");
+        monStartDatePicker.setValue(null);
+        friEndDatePicker.setValue(null);   
         
-        
+
         // AND THEN ALL THE GRID PANES AND LABELS
         officeHoursGridTimeHeaderPanes.clear();
         officeHoursGridTimeHeaderLabels.clear();
@@ -3110,7 +3177,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
 
         public void reloadOfficeHoursGrid(TAData dataComponent) {        
         ArrayList<String> gridHeaders = dataComponent.getGridHeaders();
-
         // ADD THE TIME HEADERS
         for (int i = 0; i < 2; i++) {
             addCellToGrid(dataComponent, officeHoursGridTimeHeaderPanes, officeHoursGridTimeHeaderLabels, i, 0);
@@ -3233,6 +3299,16 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             cellText += "pm";
         }
         return cellText;
+    }
+
+    @Override
+    public void jTPSDoTransaction() {
+        jtps.doTransaction();
+    }
+
+    @Override
+    public void jTPSUndoTransaction() {
+        jtps.undoTransaction();
     }
 }
     

@@ -11,7 +11,7 @@
         "banner":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\SBUDarkRedShieldLogo.png",
         "leftFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\CSLogo.png",
         "rightFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\SBUWhiteShieldLogo.jpg",
-        "exportDirectory":"Select an export location",
+        "exportDirectory":"C:\\Users\\Navin",
         "templateDirectory":"Navin\\CourseSiteGenerator\\CourseGenTester\\data",
         "styleSheet":"sea_wolf.css"
     },

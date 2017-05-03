@@ -131,12 +131,12 @@ public class AppFileController {
 
                 // TELL THE USER NEW WORK IS UNDERWAY
 		dialog.show(props.getProperty(NEW_COMPLETED_TITLE), props.getProperty(NEW_COMPLETED_MESSAGE));
+
             }
         } catch (IOException ioe) {
             // SOMETHING WENT WRONG, PROVIDE FEEDBACK
 	    dialog.show(props.getProperty(NEW_ERROR_TITLE), props.getProperty(NEW_ERROR_MESSAGE));
-        }
-        catch(NullPointerException ex){
+        }catch(NullPointerException ex){
             dialog.show(props.getProperty(NEW_ERROR_TITLE), props.getProperty(NEW_ERROR_MESSAGE));
         }
     }
@@ -300,10 +300,10 @@ public class AppFileController {
     }
     
     public void handleUndoRequest(){
-        
+        app.getWorkspaceComponent().jTPSUndoTransaction();
     }
     public void handleRedoRequest(){
-        
+        app.getWorkspaceComponent().jTPSDoTransaction();
     }
     
     public String getAbsolutePath(){

@@ -874,4 +874,5 @@ public class CSGFiles implements AppFileComponent{
             
             FileUtils.copyDirectory(initFile, selectedFile);
     }
+
 }
