@@ -8,7 +8,9 @@ package jtps;
 import csg.CSGApp;
 import csg.CSGProp;
 import csg.data.ProjectData;
+import csg.data.Student;
 import csg.ui.CSGWorkspace;
+import java.util.ArrayList;
 import javafx.scene.paint.Color;
 import properties_manager.PropertiesManager;
 
@@ -25,9 +27,10 @@ public class DeleteTeam_jTPS_Transaction implements jTPS_Transaction {
     String textColor;
     String link;
     CSGWorkspace workspace;
+    ArrayList<Student> oldStudents;
 
     public DeleteTeam_jTPS_Transaction(CSGApp app, String name, String color, String textColor,
-            String link) {
+            String link, ArrayList<Student> oldS) {
         this.app = app;
         data = (ProjectData) app.getProjectDataComponent();
         this.name = name;
@@ -35,11 +38,28 @@ public class DeleteTeam_jTPS_Transaction implements jTPS_Transaction {
         this.textColor = textColor;
         this.link = link;
         workspace = (CSGWorkspace) app.getWorkspaceComponent();
+        oldStudents = new ArrayList();
+        for(Student student: oldS){
+            oldStudents.add(new Student(student.getFirstName(), student.getLastName(),
+              student.getTeam(), student.getRole()));
+        }
     }
 
     @Override
     public void doTransaction() {
         data.deleteTeam(data.getTeam(name));
+        ArrayList<String> delArr = new ArrayList();
+        for (Student student : data.getStudents()) {
+            if (student.getTeam().equals(name)) {
+                delArr.add(student.getFirstName() + " " + student.getLastName());
+            }
+        }
+        for (int i = 0; i < delArr.size(); i++) {
+            String fName = delArr.get(i).split(" ")[0];
+            String lName = delArr.get(i).split(" ")[1];
+            data.getStudents().remove(data.
+                    getStudent(fName, lName));
+        }
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         workspace.getTeamAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
                 .toString()));
@@ -52,6 +72,11 @@ public class DeleteTeam_jTPS_Transaction implements jTPS_Transaction {
     @Override
     public void undoTransaction() {
         data.addTeam(name, color, textColor, link);
+        data.getStudents().clear();
+        for(Student student: oldStudents){
+            data.getStudents().add(new Student(student.getFirstName(), student.getLastName(),
+              student.getTeam(), student.getRole()));
+        }
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         workspace.getTeamAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
                 .toString()));

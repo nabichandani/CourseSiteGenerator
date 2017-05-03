@@ -51,6 +51,7 @@ import javafx.scene.control.TableColumn;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -617,11 +618,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         exportChangeButton.setOnAction(e ->{
             try{
-            String oldString = exportLabel.getText();
             String exportDirLocation = pickDirectory();
             exportLabel.setText(exportDirLocation);
-            jtps.addTransaction(new ChangeExportText_jTPS_Transaction
-               (app, oldString, exportDirLocation));
             courseData.setExportDir(exportDirLoc); 
             }catch(NullPointerException exe){
             }
@@ -668,10 +666,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
         courseTemplateButton.setOnAction(e -> {
             try {
-                String oldString = courseTemplateLocLabel.getText();
                 String exportDirLocation = pickDirectory();
                 courseTemplateLocLabel.setText(exportDirLocation);
-                jtps.addTransaction(new ChangeTemplateText_jTPS_Transaction(app, oldString, exportDirLocation));
                 courseData.setTemplateDir(exportDirLoc);
             } catch (NullPointerException exe) {
 
@@ -1296,9 +1292,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         teamsHeaderPane.getChildren().add(teamsRectPane);
         teamsHeaderPane.setPadding(new Insets(15, 0, 0, 5));
         
-        teamsRectangle.setOnMouseClicked(e ->{
-            //add text here
-        });
         
         teamsPane.getChildren().add(teamsHeaderPane);
         //projectPane.getChildren().add(teamsPane);
@@ -1719,11 +1712,31 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 try{
                     String name = teamNameTextField.getText();
                     Team team = projectData.getTeam(name);
+                    Team teamCopy = new Team(team.getName(), team.getColor(), 
+                        team.getTextColor(), team.getLink());
                     projectData.deleteTeam(team);
                     appFileController.markAsEdited(app.getGUI());
-                    jtps.addTransaction(new DeleteTeam_jTPS_Transaction(app, 
-                        name, team.getColor(), team.getTextColor(), 
-                        team.getLink()));
+                    ArrayList<Student> oldStudents = new ArrayList();
+                    for(Student student: projectData.getStudents()){
+                      oldStudents.add(new Student(student.getFirstName(), student.getLastName(),
+                      student.getTeam(), student.getRole()));
+                    }
+                    
+                    ArrayList<String> delArr = new ArrayList();
+                    for(Student student: projectData.getStudents()){
+                        if(student.getTeam().equals(name)){
+                            delArr.add(student.getFirstName() + " " + student.getLastName());
+                        }
+                    }
+                    for(int i = 0; i < delArr.size(); i++){
+                        String fName = delArr.get(i).split(" ")[0];
+                        String lName = delArr.get(i).split(" ")[1];
+                        projectData.getStudents().remove(projectData.
+                            getStudent(fName, lName));
+                    }
+                    jtps.addTransaction(new DeleteTeam_jTPS_Transaction(app,
+                        name, team.getColor(), team.getTextColor(),
+                        team.getLink(), oldStudents));
                     Team clickedName = (Team) teamsTable
                         .getFocusModel().getFocusedItem();
                     teamNameTextField.setText(clickedName.getName());
@@ -1747,9 +1760,26 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 Team team = projectData.getTeam(name);
                 projectData.deleteTeam(team);
                 appFileController.markAsEdited(app.getGUI());
+                ArrayList<Student> oldStudents = new ArrayList();
+                for(Student student: projectData.getStudents()){
+                  oldStudents.add(new Student(student.getFirstName(), student.getLastName(),
+                  student.getTeam(), student.getRole()));
+                }
+                ArrayList<String> delArr = new ArrayList();
+                for (Student student : projectData.getStudents()) {
+                    if (student.getTeam().equals(name)) {
+                        delArr.add(student.getFirstName() + " " + student.getLastName());
+                    }
+                }
+                for (int i = 0; i < delArr.size(); i++) {
+                    String fName = delArr.get(i).split(" ")[0];
+                    String lName = delArr.get(i).split(" ")[1];
+                    projectData.getStudents().remove(projectData.
+                            getStudent(fName, lName));
+                } 
                 jtps.addTransaction(new DeleteTeam_jTPS_Transaction(app,
                         name, team.getColor(), team.getTextColor(),
-                        team.getLink()));
+                        team.getLink(), oldStudents));
                 Team clickedName = (Team) teamsTable
                         .getFocusModel().getFocusedItem();
                 teamNameTextField.setText(clickedName.getName());
@@ -2206,8 +2236,31 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 String val = data.getOfficeHours().get(key).getValue();
                 taOfficeHours.put(key, val);   
             }
+            ArrayList<Recitation> oldRec = new ArrayList();
+            for(Recitation recitation: recData.getRecitations()){
+                oldRec.add(new Recitation(recitation.getSection(), recitation.getInstructor(), 
+                  recitation.getDayTime(), recitation.getLocation(), recitation.getFirstTA(), 
+                  recitation.getSecondTA()));
+            }
+            ArrayList<String> delArr = new ArrayList();
+            for(Recitation recitation: recData.getRecitations()){
+                if(recitation.getFirstTA().equals(name) && recitation.getSecondTA().isEmpty()){
+                    delArr.add(recitation.getSection());
+                }
+                else if(recitation.getFirstTA().equals(name) && !recitation.getSecondTA().isEmpty()){
+                    recitation.setFirstTA(recitation.getSecondTA());
+                    recitation.setSecondTA("");
+                }
+                else if(recitation.getSecondTA().equals(name)){
+                    recitation.setSecondTA("");
+                }
+            }
+            for(int i = 0; i < delArr.size(); i++){
+                recData.getRecitations().remove(recData.getRecitation(delArr.get(i)));
+            }
+            recitationTable.refresh();
             DeleteTA_jTPS_Transaction del = new DeleteTA_jTPS_Transaction
-                (app, name, email, isUG, taOfficeHours);
+                (app, name, email, isUG, taOfficeHours, oldRec);
             jtps.addTransaction(del);
             controller.handleDeleteTA();
             if(taAddButton.getText().equals(props.getProperty(CSGProp.UPDATE_TA
@@ -2232,12 +2285,40 @@ public class CSGWorkspace extends AppWorkspaceComponent{
              
             String name = taTable.getFocusModel().getFocusedItem().getName();
             String email = taTable.getFocusModel().getFocusedItem().getEmail();
+            boolean isUG = taTable.getFocusModel().getFocusedItem().isUndergrad().get();
             HashMap<String, String> taOfficeHours = new HashMap<String,String>();
             for(String key: data.getOfficeHours().keySet()){
                 String val = data.getOfficeHours().get(key).getValue();
                 taOfficeHours.put(key, val);   
             }
             controller.handleDeleteTA();
+            
+            ArrayList<Recitation> oldRec = new ArrayList();
+            for(Recitation recitation: recData.getRecitations()){
+                oldRec.add(new Recitation(recitation.getSection(), recitation.getInstructor(), 
+                  recitation.getDayTime(), recitation.getLocation(), recitation.getFirstTA(), 
+                  recitation.getSecondTA()));
+            }
+            ArrayList<String> delArr = new ArrayList();
+            for(Recitation recitation: recData.getRecitations()){
+                if(recitation.getFirstTA().equals(name) && recitation.getSecondTA().isEmpty()){
+                    delArr.add(recitation.getSection());
+                }
+                else if(recitation.getFirstTA().equals(name) && !recitation.getSecondTA().isEmpty()){
+                    recitation.setFirstTA(recitation.getSecondTA());
+                    recitation.setSecondTA("");
+                }
+                else if(recitation.getSecondTA().equals(name)){
+                    recitation.setSecondTA("");
+                }
+            }
+            for(int i = 0; i < delArr.size(); i++){
+                recData.getRecitations().remove(recData.getRecitation(delArr.get(i)));
+            }
+            recitationTable.refresh();
+            DeleteTA_jTPS_Transaction del = new DeleteTA_jTPS_Transaction
+                (app, name, email, isUG, taOfficeHours, oldRec);
+            jtps.addTransaction(del);
             if(taAddButton.getText().equals(props.getProperty(CSGProp.UPDATE_TA
                     .toString()))){
                 TeachingAssistant clickedName = (TeachingAssistant) taTable.getFocusModel().getFocusedItem();
