@@ -38,6 +38,7 @@ public class AddStudent_jTPS_Transaction implements jTPS_Transaction{
     public void doTransaction() {
         data.addStudent(firstName, lastName, team, role);
         PropertiesManager props = PropertiesManager.getPropertiesManager();
+        workspace.getStudentTable().getSelectionModel().select(data.getStudent(firstName, lastName));
         workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
                 .toString()));
         workspace.getStudentFNameTextField().clear();

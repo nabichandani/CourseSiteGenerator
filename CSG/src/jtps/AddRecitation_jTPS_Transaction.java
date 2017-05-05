@@ -44,30 +44,45 @@ public class AddRecitation_jTPS_Transaction implements jTPS_Transaction {
     public void doTransaction() {
         data.addRecitation(section, instructor, dayTime, location, firstTA, secondTA);
         CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+        workspace.getRecitationTable().getSelectionModel().select(data.getRecitation(section));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+        workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
                 .toString()));
-        workspace.getRecLocationText().setText("");
-        workspace.getRecInstructorText().setText("");
-        workspace.getRecSectionText().setText("");
-        workspace.getRecDayTimeText().setText("");
-        workspace.getRecTA1Combo().setValue("");
-        workspace.getRecTA2Combo().setValue("");
+        workspace.getRecLocationText().setText(location);
+        workspace.getRecInstructorText().setText(instructor);
+        workspace.getRecSectionText().setText(section);
+        workspace.getRecDayTimeText().setText(dayTime);
+        workspace.getRecTA1Combo().setValue(firstTA);
+        workspace.getRecTA2Combo().setValue(secondTA);
     }
 
     @Override
     public void undoTransaction() {
-        data.getRecitations().remove(data.getRecitation(section));
-        CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
-        PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
-                .toString()));
-        workspace.getRecLocationText().setText("");
-        workspace.getRecInstructorText().setText("");
-        workspace.getRecSectionText().setText("");
-        workspace.getRecDayTimeText().setText("");
-        workspace.getRecTA1Combo().setValue("");
-        workspace.getRecTA2Combo().setValue("");
+        try{
+            data.getRecitations().remove(data.getRecitation(section));
+            CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+            PropertiesManager props = PropertiesManager.getPropertiesManager();
+            workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                    .toString()));
+            Recitation rec = workspace.getRecitationTable().getSelectionModel().getSelectedItem();
+            workspace.getRecLocationText().setText(rec.getLocation());
+            workspace.getRecInstructorText().setText(rec.getInstructor());
+            workspace.getRecSectionText().setText(rec.getSection());
+            workspace.getRecDayTimeText().setText(rec.getDayTime());
+            workspace.getRecTA1Combo().setValue(rec.getFirstTA());
+            workspace.getRecTA2Combo().setValue(rec.getSecondTA());
+        } catch (NullPointerException e) {
+            CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+            PropertiesManager props = PropertiesManager.getPropertiesManager();
+            workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                    .toString()));
+            workspace.getRecLocationText().setText("");
+            workspace.getRecInstructorText().setText("");
+            workspace.getRecSectionText().setText("");
+            workspace.getRecDayTimeText().setText("");
+            workspace.getRecTA1Combo().setValue("");
+            workspace.getRecTA2Combo().setValue("");
+        }
     }
-
+        
 }

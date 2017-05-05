@@ -69,11 +69,12 @@ public class EditTA_jTPS_Transaction implements jTPS_Transaction {
         data.getTeachingAssistants().add(newTA);
         Collections.sort(data.getTeachingAssistants());
         CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+        workspace.getTaTable().getSelectionModel().select(data.getTA(newName));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getTaAddButton().setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+        workspace.getTaAddButton().setText(props.getProperty(CSGProp.UPDATE_TA
                 .toString()));
-        workspace.getTaNameTextField().clear();
-        workspace.getEmailTextField().clear();
+        workspace.getTaNameTextField().setText(newName);
+        workspace.getEmailTextField().setText(newEmail);
 
     }
 
@@ -98,11 +99,12 @@ public class EditTA_jTPS_Transaction implements jTPS_Transaction {
         data.getTeachingAssistants().add(newTA);
         Collections.sort(data.getTeachingAssistants());
         CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+        workspace.getTaTable().getSelectionModel().select(data.getTA(oldName));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getTaAddButton().setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+        workspace.getTaAddButton().setText(props.getProperty(CSGProp.UPDATE_TA
                 .toString()));
-        workspace.getTaNameTextField().clear();
-        workspace.getEmailTextField().clear();
+        workspace.getTaNameTextField().setText(newName);
+        workspace.getEmailTextField().setText(newEmail);
     }
 
 }

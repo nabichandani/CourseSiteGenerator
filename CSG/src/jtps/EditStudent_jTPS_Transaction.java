@@ -37,13 +37,14 @@ public class EditStudent_jTPS_Transaction implements jTPS_Transaction{
             oldStudent.getLastName()));
         data.addStudent(newStudent.getFirstName(), newStudent.getLastName(), 
             newStudent.getTeam(), newStudent.getRole());    
-        PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
-                .toString()));
-        workspace.getStudentFNameTextField().clear();
-        workspace.getStudentLNameTextField().clear();
-        workspace.getStudentTeamCombo().setValue(null);
-        workspace.getStudentRoleTextField().clear();
+        workspace.getStudentTable().getSelectionModel().select(data.getStudent(newStudent.getFirstName(), newStudent.getLastName()));
+//        PropertiesManager props = PropertiesManager.getPropertiesManager();
+//        workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+//                .toString()));
+//        workspace.getStudentFNameTextField().clear();
+//        workspace.getStudentLNameTextField().clear();
+//        workspace.getStudentTeamCombo().setValue(null);
+//        workspace.getStudentRoleTextField().clear();
     }
 
     @Override
@@ -52,13 +53,14 @@ public class EditStudent_jTPS_Transaction implements jTPS_Transaction{
             newStudent.getLastName()));
         data.addStudent(oldStudent.getFirstName(), oldStudent.getLastName(), 
             oldStudent.getTeam(), oldStudent.getRole());
-        PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
-                .toString()));
-        workspace.getStudentFNameTextField().clear();
-        workspace.getStudentLNameTextField().clear();
-        workspace.getStudentTeamCombo().setValue(null);
-        workspace.getStudentRoleTextField().clear();
+        workspace.getStudentTable().getSelectionModel().select(data.getStudent(oldStudent.getFirstName(), oldStudent.getLastName()));
+//        PropertiesManager props = PropertiesManager.getPropertiesManager();
+//        workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+//                .toString()));
+//        workspace.getStudentFNameTextField().clear();
+//        workspace.getStudentLNameTextField().clear();
+//        workspace.getStudentTeamCombo().setValue(null);
+//        workspace.getStudentRoleTextField().clear();
     }
 
 }

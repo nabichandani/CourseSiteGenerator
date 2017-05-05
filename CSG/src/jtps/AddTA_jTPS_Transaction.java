@@ -42,22 +42,32 @@ public class AddTA_jTPS_Transaction implements jTPS_Transaction {
         data.addTA(nameTA, emailTA, isUG);
         TA = data.getTA(nameTA);
         CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+        workspace.getTaTable().getSelectionModel().select(data.getTA(nameTA));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getTaAddButton().setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+        workspace.getTaAddButton().setText(props.getProperty(CSGProp.UPDATE_TA
                 .toString()));
-        workspace.getTaNameTextField().clear();
-        workspace.getEmailTextField().clear();
+        workspace.getTaNameTextField().setText(nameTA);
+        workspace.getEmailTextField().setText(emailTA);
     }
 
     @Override
     public void undoTransaction() {
-        data.deleteTA(TA);
+        try{
+        data.deleteTA(data.getTA(TA.getName()));
         CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getTaAddButton().setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+        TeachingAssistant ta = (TeachingAssistant)workspace.getTATable().getSelectionModel().getSelectedItem();
+        workspace.getTaAddButton().setText(props.getProperty(CSGProp.UPDATE_TA
                 .toString()));
-        workspace.getTaNameTextField().clear();
-        workspace.getEmailTextField().clear();
-
+        workspace.getTaNameTextField().setText(ta.getName());
+        workspace.getEmailTextField().setText(ta.getEmail());
+        }catch(NullPointerException e){
+            CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+            PropertiesManager props = PropertiesManager.getPropertiesManager();
+            workspace.getTaAddButton().setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
+                .toString()));
+            workspace.getTaNameTextField().setText("");
+            workspace.getEmailTextField().setText("");
+        }
     }
 }

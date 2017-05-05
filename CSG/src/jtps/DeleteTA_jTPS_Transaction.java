@@ -58,6 +58,7 @@ import properties_manager.PropertiesManager;
 
     @Override
     public void doTransaction() {
+        try{
         data.deleteTA(TA);
         HashMap<String, StringProperty> officeHours = data.getOfficeHours();
           for(String key: officeHours.keySet()){
@@ -84,10 +85,19 @@ import properties_manager.PropertiesManager;
             }
             workspace.getRecitationTable().refresh();
             PropertiesManager props = PropertiesManager.getPropertiesManager();
+            TeachingAssistant ta = (TeachingAssistant)workspace.getTATable().getSelectionModel().getSelectedItem();
+            workspace.getTaAddButton().setText(props.getProperty(CSGProp.UPDATE_TA
+                .toString()));
+        workspace.getTaNameTextField().setText(ta.getName());
+        workspace.getEmailTextField().setText(ta.getEmail());
+        }catch(NullPointerException e){
+            CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+            PropertiesManager props = PropertiesManager.getPropertiesManager();
             workspace.getTaAddButton().setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
-                        .toString()));
-            workspace.getTaNameTextField().clear();
-            workspace.getEmailTextField().clear();
+                .toString()));
+            workspace.getTaNameTextField().setText("");
+            workspace.getEmailTextField().setText("");
+        }
     }
 
     @Override
@@ -105,11 +115,13 @@ import properties_manager.PropertiesManager;
         }
         workspace.getRecitationTable().refresh();
         Collections.sort(recData.getRecitations());
+         workspace.getTaTable().getSelectionModel().select(data.getTA(name));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getTaAddButton().setText(props.getProperty(CSGProp.ADD_BUTTON_TEXT
-                        .toString()));
-        workspace.getTaNameTextField().clear();
-        workspace.getEmailTextField().clear();
+        workspace.getTaAddButton().setText(props.getProperty(CSGProp.UPDATE_TA
+                .toString()));
+        workspace.getTaNameTextField().setText(name);
+        workspace.getEmailTextField().setText(email);
+        workspace.getTaTable().getSelectionModel().select(data.getTA(name));
         
     }
     

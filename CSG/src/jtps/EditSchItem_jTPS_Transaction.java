@@ -43,6 +43,9 @@ public class EditSchItem_jTPS_Transaction implements jTPS_Transaction {
                 oldSchItem.getTime(), oldSchItem.getTitle(), oldSchItem.getTopic(),
                 oldSchItem.getLink(), oldSchItem.getCriteria()));
         data.addScheduleItem(newSchItem);
+        workspace.getScheduleTable().getSelectionModel().select(data.getScheduleItem(newSchItem.getType(), newSchItem.getDate(),
+                newSchItem.getTime(), newSchItem.getTitle(), newSchItem.getTopic(),
+                newSchItem.getLink(), newSchItem.getCriteria()));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         workspace.getScheduleAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
                 .toString()));
@@ -61,16 +64,19 @@ public class EditSchItem_jTPS_Transaction implements jTPS_Transaction {
                 newSchItem.getTime(), newSchItem.getTitle(), newSchItem.getTopic(),
                 newSchItem.getLink(), newSchItem.getCriteria()));
         data.addScheduleItem(oldSchItem);
-        PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getScheduleAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
-                .toString()));
-        workspace.getScheduleCriteriaTextField().setText("");
-        workspace.getScheduleDatePicker().setValue(null);
-        workspace.getScheduleLinkTextField().setText("");
-        workspace.getScheduleTimeTextField().setText("");
-        workspace.getScheduleTitleTextField().setText("");
-        workspace.getScheduleTopicTextField().setText("");
-        workspace.getScheduleTypeCombo().setValue("");
+                workspace.getScheduleTable().getSelectionModel().select(data.getScheduleItem(oldSchItem.getType(), oldSchItem.getDate(),
+                oldSchItem.getTime(), oldSchItem.getTitle(), oldSchItem.getTopic(),
+                oldSchItem.getLink(), oldSchItem.getCriteria()));
+//        PropertiesManager props = PropertiesManager.getPropertiesManager();
+//        workspace.getScheduleAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+//                .toString()));
+//        workspace.getScheduleCriteriaTextField().setText("");
+//        workspace.getScheduleDatePicker().setValue(null);
+//        workspace.getScheduleLinkTextField().setText("");
+//        workspace.getScheduleTimeTextField().setText("");
+//        workspace.getScheduleTitleTextField().setText("");
+//        workspace.getScheduleTopicTextField().setText("");
+//        workspace.getScheduleTypeCombo().setValue("");
     }
 
 }

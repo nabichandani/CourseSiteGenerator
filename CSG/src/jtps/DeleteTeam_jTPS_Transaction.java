@@ -77,6 +77,7 @@ public class DeleteTeam_jTPS_Transaction implements jTPS_Transaction {
             data.getStudents().add(new Student(student.getFirstName(), student.getLastName(),
               student.getTeam(), student.getRole()));
         }
+        workspace.getTeamsTable().getSelectionModel().select(data.getTeam(name));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         workspace.getTeamAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
                 .toString()));

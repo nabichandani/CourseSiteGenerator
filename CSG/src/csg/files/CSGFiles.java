@@ -846,7 +846,7 @@ public class CSGFiles implements AppFileComponent{
     @Override
     public void exportData() throws IOException {
             File selectedFile = new File((workspace.getExportLabel().getText()));
-            Path destPath = selectedFile.toPath();
+            File destFile = new File(workspace.getCourseTemplateLocLabel().getText());
          
             String path = "../CourseGenTester/public_html/js/OfficeHoursGridData.json";
             saveData(app.getTADataComponent(), 
@@ -868,7 +868,7 @@ public class CSGFiles implements AppFileComponent{
             String pathCourse =  "../CourseGenTester/public_html/js/ProjectsData.json";
             saveProjectsData(app.getCourseDataComponent(), pathCourse);
             
-            String initPath = "../CourseGenTester/public_html/";
+            String initPath = destFile.toString();
             Path initialPath = Paths.get(initPath);
             File initFile= new File(initPath);
             

@@ -169,7 +169,7 @@
         <property name="STUDENT_TEAM_COLON_TEXT"         value="Equipo:"></property>
         <property name="ROLE_COLON_TEXT"         value="Papel:"></property>
         <property name="EXPORT_LOCATION_TEXT"         value="Seleccione una ubicación de exportación"></property>
-        <property name="TEMPLATE_LOCATION_TEXT"         value="Elegir una ubicación de plantilla"></property>
+        <property name="TEMPLATE_LOCATION_TEXT"         value="../CourseGenTester/public_html/"></property>
         <property name="UPDATE_TA"         value="Actualizar"></property>
 
         <property name="SUBMIT_TEXT"         value="Enviar"></property>
@@ -209,6 +209,9 @@
         <property name="STUDENT_NOT_UNIQUE_MESSAGE"   value="Debe proporcionar un nombre de estudiante único."></property>
         <property name="STUDENT_MISSING_TITLE"   value="Falta el campo del estudiante"></property>
         <property name="STUDENT_MISSING_MESSAGE"   value="Debe proporcionar todos los atributos del Estudiante."></property>
+
+        <property name="INVALID_DATE_TITLE"   value="Fecha invalida"></property>
+        <property name="INVALID_DATE_MESSAGE"   value="Por favor ponga una fecha válida."></property>
     </property_list>
     <property_options_list>
         <property_options name="OFFICE_HOURS_TABLE_HEADERS">

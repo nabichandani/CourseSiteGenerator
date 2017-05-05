@@ -42,15 +42,16 @@ public class EditRecitation_jTPS_Transaction implements jTPS_Transaction {
         data.getRecitations().add(newRec);
         Collections.sort(data.getRecitations());
         CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+        workspace.getRecitationTable().getSelectionModel().select(data.getRecitation(newRec.getSection()));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+        workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
                 .toString()));
-        workspace.getRecLocationText().setText("");
-        workspace.getRecInstructorText().setText("");
-        workspace.getRecSectionText().setText("");
-        workspace.getRecDayTimeText().setText("");
-        workspace.getRecTA1Combo().setValue("");
-        workspace.getRecTA2Combo().setValue("");
+        workspace.getRecLocationText().setText(newRec.getLocation());
+        workspace.getRecInstructorText().setText(newRec.getInstructor());
+        workspace.getRecSectionText().setText(newRec.getSection());
+        workspace.getRecDayTimeText().setText(newRec.getDayTime());
+        workspace.getRecTA1Combo().setValue(newRec.getFirstTA());
+        workspace.getRecTA2Combo().setValue(newRec.getSecondTA());
     }
 
     @Override
@@ -59,14 +60,15 @@ public class EditRecitation_jTPS_Transaction implements jTPS_Transaction {
         data.getRecitations().add(oldRec);
         Collections.sort(data.getRecitations());
         CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+        workspace.getRecitationTable().getSelectionModel().select(data.getRecitation(oldRec.getSection()));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+        workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
                 .toString()));
-        workspace.getRecLocationText().setText("");
-        workspace.getRecInstructorText().setText("");
-        workspace.getRecSectionText().setText("");
-        workspace.getRecDayTimeText().setText("");
-        workspace.getRecTA1Combo().setValue("");
-        workspace.getRecTA2Combo().setValue("");
+        workspace.getRecLocationText().setText(oldRec.getLocation());
+        workspace.getRecInstructorText().setText(oldRec.getInstructor());
+        workspace.getRecSectionText().setText(oldRec.getSection());
+        workspace.getRecDayTimeText().setText(oldRec.getDayTime());
+        workspace.getRecTA1Combo().setValue(oldRec.getFirstTA());
+        workspace.getRecTA2Combo().setValue(oldRec.getSecondTA());
     }
 }

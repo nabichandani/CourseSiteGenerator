@@ -388,8 +388,8 @@ public class TestSave implements AppFileComponent{
 	ObservableList<Team> teams = projectDataManager.getTeams();
         ObservableList<Student> students = projectDataManager.getStudents();
         
-        Team team1 = new Team("Team 1", "0x66ff00ff", "0x0000ffff", "www.team1.com");
-        Team team2 = new Team("Team 2", "0x6633ffff", "0x0099ffff", "www.team2.com");
+        Team team1 = new Team("Team 1", "66ff00", "0000ff", "www.team1.com");
+        Team team2 = new Team("Team 2", "6633ff", "0099ff", "www.team2.com");
         teams.add(team1);
         teams.add(team2);
         

@@ -7,6 +7,7 @@ package csg.ui;
 
 import com.sun.xml.internal.bind.v2.util.FatalAdapter;
 import csg.CSGApp;
+import csg.CSGProp;
 import static csg.CSGProp.MISSING_TA_EMAIL_MESSAGE;
 import static csg.CSGProp.MISSING_TA_EMAIL_TITLE;
 import static csg.CSGProp.MISSING_TA_NAME_MESSAGE;
@@ -114,8 +115,11 @@ public class CSGControls {
             
             
             // CLEAR THE TEXT FIELDS
-            nameTextField.setText("");
-            emailTextField.setText("");
+            workspace.getTaTable().getSelectionModel().select(data.getTA(name));
+            workspace.getTaAddButton().setText(props.getProperty(CSGProp.UPDATE_TA
+                .toString()));
+            nameTextField.setText(name);
+            emailTextField.setText(email);
             // AND SEND THE CARET BACK TO THE NAME TEXT FIELD FOR EASY DATA ENTRY
             nameTextField.requestFocus();
             
@@ -190,7 +194,8 @@ public class CSGControls {
                 TeachingAssistant newTA = new TeachingAssistant(name, email, ug);
                 data.getTeachingAssistants().add(newTA);
                 Collections.sort(data.getTeachingAssistants());
-                appFileController.markAsEdited(app.getGUI()); 
+                appFileController.markAsEdited(app.getGUI());
+                workspace.getTaTable().getSelectionModel().select(data.getTA(name));
             }
             else{
                 AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
@@ -268,7 +273,8 @@ public class CSGControls {
                 data.addStudent(firstName, lastName, team, role);
                 workspace.getjTPS().addTransaction
                    (new EditStudent_jTPS_Transaction(app, student, s));
-                appFileController.markAsEdited(app.getGUI()); 
+                appFileController.markAsEdited(app.getGUI());
+                workspace.getStudentTable().getSelectionModel().select(data.getStudent(firstName, lastName));
            }
           }catch(Exception e){
           }
@@ -283,8 +289,8 @@ public class CSGControls {
               CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
               ProjectData data = (ProjectData) app.getProjectDataComponent();
               String name = workspace.getTeamNameTextField().getText().trim();
-              String color = workspace.getColorPicker().getValue().toString();
-              String textColor = workspace.getTextColorPicker().getValue().toString();
+              String color = Integer.toHexString(workspace.getColorPicker().getValue().hashCode()).substring(0,6);
+              String textColor = Integer.toHexString(workspace.getTextColorPicker().getValue().hashCode()).substring(0,6);
               String link = workspace.getTeamLinkTextField().getText().trim();
               
             if(name.isEmpty() || color.isEmpty() || textColor.isEmpty() || 
@@ -321,8 +327,8 @@ public class CSGControls {
             CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
             ProjectData data = (ProjectData) app.getProjectDataComponent();
             String name = workspace.getTeamNameTextField().getText().trim();
-            String color = workspace.getColorPicker().getValue().toString();
-            String textColor = workspace.getTextColorPicker().getValue().toString();
+            String color = Integer.toHexString(workspace.getColorPicker().getValue().hashCode()).substring(0, 6);
+            String textColor = Integer.toHexString(workspace.getTextColorPicker().getValue().hashCode()).substring(0, 6);
             String link = workspace.getTeamLinkTextField().getText().trim();
             Team newTeam = new Team(name, color, textColor, link);
             if (data.containsTeam(name) && !team.getName().equals(name)) {
@@ -344,7 +350,8 @@ public class CSGControls {
                 data.getTeams().remove(team);
                 data.addTeam(name, color, textColor, link);
                 workspace.getjTPS().addTransaction(new EditTeam_jTPS_Transaction(app, team, newTeam));
-                appFileController.markAsEdited(app.getGUI()); 
+                appFileController.markAsEdited(app.getGUI());
+                workspace.getTeamsTable().getSelectionModel().select(data.getTeam(name));
            }
           }catch(Exception e){
           }
@@ -408,23 +415,24 @@ public class CSGControls {
            String criteria = workspace.getScheduleCriteriaTextField().getText().trim();
            ScheduleItem newSch = new ScheduleItem(type, date, time, title, topic, link, criteria);
            if(data.isInSchedule(newSch)){
-               AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
-               dialog.show(props.getProperty(REC_NOT_UNIQUE_TITLE), props.getProperty(REC_NOT_UNIQUE_MESSAGE));
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(SCH_NOT_UNIQUE_TITLE), props.getProperty(SCH_NOT_UNIQUE_MESSAGE)); 
            }
            else if (type.isEmpty() || date.equals(null)|| time.isEmpty()
                   || title.isEmpty()) {
-              AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
-              dialog.show(props.getProperty(REC_MISSING_TITLE), props.getProperty(REC_MISSING_MESSAGE));   
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(SCH_MISSING_TITLE), props.getProperty(SCH_MISSING_MESSAGE));
           }
            else{
                 data.getSchedule().remove(sch);
                 data.addScheduleItem(newSch);
                 workspace.getjTPS().addTransaction(new EditSchItem_jTPS_Transaction(app, sch, newSch));
                 appFileController.markAsEdited(app.getGUI()); 
+                workspace.getScheduleTable().getSelectionModel().select(data.getScheduleItem(type, date, time, title, topic, link, criteria));
            }
           }catch(Exception e){
                 AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
-                dialog.show(props.getProperty(REC_NOT_UNIQUE_TITLE), props.getProperty(REC_NOT_UNIQUE_MESSAGE));    
+                dialog.show(props.getProperty(SCH_NOT_UNIQUE_TITLE), props.getProperty(SCH_NOT_UNIQUE_MESSAGE)); 
           }
       }
       
@@ -449,14 +457,17 @@ public class CSGControls {
                     location, ta1, ta2);
                 jTPS jtps = workspace.getjTPS();
                 jtps.addTransaction(new AddRecitation_jTPS_Transaction(app, 
-                    section, instructor, dayTime, location, ta1, ta2));               
-                workspace.getRecLocationText().setText(""); 
-                workspace.getRecInstructorText().setText("");
-                workspace.getRecSectionText().setText("");
-                workspace.getRecDayTimeText().setText("");
-                workspace.getRecTA1Combo().setValue("");
-                workspace.getRecTA2Combo().setValue("");
+                    section, instructor, dayTime, location, ta1, ta2));
+                workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                .toString()));
+                workspace.getRecLocationText().setText(location); 
+                workspace.getRecInstructorText().setText(instructor);
+                workspace.getRecSectionText().setText(section);
+                workspace.getRecDayTimeText().setText(dayTime);
+                workspace.getRecTA1Combo().setValue(ta1);
+                workspace.getRecTA2Combo().setValue(ta2);
                 appFileController.markAsEdited(app.getGUI()); 
+                workspace.getRecitationTable().getSelectionModel().select(data.getRecitation(section));
            }
            else{
                 AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
@@ -503,6 +514,7 @@ public class CSGControls {
                 workspace.getjTPS().addTransaction(new EditRecitation_jTPS_Transaction(app, rec, newRec));
                 data.addRecitation(section, instructor, dayTime, 
                     location, ta1, ta2);
+                workspace.getRecitationTable().getSelectionModel().select(data.getRecitation(section));
                 appFileController.markAsEdited(app.getGUI()); 
            }
       }

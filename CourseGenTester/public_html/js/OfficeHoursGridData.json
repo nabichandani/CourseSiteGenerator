@@ -11,13 +11,13 @@
         "banner":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\SBUDarkRedShieldLogo.png",
         "leftFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\CSLogo.png",
         "rightFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\SBUWhiteShieldLogo.jpg",
-        "exportDirectory":"C:\\Users\\Navin",
-        "templateDirectory":"Navin\\CourseSiteGenerator\\CourseGenTester\\data",
+        "exportDirectory":"Select an export location",
+        "templateDirectory":"Select an export location",
         "styleSheet":"sea_wolf.css"
     },
     "courseTemplate":[
         {
-            "use":false,
+            "use":true,
             "navbarTitle":"Home",
             "fileName":"index.html",
             "script":"Homebuilder.js"
@@ -35,13 +35,13 @@
             "script":"ScheduleBuilder.js"
         },
         {
-            "use":false,
+            "use":true,
             "navbarTitle":"HWs",
             "fileName":"hws.html",
             "script":"HWsBuilder.js"
         },
         {
-            "use":false,
+            "use":true,
             "navbarTitle":"Projects",
             "fileName":"projects.html",
             "script":"ProjectsBuilder.js"

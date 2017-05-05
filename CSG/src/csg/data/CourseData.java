@@ -43,13 +43,13 @@ public class CourseData implements AppDataComponent{
     public CourseData(CSGApp initApp){
         app = initApp;   
         templates = FXCollections.observableArrayList();
-        home = new CourseTemplate(false, "Home", "index.html", "Homebuilder.js");
-        syllabus = new CourseTemplate(false, "Syllabus", 
+        home = new CourseTemplate(true, "Home", "index.html", "Homebuilder.js");
+        syllabus = new CourseTemplate(true, "Syllabus", 
             "syllabus.html", "SyllabusBuilder.js");
-        schedule = new CourseTemplate(false, "Schedule",
+        schedule = new CourseTemplate(true, "Schedule",
             "schedule.html", "ScheduleBuilder.js");
-        hws = new CourseTemplate(false, "HWs", "hws.html", "HWsBuilder.js");
-        projects = new CourseTemplate(false, "Projects", 
+        hws = new CourseTemplate(true, "HWs", "hws.html", "HWsBuilder.js");
+        projects = new CourseTemplate(true, "Projects", 
             "projects.html", "ProjectsBuilder.js");
         templates.add(home);
         templates.add(syllabus);
@@ -131,6 +131,14 @@ public class CourseData implements AppDataComponent{
     public void setExportDir(String exportDir) {
         this.exportDir = exportDir;
     }
+    public CourseTemplate getCourseTemplate(String name){
+        for(CourseTemplate template: templates){
+           if(template.getNavbarTitle().equals(name)){
+               return template;
+           } 
+        }
+        return null;
+    }
 
     public String getTemplateDir() {
         return templateDir;
@@ -195,13 +203,13 @@ public class CourseData implements AppDataComponent{
     public void resetData() {
         templates.clear();
         
-                home = new CourseTemplate(false, "Home", "index.html", "Homebuilder.js");
-        syllabus = new CourseTemplate(false, "Syllabus", 
+                home = new CourseTemplate(true, "Home", "index.html", "Homebuilder.js");
+        syllabus = new CourseTemplate(true, "Syllabus", 
             "syllabus.html", "SyllabusBuilder.js");
-        schedule = new CourseTemplate(false, "Schedule",
+        schedule = new CourseTemplate(true, "Schedule",
             "schedule.html", "ScheduleBuilder.js");
-        hws = new CourseTemplate(false, "HWs", "hws.html", "HWsBuilder.js");
-        projects = new CourseTemplate(false, "Projects", 
+        hws = new CourseTemplate(true, "HWs", "hws.html", "HWsBuilder.js");
+        projects = new CourseTemplate(true, "Projects", 
             "projects.html", "ProjectsBuilder.js");
         templates.add(home);
         templates.add(syllabus);

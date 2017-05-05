@@ -5,6 +5,10 @@ import jtps.*;
 import csg.CSGApp;
 import csg.CSGProp;
 import static csg.CSGProp.COURSE_SUBHEADER;
+import static csg.CSGProp.INVALID_DATE_MESSAGE;
+import static csg.CSGProp.INVALID_DATE_TITLE;
+import static csg.CSGProp.MISSING_TA_EMAIL_MESSAGE;
+import static csg.CSGProp.MISSING_TA_EMAIL_TITLE;
 import csg.CSGStyle;
 import csg.data.CourseData;
 import csg.data.CourseTemplate;
@@ -33,7 +37,9 @@ import javafx.scene.shape.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.chrono.Chronology;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.BorderPane;
@@ -51,11 +57,11 @@ import javafx.scene.control.TableColumn;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -544,6 +550,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseSemYear.getChildren().add(courseSemesterLabel);
         semCombo = new ComboBox();
         semCombo.setPrefWidth(130);
+        ObservableList<String> semesterItems = FXCollections.observableArrayList();
+        semesterItems.addAll("Fall", "Winter", "Summer", "Spring");
+        semCombo.setItems(semesterItems);
         courseSemYear.getChildren().add(semCombo);
         
         String courseYearText = props.getProperty(CSGProp.YEAR_TEXT.toString());
@@ -554,6 +563,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseSemYear.setSpacing(80);
         
         yearCombo = new ComboBox();
+        ObservableList<String> yearList = FXCollections.observableArrayList();
+        yearList.addAll("2016", "2017", "2018", "2019", "2020", "2021","2022");
+        yearCombo.setItems(yearList);
         yearCombo.setPrefWidth(130);
         courseSemYear.getChildren().add(yearCombo);
         courseDetails.getChildren().add(courseSemYear);
@@ -664,15 +676,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseTemplateButtonPane.getChildren().add(courseTemplateButton);
         courseTemplatePane.getChildren().add(courseTemplateButtonPane);
         
-        courseTemplateButton.setOnAction(e -> {
-            try {
-                String exportDirLocation = pickDirectory();
-                courseTemplateLocLabel.setText(exportDirLocation);
-                courseData.setTemplateDir(exportDirLoc);
-            } catch (NullPointerException exe) {
-
-            }
-        });
 
         //Site Pages Label
         String courseSitePageText = props.getProperty(CSGProp.SITE_PAGE_TEXT.toString());
@@ -937,6 +940,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         recitationPane.getChildren().add(recitationAddPane);
         recitationAddLabel = new Label(props.getProperty
         (CSGProp.ADDEDIT_TEXT.toString()));
+        recitationAddLabel.setPadding(new Insets(0,0,0,22));
         recitationAddPane.getChildren().add(recitationAddLabel);
         
         //Recitation Section HBox
@@ -1567,6 +1571,108 @@ public class CSGWorkspace extends AppWorkspaceComponent{
 
         //This is now the end of the creation of GUIS and now includes
         // event handlers.
+        styleSheetCombo.setOnMouseClicked(e ->{
+            String currentStyleSheet = (String) styleSheetCombo.getValue();
+            File pickedFile = new File(courseTemplateLocLabel.getText() 
+              + "/css/" + currentStyleSheet);
+            try{
+            styleSheetCombo.getItems().clear();
+            String loc = courseTemplateLocLabel.getText() + "/css/";
+            File newFile = new File(loc);
+            File[] files = newFile.listFiles();
+            for(File file: files){
+                if(file.getName().endsWith(".css")){
+                    styleSheetCombo.getItems().add(file.getName());
+                }
+            }
+            }catch(NullPointerException ex){               
+            }finally{
+            if(pickedFile.isFile()){
+                styleSheetCombo.setValue(currentStyleSheet);
+            }
+            else{
+                 styleSheetCombo.setValue(null);
+            }
+        }
+        });
+        
+        courseTemplateButton.setOnAction(e -> {
+            try {
+                String exportDirLocation = pickDirectory();
+                courseTemplateLocLabel.setText(exportDirLocation);
+                courseData.setTemplateDir(exportDirLoc);
+                File file1 = new File(exportDirLocation + "/index.html");
+                File file2 = new File(exportDirLocation + "/hws.html");
+                File file3 = new File(exportDirLocation + "/projects.html");
+                File file4 = new File(exportDirLocation + "/schedule.html");
+                File file5 = new File(exportDirLocation + "/syllabus.html");
+                if(file1.exists()){
+                    courseData.getCourseTemplate("Home").setUse(new SimpleBooleanProperty(true));
+                }
+                else{
+                    courseData.getCourseTemplate("Home").setUse(new SimpleBooleanProperty(false));
+                }
+                if(file2.exists()){
+                    courseData.getCourseTemplate("HWs").setUse(new SimpleBooleanProperty(true));
+                }
+                else{
+                    courseData.getCourseTemplate("HWs").setUse(new SimpleBooleanProperty(false));
+                }
+                if(file3.exists()){
+                    courseData.getCourseTemplate("Projects").setUse(new SimpleBooleanProperty(true));
+                }
+                else{
+                    courseData.getCourseTemplate("Projects").setUse(new SimpleBooleanProperty(false));
+                }
+                if(file4.exists()){
+                    courseData.getCourseTemplate("Schedule").setUse(new SimpleBooleanProperty(true));
+                }
+                else{
+                    courseData.getCourseTemplate("Schedule").setUse(new SimpleBooleanProperty(false));
+                }
+                if(file5.exists()){
+                    courseData.getCourseTemplate("Syllabus").setUse(new SimpleBooleanProperty(true));
+                }
+                else{
+                    courseData.getCourseTemplate("Syllabus").setUse(new SimpleBooleanProperty(false));
+                }
+                templateTable.refresh();
+            } catch (NullPointerException exe) {
+
+            }
+        });
+        
+        
+        monStartDatePicker.setOnAction(e ->{ 
+        try{
+                LocalDate start = monStartDatePicker.getValue();
+                LocalDate end = friEndDatePicker.getValue(); 
+                if(start.isAfter(end)){
+                    monStartDatePicker.setValue(null);
+                    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));                    
+                }
+            }catch(NullPointerException ex){
+                
+            }
+        });
+        
+        friEndDatePicker.setOnMouseClicked(e ->{ 
+            try{
+                friEndDatePicker.setChronology(Chronology.from(monStartDatePicker.getValue()));
+                LocalDate start = monStartDatePicker.getValue();
+                
+                LocalDate end = friEndDatePicker.getValue(); 
+                if(start.isAfter(end)){
+                    friEndDatePicker.setValue(null);
+                    
+                    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));                    
+                }
+            }catch(NullPointerException ex){
+                
+            }
+        });
 
         
         studentAddUpdateButton.setOnAction(e -> {
@@ -2766,6 +2872,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     public TableColumn<Team, String> getLinkColumn() {
         return linkColumn;
     }
+
+    public TableView<Team> getTeamsTable() {
+        return teamsTable;
+    }
+    
 
     public TableColumn<Recitation, String> getSectionColumn() {
         return sectionColumn;

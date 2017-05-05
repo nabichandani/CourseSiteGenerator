@@ -67,6 +67,9 @@ public class DeleteSchItem_jTPS_Transaction implements jTPS_Transaction{
     public void undoTransaction() {
         data.addScheduleItem(type, date, time, title, topic, link, criteria);
         PropertiesManager props = PropertiesManager.getPropertiesManager();
+        workspace.getScheduleTable().getSelectionModel().select(data.getScheduleItem(type, date,
+                time, title, topic,
+                link, criteria));
         workspace.getScheduleAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
                 .toString()));
         workspace.getScheduleCriteriaTextField().setText("");

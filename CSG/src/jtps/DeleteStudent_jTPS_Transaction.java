@@ -50,6 +50,7 @@ public class DeleteStudent_jTPS_Transaction implements jTPS_Transaction{
     @Override
     public void undoTransaction() {
         data.addStudent(firstName, lastName, team, role);
+        workspace.getStudentTable().getSelectionModel().select(data.getStudent(firstName, lastName));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
                 .toString()));

@@ -40,6 +40,7 @@ public class AddTeam_jTPS_Transaction implements jTPS_Transaction {
     @Override
     public void doTransaction() {
         data.addTeam(name, color, textColor, link);
+        workspace.getTeamsTable().getSelectionModel().select(data.getTeam(name));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         workspace.getTeamAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
                 .toString()));
