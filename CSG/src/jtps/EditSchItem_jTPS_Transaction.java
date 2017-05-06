@@ -47,15 +47,15 @@ public class EditSchItem_jTPS_Transaction implements jTPS_Transaction {
                 newSchItem.getTime(), newSchItem.getTitle(), newSchItem.getTopic(),
                 newSchItem.getLink(), newSchItem.getCriteria()));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        workspace.getScheduleAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+        workspace.getScheduleAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
                 .toString()));
-        workspace.getScheduleCriteriaTextField().setText("");
-        workspace.getScheduleDatePicker().setValue(null);
-        workspace.getScheduleLinkTextField().setText("");
-        workspace.getScheduleTimeTextField().setText("");
-        workspace.getScheduleTitleTextField().setText("");
-        workspace.getScheduleTopicTextField().setText("");
-        workspace.getScheduleTypeCombo().setValue("");
+        workspace.getScheduleCriteriaTextField().setText(newSchItem.getCriteria());
+        workspace.getScheduleDatePicker().setValue(newSchItem.getDate());
+        workspace.getScheduleLinkTextField().setText(newSchItem.getLink());
+        workspace.getScheduleTimeTextField().setText(newSchItem.getTime());
+        workspace.getScheduleTitleTextField().setText(oldSchItem.getTitle());
+        workspace.getScheduleTopicTextField().setText(newSchItem.getTopic());
+        workspace.getScheduleTypeCombo().setValue(newSchItem.getType());
     }
 
     @Override
@@ -66,17 +66,17 @@ public class EditSchItem_jTPS_Transaction implements jTPS_Transaction {
         data.addScheduleItem(oldSchItem);
                 workspace.getScheduleTable().getSelectionModel().select(data.getScheduleItem(oldSchItem.getType(), oldSchItem.getDate(),
                 oldSchItem.getTime(), oldSchItem.getTitle(), oldSchItem.getTopic(),
-                oldSchItem.getLink(), oldSchItem.getCriteria()));
-//        PropertiesManager props = PropertiesManager.getPropertiesManager();
-//        workspace.getScheduleAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
-//                .toString()));
-//        workspace.getScheduleCriteriaTextField().setText("");
-//        workspace.getScheduleDatePicker().setValue(null);
-//        workspace.getScheduleLinkTextField().setText("");
-//        workspace.getScheduleTimeTextField().setText("");
-//        workspace.getScheduleTitleTextField().setText("");
-//        workspace.getScheduleTopicTextField().setText("");
-//        workspace.getScheduleTypeCombo().setValue("");
+                oldSchItem.getLink(), oldSchItem.getCriteria()));         
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        workspace.getScheduleAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                .toString()));
+        workspace.getScheduleCriteriaTextField().setText(oldSchItem.getCriteria());
+        workspace.getScheduleDatePicker().setValue(oldSchItem.getDate());
+        workspace.getScheduleLinkTextField().setText(oldSchItem.getLink());
+        workspace.getScheduleTimeTextField().setText(oldSchItem.getTime());
+        workspace.getScheduleTitleTextField().setText(oldSchItem.getTitle());
+        workspace.getScheduleTopicTextField().setText(oldSchItem.getTopic());
+        workspace.getScheduleTypeCombo().setValue(oldSchItem.getType());
     }
 
 }

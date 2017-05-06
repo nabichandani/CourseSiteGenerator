@@ -3,7 +3,7 @@
     "startingMondayMonth":1,
     "startingMondayDay":2,
     "endingFridayMonth":7,
-    "endingFridayDay":10,
+    "endingFridayDay":14,
     "holidays":[
         {
             "month":5,

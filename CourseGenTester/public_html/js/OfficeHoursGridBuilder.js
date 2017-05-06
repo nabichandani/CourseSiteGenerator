@@ -72,7 +72,9 @@ function addOfficeHours(data) {
         var textToAppend = "<tr>";
         var amPm = getAMorPM(i);
         var displayNum = i;
-        if (i > 12)
+        if(i == 0)
+            displayNum = 12;        
+        else if(i > 12)
             displayNum = displayNum-12;
         textToAppend += "<td>" + displayNum + ":00" + amPm + "</td>"
                     + "<td>" + displayNum + ":30" + amPm + "</td>";

@@ -32,6 +32,136 @@
     "officeHours":[
         {
             "day":"MONDAY",
+            "time":"12_30am",
+            "name":"Patrick"
+        },
+        {
+            "day":"TUESDAY",
+            "time":"1_00am",
+            "name":"SpongeBob"
+        },
+        {
+            "day":"WEDNESDAY",
+            "time":"1_00am",
+            "name":"SpongeBob"
+        },
+        {
+            "day":"THURSDAY",
+            "time":"1_00am",
+            "name":"SpongeBob"
+        },
+        {
+            "day":"TUESDAY",
+            "time":"2_00am",
+            "name":"SpongeBob"
+        },
+        {
+            "day":"WEDNESDAY",
+            "time":"2_00am",
+            "name":"SpongeBob"
+        },
+        {
+            "day":"THURSDAY",
+            "time":"2_00am",
+            "name":"Sandy Cheeks"
+        },
+        {
+            "day":"FRIDAY",
+            "time":"2_30am",
+            "name":"SpongeBob"
+        },
+        {
+            "day":"FRIDAY",
+            "time":"2_30am",
+            "name":"Sandy Cheeks"
+        },
+        {
+            "day":"TUESDAY",
+            "time":"3_00am",
+            "name":"Mr. Krabs"
+        },
+        {
+            "day":"THURSDAY",
+            "time":"3_00am",
+            "name":"Sandy Cheeks"
+        },
+        {
+            "day":"MONDAY",
+            "time":"3_30am",
+            "name":"Squidward"
+        },
+        {
+            "day":"TUESDAY",
+            "time":"3_30am",
+            "name":"Sandy Cheeks"
+        },
+        {
+            "day":"THURSDAY",
+            "time":"3_30am",
+            "name":"Patrick"
+        },
+        {
+            "day":"WEDNESDAY",
+            "time":"4_00am",
+            "name":"Squidward"
+        },
+        {
+            "day":"WEDNESDAY",
+            "time":"4_00am",
+            "name":"Mr. Krabs"
+        },
+        {
+            "day":"THURSDAY",
+            "time":"4_00am",
+            "name":"Sandy Cheeks"
+        },
+        {
+            "day":"WEDNESDAY",
+            "time":"5_00am",
+            "name":"Mr. Krabs"
+        },
+        {
+            "day":"TUESDAY",
+            "time":"5_30am",
+            "name":"Patrick"
+        },
+        {
+            "day":"THURSDAY",
+            "time":"5_30am",
+            "name":"Squidward"
+        },
+        {
+            "day":"THURSDAY",
+            "time":"5_30am",
+            "name":"Sandy Cheeks"
+        },
+        {
+            "day":"WEDNESDAY",
+            "time":"6_00am",
+            "name":"Mr. Krabs"
+        },
+        {
+            "day":"FRIDAY",
+            "time":"6_00am",
+            "name":"Squidward"
+        },
+        {
+            "day":"TUESDAY",
+            "time":"6_30am",
+            "name":"Mr. Krabs"
+        },
+        {
+            "day":"THURSDAY",
+            "time":"7_00am",
+            "name":"Mr. Krabs"
+        },
+        {
+            "day":"FRIDAY",
+            "time":"7_30am",
+            "name":"Mr. Krabs"
+        },
+        {
+            "day":"MONDAY",
             "time":"10_00am",
             "name":"SpongeBob"
         },

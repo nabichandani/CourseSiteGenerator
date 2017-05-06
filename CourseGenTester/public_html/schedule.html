@@ -15,12 +15,14 @@
         <!-- LINK TO OUR JavaScript FILE AND JQuery -->
         <script src="./js/jquery.min.js"></script>
         <script src="./js/ScheduleBuilder.js"></script>
+        <script src="./js/CourseBuilder.js"></script>
 
 	<!-- ONCE THE PAGE FULLY LOADS INITIALIZE THE SLIDESHOW -->
         <script>
 	    $(document).ready()
 	    {
 		initSchedule();
+                changeCourse();
 	    }
         </script>
     <style type="text/css">
@@ -35,9 +37,9 @@
 
 	    <div id="navbar">
 
-		<a href="http://www.stonybrook.edu/"><img alt="Stony Brook University" class="sbu_navbar" src="./images/SBUDarkRedShieldLogo.png"></a>
-                <!-- NAVIGATION LINKS GO HERE -->
-                <a class="nav" href="index.html" id="home_link">Home</a><a class="nav" href="syllabus.html" id="syllabus_link">Syllabus</a><a class="open_nav" href="schedule.html" id="schedule_link">Schedule</a><a class="nav" href="hws.html" id="hws_link">HWs</a><a id="projects_link" class="nav" href="projects.html">Projects</a>
+<!--		<a href="http://www.stonybrook.edu/"><img alt="Stony Brook University" class="sbu_navbar" src="./images/SBUDarkRedShieldLogo.png"></a>
+                 NAVIGATION LINKS GO HERE 
+                <a class="nav" href="index.html" id="home_link">Home</a><a class="nav" href="syllabus.html" id="syllabus_link">Syllabus</a><a class="open_nav" href="schedule.html" id="schedule_link">Schedule</a><a class="nav" href="hws.html" id="hws_link">HWs</a><a id="projects_link" class="nav" href="projects.html">Projects</a>-->
 	    </div>
 
 
@@ -58,8 +60,10 @@
 		<hr>
 
 
-		<a href="http://www.stonybrook.edu/"><img alt="SBU" class="sunysb" src="./CSE 219-2_files/SBUWhiteShieldLogo.jpg" style="float:left"></a>
-                <a href="http://www.cs.stonybrook.edu/"><img alt="CS" src="./CSE 219-2_files/CSLogo.png" style="float:right"></a>
+                <span id="footer"> 
+		<a href="http://www.stonybrook.edu"><img alt="SBU" class="sunysb" src="./images/SBUWhiteShieldLogo.jpg" style="float:left"></a>
+                <a href="http://www.cs.stonybrook.edu"><img alt="CS" src="./images/CSLogo.png" style="float:right"></a>
+                </span> 
 
 
 		<p style="font-size:9pt; text-align:center;">Web page created and maintained<br>

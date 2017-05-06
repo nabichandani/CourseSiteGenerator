@@ -19,12 +19,14 @@
         <!-- LINK TO OUR JavaScript FILE AND JQuery -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="./js/ProjectsBuilder.js"></script>
+        <script src="./js/CourseBuilder.js"></script>
 
 	<!-- ONCE THE PAGE FULLY LOADS INITIALIZE THE SLIDESHOW -->
         <script>
 	    $(document).ready()
 	    {
 		initProjects();
+                changeCourse();
 	    }
         </script>  
  </head>
@@ -35,12 +37,12 @@
   <div id="content">
 
    <div id="navbar">
-    <a href="http://www.stonybrook.edu"><img class="sbu_navbar" alt="Stony Brook University" src="./images/SBUDarkRedShieldLogo.png" /></a>
+<!--    <a href="http://www.stonybrook.edu"><img class="sbu_navbar" alt="Stony Brook University" src="./images/SBUDarkRedShieldLogo.png" /></a>
     <a id="home_link" class="nav" href="index.html">Home</a>
     <a id="syllabus_link" class="nav" href="syllabus.html">Syllabus</a>
     <a id="schedule_link" class="nav" href="schedule.html">Schedule</a>
     <a id="hws_link" class="nav" href="hws.html">HWs</a>
-    <a id="projects_link" class="open_nav" href="projects.html">Projects</a>
+    <a id="projects_link" class="open_nav" href="projects.html">Projects</a>-->
    </div>
 
    <div id="banner">
@@ -60,8 +62,10 @@
 <hr />
 
 
-     <a href="http://www.stonybrook.edu"><img class="sunysb" style="float:left" src="./images/SBUWhiteShieldLogo.jpg" alt="SBU" /></a>
-     <a href="http://www.cs.stonybrook.edu"><img style="float:right" src="./images/CSLogo.png" alt="CS" /></a>
+    <span id="footer"> 
+        <a href="http://www.stonybrook.edu"><img alt="SBU" class="sunysb" src="./images/SBUWhiteShieldLogo.jpg" style="float:left"></a>
+        <a href="http://www.cs.stonybrook.edu"><img alt="CS" src="./images/CSLogo.png" style="float:right"></a>
+    </span> 
 
      <p style="font-size:9pt; text-align:center;">Web page created and maintained<br />
      by <a href="http://www.cs.stonybrook.edu/~richard">Richard McKenna</a><br /><br /><br /><br /></p>

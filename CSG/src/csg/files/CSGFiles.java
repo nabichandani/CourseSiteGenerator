@@ -721,6 +721,65 @@ public class CSGFiles implements AppFileComponent{
 	pw.close();
     }
     
+    public void saveCourseData(AppDataComponent courseData, String filePath) throws IOException{
+        CourseData courseDataManager = (CourseData)courseData;
+        JsonArrayBuilder courseArrayBuilder = Json.createArrayBuilder();
+        JsonArray courseArray = courseArrayBuilder.build();
+        
+        CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
+        JsonObject courseJson = Json.createObjectBuilder()
+                .add(JSON_SUBJECT, courseDataManager.getSubject())
+                .add(JSON_NUMBER, courseDataManager.getNumber())
+                .add(JSON_SEMESTER, courseDataManager.getSemester())
+                .add(JSON_YEAR, courseDataManager.getYear())
+                .add(JSON_TITLE, courseDataManager.getTitle())
+                .add(JSON_INSTRUCTORNAME, courseDataManager.getInsName())
+                .add(JSON_INSTRUCTORHOME, courseDataManager.getInsHome())
+                .add(JSON_BANNER, courseDataManager.getBannerLink())
+                .add(JSON_LEFTFOOTER, courseDataManager.getLeftFooterLink())
+                .add(JSON_RIGHTFOOTER, courseDataManager.getRightFooterLink())
+                .add(JSON_STYLESHEET, courseDataManager.getStyleSheet())
+                .build();
+        
+        ObservableList<CourseTemplate> templates = courseDataManager.getTemplates();
+        
+        for (CourseTemplate template : templates) {	    
+	    JsonObject cJson = Json.createObjectBuilder()
+		    .add(JSON_USE, template.isUse().getValue())
+                    .add(JSON_NAVBAR, template.getNavbarTitle())
+                    .add(JSON_FILENAME, template.getFileName())
+                    .add(JSON_SCRIPT, template.getScript())        
+                    .build();
+	    courseArrayBuilder.add(cJson);
+	}
+        courseArray = courseArrayBuilder.build();
+        
+        	JsonObject dataManagerJSO = Json.createObjectBuilder()
+                .add(JSON_COURSE, courseJson)
+                .add(JSON_COURSETEMPLATE, courseArray)
+                        .build();
+        
+        	// AND NOW OUTPUT IT TO A JSON FILE WITH PRETTY PRINTING
+	Map<String, Object> properties = new HashMap<>(1);
+	properties.put(JsonGenerator.PRETTY_PRINTING, true);
+	JsonWriterFactory writerFactory = Json.createWriterFactory(properties);
+	StringWriter sw = new StringWriter();
+	JsonWriter jsonWriter = writerFactory.createWriter(sw);
+	jsonWriter.writeObject(dataManagerJSO);
+	jsonWriter.close();
+
+	// INIT THE WRITER
+	OutputStream os = new FileOutputStream(filePath);
+	JsonWriter jsonFileWriter = Json.createWriter(os);
+	jsonFileWriter.writeObject(dataManagerJSO);
+	String prettyPrinted = sw.toString();
+	PrintWriter pw = new PrintWriter(filePath);
+	pw.write(prettyPrinted);
+	pw.close();
+    }
+    
+    
+    
     public void saveTeamsAndStudentsData(AppDataComponent projectData, String filePath) throws IOException{
         ProjectData projectDataManager = (ProjectData)projectData;
         JsonArrayBuilder teamArrayBuilder = Json.createArrayBuilder();
@@ -845,8 +904,29 @@ public class CSGFiles implements AppFileComponent{
 
     @Override
     public void exportData() throws IOException {
+        //GetExportLabel gets the template and the getCourseTemplateLabel gets the export.
             File selectedFile = new File((workspace.getExportLabel().getText()));
             File destFile = new File(workspace.getCourseTemplateLocLabel().getText());
+            CourseData courseData = (CourseData)app.getCourseDataComponent();
+            File bannerFile = new File(courseData.getBannerLink());
+            File selectedImgFile = new File(selectedFile.getAbsolutePath() + "/images/");
+            
+            FileUtils.copyFileToDirectory(bannerFile, selectedImgFile);
+            
+            File leftFooterFile = new File(courseData.getLeftFooterLink());
+            File rightFooterFile = new File(courseData.getRightFooterLink());
+            FileUtils.copyFileToDirectory(leftFooterFile, selectedImgFile);
+            FileUtils.copyFileToDirectory(rightFooterFile, selectedImgFile);
+            
+//        String newBanner = bannerFile.getName();
+//        courseData.setBannerLink("./images/" + newBanner);
+//
+//        String newLeft = leftFooterFile.getName();
+//        courseData.setLeftFooterLink("./images/" + newLeft);
+//
+//        String newRight = rightFooterFile.getName();
+//        courseData.setRightFooterLink("./images/" + newRight); sa
+            
          
             String path = "../CourseGenTester/public_html/js/OfficeHoursGridData.json";
             saveData(app.getTADataComponent(), 
@@ -861,6 +941,9 @@ public class CSGFiles implements AppFileComponent{
             
             String pathSch = "../CourseGenTester/public_html/js/ScheduleData.json";
             saveScheduleData(app.getScheduleDataComponent(), pathSch);
+            
+            String pathCourseData = "../CourseGenTester/public_html/js/CourseData.json";
+            saveCourseData(app.getCourseDataComponent(), pathCourseData);
             
             String pathTeamsStudents =  "../CourseGenTester/public_html/js/TeamsAndStudents.json";
             saveTeamsAndStudentsData(app.getProjectDataComponent(), pathTeamsStudents);

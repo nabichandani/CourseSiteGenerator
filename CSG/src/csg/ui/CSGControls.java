@@ -116,10 +116,8 @@ public class CSGControls {
             
             // CLEAR THE TEXT FIELDS
             workspace.getTaTable().getSelectionModel().select(data.getTA(name));
-            workspace.getTaAddButton().setText(props.getProperty(CSGProp.UPDATE_TA
-                .toString()));
-            nameTextField.setText(name);
-            emailTextField.setText(email);
+            workspace.getTaNameTextField().setText("");
+            workspace.getEmailTextField().setText("");
             // AND SEND THE CARET BACK TO THE NAME TEXT FIELD FOR EASY DATA ENTRY
             nameTextField.requestFocus();
             
@@ -226,6 +224,7 @@ public class CSGControls {
                 data.addStudent(firstName, lastName, team, role);
                 workspace.getjTPS().addTransaction(new 
                   AddStudent_jTPS_Transaction(app, firstName, lastName, team, role));
+                workspace.getStudentTable().getSelectionModel().select(data.getStudent(firstName, lastName));
                 workspace.getStudentFNameTextField().clear();
                 workspace.getStudentLNameTextField().clear();
                 workspace.getStudentTeamCombo().setValue(null);
@@ -289,8 +288,8 @@ public class CSGControls {
               CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
               ProjectData data = (ProjectData) app.getProjectDataComponent();
               String name = workspace.getTeamNameTextField().getText().trim();
-              String color = Integer.toHexString(workspace.getColorPicker().getValue().hashCode()).substring(0,6);
-              String textColor = Integer.toHexString(workspace.getTextColorPicker().getValue().hashCode()).substring(0,6);
+              String color = workspace.getColorPicker().getValue().toString().substring(2, 8);
+              String textColor = workspace.getTextColorPicker().getValue().toString().substring(2, 8);
               String link = workspace.getTeamLinkTextField().getText().trim();
               
             if(name.isEmpty() || color.isEmpty() || textColor.isEmpty() || 
@@ -302,6 +301,7 @@ public class CSGControls {
                data.addTeam(name, color, textColor, link);
                workspace.getjTPS().addTransaction(new AddTeam_jTPS_Transaction
                 (app, name, color, textColor, link));
+               workspace.getTeamsTable().getSelectionModel().select(data.getTeam(name));
                workspace.getTeamNameTextField().setText("");
                workspace.getColorPicker().setValue(Color.WHITE);
                workspace.getTextColorPicker().setValue(Color.WHITE);
@@ -327,8 +327,8 @@ public class CSGControls {
             CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
             ProjectData data = (ProjectData) app.getProjectDataComponent();
             String name = workspace.getTeamNameTextField().getText().trim();
-            String color = Integer.toHexString(workspace.getColorPicker().getValue().hashCode()).substring(0, 6);
-            String textColor = Integer.toHexString(workspace.getTextColorPicker().getValue().hashCode()).substring(0, 6);
+            String color = workspace.getColorPicker().getValue().toString().substring(2, 8);
+            String textColor = workspace.getTextColorPicker().getValue().toString().substring(2, 8);
             String link = workspace.getTeamLinkTextField().getText().trim();
             Team newTeam = new Team(name, color, textColor, link);
             if (data.containsTeam(name) && !team.getName().equals(name)) {
@@ -380,6 +380,7 @@ public class CSGControls {
                 workspace.getjTPS().addTransaction(new AddSchItem_jTPS_Transaction
                   (app, type, date, time, title, topic, link, criteria));
                 data.addScheduleItem(schItem);
+                workspace.getScheduleTable().getSelectionModel().select(data.getScheduleItem(type, date, time, title, topic, link, criteria));
                 workspace.getScheduleCriteriaTextField().setText("");
                 workspace.getScheduleDatePicker().setValue(null);
                 workspace.getScheduleLinkTextField().setText("");
@@ -468,6 +469,12 @@ public class CSGControls {
                 workspace.getRecTA2Combo().setValue(ta2);
                 appFileController.markAsEdited(app.getGUI()); 
                 workspace.getRecitationTable().getSelectionModel().select(data.getRecitation(section));
+                workspace.getRecLocationText().setText("");
+                workspace.getRecInstructorText().setText("");
+                workspace.getRecSectionText().setText("");
+                workspace.getRecDayTimeText().setText("");
+                workspace.getRecTA1Combo().setValue("");
+                workspace.getRecTA2Combo().setValue("");
            }
            else{
                 AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
@@ -514,8 +521,14 @@ public class CSGControls {
                 workspace.getjTPS().addTransaction(new EditRecitation_jTPS_Transaction(app, rec, newRec));
                 data.addRecitation(section, instructor, dayTime, 
                     location, ta1, ta2);
-                workspace.getRecitationTable().getSelectionModel().select(data.getRecitation(section));
-                appFileController.markAsEdited(app.getGUI()); 
+               workspace.getRecitationTable().getSelectionModel().select(data.getRecitation(section));
+               appFileController.markAsEdited(app.getGUI());
+               workspace.getRecLocationText().setText("");
+               workspace.getRecInstructorText().setText("");
+               workspace.getRecSectionText().setText("");
+               workspace.getRecDayTimeText().setText("");
+               workspace.getRecTA1Combo().setValue("");
+               workspace.getRecTA2Combo().setValue("");
            }
       }
     

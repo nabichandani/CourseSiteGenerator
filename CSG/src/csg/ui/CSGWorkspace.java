@@ -628,15 +628,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             .EXPORT_LOCATION_TEXT.toString());
         exportLabel.setText(exportDirLoc);
         
-        exportChangeButton.setOnAction(e ->{
-            try{
-            String exportDirLocation = pickDirectory();
-            exportLabel.setText(exportDirLocation);
-            courseData.setExportDir(exportDirLoc); 
-            }catch(NullPointerException exe){
-            }
-        });
-        
         
         courseExportDir.getChildren().add(exportLabel);
         courseExportDir.getChildren().add(exportChangeButton);
@@ -882,10 +873,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         recRectPane.getChildren().addAll(recitationRectangle, rectText);
         recitationHeaderPane.getChildren().add(recRectPane);
         
-        //eventHandler for clicking rectangle
-        recitationRectangle.setOnMouseClicked(e ->{
-
-        });
         
         
         RecitationData recData = (RecitationData) app.
@@ -1092,10 +1079,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         schRectPane.getChildren().addAll(scheduleRectangle, scheduleText);
         schRectPane.setPadding(new Insets(0,0,0,15));
         scheduleTableHeaderPane.getChildren().add(schRectPane);
-        
-        scheduleRectangle.setOnMouseClicked(e ->{
-            //add text here
-        });
         
         //SchedulePane with table- table
         HBox scheduleTableHolderPane = new HBox();
@@ -1571,6 +1554,17 @@ public class CSGWorkspace extends AppWorkspaceComponent{
 
         //This is now the end of the creation of GUIS and now includes
         // event handlers.
+        exportChangeButton.setOnAction(e ->{
+            try{
+            String exportDirLocation = pickDirectory();
+            exportLabel.setText(exportDirLocation);
+            courseData.setExportDir(exportDirLocation); 
+            }catch(NullPointerException exe){
+            }
+        });
+        
+        
+        
         styleSheetCombo.setOnMouseClicked(e ->{
             String currentStyleSheet = (String) styleSheetCombo.getValue();
             File pickedFile = new File(courseTemplateLocLabel.getText() 
@@ -1600,7 +1594,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             try {
                 String exportDirLocation = pickDirectory();
                 courseTemplateLocLabel.setText(exportDirLocation);
-                courseData.setTemplateDir(exportDirLoc);
+                courseData.setTemplateDir(exportDirLocation);
                 File file1 = new File(exportDirLocation + "/index.html");
                 File file2 = new File(exportDirLocation + "/hws.html");
                 File file3 = new File(exportDirLocation + "/projects.html");
@@ -1643,34 +1637,41 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         });
         
         
-        monStartDatePicker.setOnAction(e ->{ 
-        try{
+        monStartDatePicker.setOnAction(e -> {
+            try {
                 LocalDate start = monStartDatePicker.getValue();
-                LocalDate end = friEndDatePicker.getValue(); 
-                if(start.isAfter(end)){
+                LocalDate end = friEndDatePicker.getValue();
+                if (start.isAfter(end)) {
                     monStartDatePicker.setValue(null);
                     AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
-                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));                    
+                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));
+                } else if (start.getDayOfWeek().getValue() != 1) {
+                    monStartDatePicker.setValue(null);
+                    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));
                 }
-            }catch(NullPointerException ex){
-                
+            } catch (NullPointerException ex) {
+
             }
         });
-        
-        friEndDatePicker.setOnMouseClicked(e ->{ 
-            try{
+
+        friEndDatePicker.setOnAction(e -> {
+            try {
                 friEndDatePicker.setChronology(Chronology.from(monStartDatePicker.getValue()));
                 LocalDate start = monStartDatePicker.getValue();
-                
-                LocalDate end = friEndDatePicker.getValue(); 
-                if(start.isAfter(end)){
+                LocalDate end = friEndDatePicker.getValue();
+                if (start.isAfter(end)) {
                     friEndDatePicker.setValue(null);
-                    
                     AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
-                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));                    
+                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));
+                } else if (end.getDayOfWeek().getValue() != 5) {
+                    friEndDatePicker.setValue(null);
+                    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));
+
                 }
-            }catch(NullPointerException ex){
-                
+            } catch (NullPointerException ex) {
+
             }
         });
 
@@ -3346,7 +3347,14 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         int prevStartIndex = data.getStartHour() * 2;
         int prevStart = data.getStartHour();
         int prevEnd = data.getEndHour();
-        resetWorkspace(); 
+        officeHoursGridTimeHeaderPanes.clear();
+        officeHoursGridTimeHeaderLabels.clear();
+        officeHoursGridDayHeaderPanes.clear();
+        officeHoursGridDayHeaderLabels.clear();
+        officeHoursGridTimeCellPanes.clear();
+        officeHoursGridTimeCellLabels.clear();
+        officeHoursGridTACellPanes.clear();
+        officeHoursGridTACellLabels.clear();
         data.initOfficeHours(startInt, endInt);
         for(String key: taOfficeHours.keySet()){
             String[] keyArr = key.split("_");
@@ -3361,10 +3369,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                 String newKey = keyArr[0] + "_" + hour;
                 data.addToGrid(newKey, taOfficeHours.get(key).getValue());
             }
+        }
         EditGrid_jTPS_Transaction editGrid = new EditGrid_jTPS_Transaction
           (app, startInt, endInt, prevStart, prevEnd, taOfficeHours);
         jtps.addTransaction(editGrid);
-        }
+        
     }
 
         public void reloadOfficeHoursGrid(TAData dataComponent) {        

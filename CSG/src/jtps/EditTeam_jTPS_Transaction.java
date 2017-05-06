@@ -42,13 +42,13 @@ public class EditTeam_jTPS_Transaction implements jTPS_Transaction {
         data.addTeam(newTeam.getName(), newTeam.getColor(),
                 newTeam.getTextColor(), newTeam.getLink());
         workspace.getTeamsTable().getSelectionModel().select(data.getTeam(newTeam.getName()));
-//        PropertiesManager props = PropertiesManager.getPropertiesManager();
-//        workspace.getTeamAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
-//                .toString()));
-//        workspace.getTeamNameTextField().clear();
-//        workspace.getColorPicker().setValue(Color.WHITE);
-//        workspace.getTextColorPicker().setValue(Color.WHITE);
-//        workspace.getTeamLinkTextField().clear();
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        workspace.getTeamAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                .toString()));
+        workspace.getTeamNameTextField().setText(newTeam.getName());
+        workspace.getColorPicker().setValue(Color.valueOf(newTeam.getColor()));
+        workspace.getTextColorPicker().setValue(Color.valueOf(newTeam.getTextColor()));
+        workspace.getTeamLinkTextField().setText(newTeam.getLink());
     }
 
     @Override
@@ -57,13 +57,13 @@ public class EditTeam_jTPS_Transaction implements jTPS_Transaction {
         data.addTeam(oldTeam.getName(), oldTeam.getColor(),
                 oldTeam.getTextColor(), oldTeam.getLink());
         workspace.getTeamsTable().getSelectionModel().select(data.getTeam(oldTeam.getName()));
-//        PropertiesManager props = PropertiesManager.getPropertiesManager();
-//        workspace.getTeamAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
-//                .toString()));
-//        workspace.getTeamNameTextField().clear();
-//        workspace.getColorPicker().setValue(Color.WHITE);
-//        workspace.getTextColorPicker().setValue(Color.WHITE);
-//        workspace.getTeamLinkTextField().clear();
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        workspace.getTeamAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                .toString()));
+        workspace.getTeamNameTextField().setText(oldTeam.getName());
+        workspace.getColorPicker().setValue(Color.valueOf(oldTeam.getColor()));
+        workspace.getTextColorPicker().setValue(Color.valueOf(oldTeam.getTextColor()));
+        workspace.getTeamLinkTextField().setText(oldTeam.getLink());
     }
 
 }

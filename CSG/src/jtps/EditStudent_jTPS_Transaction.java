@@ -38,13 +38,13 @@ public class EditStudent_jTPS_Transaction implements jTPS_Transaction{
         data.addStudent(newStudent.getFirstName(), newStudent.getLastName(), 
             newStudent.getTeam(), newStudent.getRole());    
         workspace.getStudentTable().getSelectionModel().select(data.getStudent(newStudent.getFirstName(), newStudent.getLastName()));
-//        PropertiesManager props = PropertiesManager.getPropertiesManager();
-//        workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
-//                .toString()));
-//        workspace.getStudentFNameTextField().clear();
-//        workspace.getStudentLNameTextField().clear();
-//        workspace.getStudentTeamCombo().setValue(null);
-//        workspace.getStudentRoleTextField().clear();
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                .toString()));
+        workspace.getStudentFNameTextField().setText(newStudent.getFirstName());
+        workspace.getStudentLNameTextField().setText(newStudent.getLastName());
+        workspace.getStudentTeamCombo().setValue(newStudent.getTeam());
+        workspace.getStudentRoleTextField().setText(newStudent.getRole());
     }
 
     @Override
@@ -54,13 +54,13 @@ public class EditStudent_jTPS_Transaction implements jTPS_Transaction{
         data.addStudent(oldStudent.getFirstName(), oldStudent.getLastName(), 
             oldStudent.getTeam(), oldStudent.getRole());
         workspace.getStudentTable().getSelectionModel().select(data.getStudent(oldStudent.getFirstName(), oldStudent.getLastName()));
-//        PropertiesManager props = PropertiesManager.getPropertiesManager();
-//        workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
-//                .toString()));
-//        workspace.getStudentFNameTextField().clear();
-//        workspace.getStudentLNameTextField().clear();
-//        workspace.getStudentTeamCombo().setValue(null);
-//        workspace.getStudentRoleTextField().clear();
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                .toString()));
+        workspace.getStudentFNameTextField().setText(oldStudent.getFirstName());
+        workspace.getStudentLNameTextField().setText(oldStudent.getLastName());
+        workspace.getStudentTeamCombo().setValue(oldStudent.getTeam());
+        workspace.getStudentRoleTextField().setText(oldStudent.getRole());
     }
 
 }

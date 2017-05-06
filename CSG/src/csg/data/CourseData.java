@@ -199,6 +199,7 @@ public class CourseData implements AppDataComponent{
     }
     
     
+    
     @Override
     public void resetData() {
         templates.clear();

@@ -2,6 +2,7 @@ package csg.data;
 
 import csg.CSGApp;
 import csg.CSGProp;
+import csg.ui.CSGWorkspace;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import djf.components.AppDataComponent;
@@ -10,8 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import javafx.beans.property.StringProperty;
 import properties_manager.PropertiesManager;
-import csg.data.TeachingAssistant;
-import csg.ui.CSGWorkspace;
 import javafx.beans.property.BooleanProperty;
 
 /**
