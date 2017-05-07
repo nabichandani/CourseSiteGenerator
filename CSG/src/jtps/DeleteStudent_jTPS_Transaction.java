@@ -47,7 +47,7 @@ public class DeleteStudent_jTPS_Transaction implements jTPS_Transaction{
         workspace.getStudentFNameTextField().setText(s.getFirstName());
         workspace.getStudentLNameTextField().setText(s.getLastName());
         workspace.getStudentTeamCombo().setValue(s.getTeam());
-        workspace.getStudentRoleTextField().setText(s.getRole());
+        workspace.getStudentRoleCombo().setValue(s.getRole());
         }catch(NullPointerException ex){
             PropertiesManager props = PropertiesManager.getPropertiesManager();
                     workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
@@ -55,14 +55,13 @@ public class DeleteStudent_jTPS_Transaction implements jTPS_Transaction{
         workspace.getStudentFNameTextField().clear();
         workspace.getStudentLNameTextField().clear();
         workspace.getStudentTeamCombo().setValue(null);
-        workspace.getStudentRoleTextField().clear();
+        workspace.getStudentRoleCombo().setValue(null);
         }
     }
 
     @Override
     public void undoTransaction() {
         data.addStudent(firstName, lastName, team, role);
-        workspace.getStudentTable().getSelectionModel().select(data.getStudent(firstName, lastName));
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         workspace.getStudentTable().getSelectionModel().select(data.getStudent(firstName, lastName));
         workspace.getStudentAddUpdateButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
@@ -70,7 +69,7 @@ public class DeleteStudent_jTPS_Transaction implements jTPS_Transaction{
         workspace.getStudentFNameTextField().setText(firstName);
         workspace.getStudentLNameTextField().setText(lastName);
         workspace.getStudentTeamCombo().setValue(team);
-        workspace.getStudentRoleTextField().setText(role);
+        workspace.getStudentRoleCombo().setValue(role);
     }
 
 }

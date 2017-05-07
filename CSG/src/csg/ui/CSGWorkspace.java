@@ -293,7 +293,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
     TextField studentFNameTextField;
     TextField studentLNameTextField;
     ComboBox studentTeamCombo;
-    TextField studentRoleTextField;
+    ComboBox studentRoleCombo;
     Button studentAddUpdateButton;
     
     VBox projectWholePane;
@@ -986,7 +986,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         recTA1.setPadding(new Insets(0,0,0,20));
         recTA1.setPrefWidth(258);
         recTA1Combo = new ComboBox();
-        recTA1Combo.setItems(tableData);
         recTA1Combo.setMinWidth(200);
         recTA1Box.getChildren().add(recTA1);
         recTA1Box.getChildren().add(recTA1Combo);
@@ -998,7 +997,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         recTA2.setPrefWidth(258);
         recTA2.setPadding(new Insets(0,0,0,20));
         recTA2Combo = new ComboBox();
-        recTA2Combo.setItems(tableData);
         recTA2Combo.setMinWidth(200);
         recTA2Box.getChildren().add(recTA2);
         recTA2Box.getChildren().add(recTA2Combo);
@@ -1522,11 +1520,11 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         studentRoleLabel = new Label(props.getProperty(CSGProp
                 .ROLE_COLON_TEXT.toString()));
         studentRoleLabel.setPrefWidth(200);
-        studentRoleTextField = new TextField();
-        studentRoleTextField.setMinWidth(250);
+        studentRoleCombo = new ComboBox();
+        studentRoleCombo.setMinWidth(250);
         studentRoleLabel.setPadding(new Insets(0,0,0,15));
         studentRolePane.getChildren().add(studentRoleLabel);
-        studentRolePane.getChildren().add(studentRoleTextField);
+        studentRolePane.getChildren().add(studentRoleCombo);
         studentPane.getChildren().add(studentRolePane);
         
         // Student Buttons Row
@@ -1560,6 +1558,72 @@ public class CSGWorkspace extends AppWorkspaceComponent{
 
         //This is now the end of the creation of GUIS and now includes
         // event handlers.
+        studentTeamCombo.setOnMousePressed(e ->{
+            ObservableList<String> teamList = FXCollections.observableArrayList();
+            for(Team t: projectData.getTeams()){
+                int teamCounter = 0;
+                for(Student s: projectData.getStudents()){
+                    if(s.getTeam().equals(t.getName())){
+                        teamCounter++;
+                    }
+                }
+                if(teamCounter < 4){
+                    teamList.add(t.getName());
+                }
+            }
+            studentTeamCombo.setItems(teamList);
+        });
+        
+        studentRoleCombo.setOnMousePressed(e ->{
+            ObservableList<String> roleList = FXCollections.observableArrayList();
+            if(studentTeamCombo.getValue()!= null){
+            roleList.addAll("Lead Programmer", "Project Manager", "Lead Designer",
+              "Data Designer");
+            for(Student s: projectData.getStudents()){
+                    if(s.getTeam().equals(studentTeamCombo.getValue())){
+                        roleList.remove(s.getRole());
+                    }
+            }
+            }
+            studentRoleCombo.setItems(roleList);
+        });
+        
+        recTA1Combo.setOnMousePressed(e ->{
+            ObservableList<String> combo1List = FXCollections.observableArrayList();
+            combo1List.add("");
+            if(recTA2Combo.getValue() == null || recTA2Combo.getValue().equals("")){
+                for(TeachingAssistant ta: tableData){
+                    combo1List.add(ta.getName());
+                }
+            }
+            else{
+                for(TeachingAssistant ta: tableData){
+                    if(!ta.getName().equals(recTA2Combo.getValue()))
+                    combo1List.add(ta.getName());
+                } 
+            }
+            recTA1Combo.setItems(combo1List);
+        });
+        
+        recTA2Combo.setOnMousePressed(e ->{
+            ObservableList<String> combo2List = FXCollections.observableArrayList();
+            combo2List.add("");
+            if(recTA1Combo.getValue() == null || recTA1Combo.getValue().equals("")){
+                for(TeachingAssistant ta: tableData){
+                    combo2List.add(ta.getName());
+                }
+            }
+            else{
+                for(TeachingAssistant ta: tableData){
+                    if(!ta.getName().equals(recTA1Combo.getValue()))
+                    combo2List.add(ta.getName());
+                } 
+            }
+            recTA2Combo.setItems(combo2List);
+        });
+        
+        
+        
         exportChangeButton.setOnAction(e ->{
             try{
             String exportDirLocation = pickDirectory();
@@ -1718,7 +1782,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                     studentFNameTextField.setText(student.getFirstName());
                     studentLNameTextField.setText(student.getLastName());
                     studentTeamCombo.setValue(student.getTeam());
-                    studentRoleTextField.setText(student.getRole());
+                    studentRoleCombo.setValue(student.getRole());
             }
         });
         
@@ -1728,7 +1792,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             studentFNameTextField.clear();
             studentLNameTextField.clear();
             studentTeamCombo.setValue(null);
-            studentRoleTextField.clear();
+            studentRoleCombo.setValue(null);
         });
         
         studentTable.setOnMouseClicked(e ->{
@@ -1743,7 +1807,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                     studentFNameTextField.setText(student.getFirstName());
                     studentLNameTextField.setText(student.getLastName());
                     studentTeamCombo.setValue(student.getTeam());
-                    studentRoleTextField.setText(student.getRole());
+                    studentRoleCombo.setValue(student.getRole());
                 }
             } catch (NullPointerException ex) {
 
@@ -1763,7 +1827,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                     studentFNameTextField.setText(student.getFirstName());
                     studentLNameTextField.setText(student.getLastName());
                     studentTeamCombo.setValue(student.getTeam());
-                    studentRoleTextField.setText(student.getRole());
+                    studentRoleCombo.setValue(student.getRole());
                 }
                 catch(NullPointerException t){
             studentAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
@@ -1771,7 +1835,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             studentFNameTextField.clear();
             studentLNameTextField.clear();
             studentTeamCombo.setValue(null);
-            studentRoleTextField.clear();
+            studentRoleCombo.setValue(null);
                 }
         }});
         
@@ -1789,7 +1853,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
                     studentFNameTextField.setText(student.getFirstName());
                     studentLNameTextField.setText(student.getLastName());
                     studentTeamCombo.setValue(student.getTeam());
-                    studentRoleTextField.setText(student.getRole());
+                    studentRoleCombo.setValue(student.getRole());
                 }
                 catch(NullPointerException t){
             studentAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
@@ -1797,7 +1861,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             studentFNameTextField.clear();
             studentLNameTextField.clear();
             studentTeamCombo.setValue(null);
-            studentRoleTextField.clear();
+            studentRoleCombo.setValue(null);
                 }
         });
         
@@ -2382,7 +2446,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             ArrayList<String> delArr = new ArrayList();
             for(Recitation recitation: recData.getRecitations()){
                 if(recitation.getFirstTA().equals(name) && recitation.getSecondTA().isEmpty()){
-                    delArr.add(recitation.getSection());
+                    recitation.setFirstTA("");
                 }
                 else if(recitation.getFirstTA().equals(name) && !recitation.getSecondTA().isEmpty()){
                     recitation.setFirstTA(recitation.getSecondTA());
@@ -2439,7 +2503,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             ArrayList<String> delArr = new ArrayList();
             for(Recitation recitation: recData.getRecitations()){
                 if(recitation.getFirstTA().equals(name) && recitation.getSecondTA().isEmpty()){
-                    delArr.add(recitation.getSection());
+                    recitation.setFirstTA("");
                 }
                 else if(recitation.getFirstTA().equals(name) && !recitation.getSecondTA().isEmpty()){
                     recitation.setFirstTA(recitation.getSecondTA());
@@ -3237,8 +3301,8 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         return studentTeamCombo;
     }
 
-    public TextField getStudentRoleTextField() {
-        return studentRoleTextField;
+    public ComboBox getStudentRoleCombo() {
+        return studentRoleCombo;
     }
 
     public Button getScheduleAddUpdateButton() {
@@ -3294,7 +3358,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         studentFNameTextField.clear();
         studentLNameTextField.clear();
         studentTeamCombo.setValue(null);
-        studentRoleTextField.clear();
+        studentRoleCombo.setValue(null);
         teamAddUpdateButton.setText(props.getProperty(CSGProp.ADDEDIT_TEXT
                 .toString()));
         teamLinkTextField.setText("");

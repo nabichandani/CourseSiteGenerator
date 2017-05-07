@@ -39,6 +39,9 @@ import static test_bed.TestSave.JSON_DATE;
 import static test_bed.TestSave.JSON_DAY;
 import static test_bed.TestSave.JSON_DAYTIME;
 import static test_bed.TestSave.JSON_EMAIL;
+import static test_bed.TestSave.JSON_ENDDAY;
+import static test_bed.TestSave.JSON_ENDMONTH;
+import static test_bed.TestSave.JSON_ENDYEAR;
 import static test_bed.TestSave.JSON_END_HOUR;
 import static test_bed.TestSave.JSON_EXPORTDIR;
 import static test_bed.TestSave.JSON_FILENAME;
@@ -64,6 +67,9 @@ import static test_bed.TestSave.JSON_SCRIPT;
 import static test_bed.TestSave.JSON_SECONDTA;
 import static test_bed.TestSave.JSON_SECTION;
 import static test_bed.TestSave.JSON_SEMESTER;
+import static test_bed.TestSave.JSON_STARTDAY;
+import static test_bed.TestSave.JSON_STARTMONTH;
+import static test_bed.TestSave.JSON_STARTYEAR;
 import static test_bed.TestSave.JSON_START_HOUR;
 import static test_bed.TestSave.JSON_STUDENTS;
 import static test_bed.TestSave.JSON_STYLESHEET;
@@ -239,7 +245,12 @@ public class TestSaveTest {
         assertEquals(courseData.getExportDir(), courseJson.getString(JSON_EXPORTDIR));
         assertEquals(courseData.getTemplateDir(),courseJson.getString(JSON_TEMPLATEDIR));
         assertEquals(courseData.getStyleSheet(), courseJson.getString(JSON_STYLESHEET));
-        
+        assertEquals(courseData.getStartDay(), json.getInt(JSON_STARTDAY));
+        assertEquals(courseData.getStartMonth(), json.getInt(JSON_STARTMONTH));
+        assertEquals(courseData.getStartYear(), json.getInt(JSON_STARTYEAR));
+        assertEquals(courseData.getEndDay(), json.getInt(JSON_ENDDAY));
+        assertEquals(courseData.getEndMonth(), json.getInt(JSON_ENDMONTH));
+        assertEquals(courseData.getEndYear(), json.getInt(JSON_ENDYEAR));
         
     }
 

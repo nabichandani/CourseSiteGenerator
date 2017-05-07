@@ -178,6 +178,10 @@ public class CSGFiles implements AppFileComponent{
         int startMonth = json.getInt(JSON_STARTMONTH);
         int startYear = json.getInt(JSON_STARTYEAR);
         
+        courseDataManager.setStartDay(startDay);
+        courseDataManager.setStartMonth(startMonth);
+        courseDataManager.setStartYear(startYear);
+        
         if(startDay != 0 && startMonth != 0 && startYear != 0){
             LocalDate startDate = LocalDate.of(startYear, startMonth,startDay);
             workspace.getMonStartDatePicker().setValue(startDate);
@@ -189,6 +193,10 @@ public class CSGFiles implements AppFileComponent{
         int endDay = json.getInt(JSON_ENDDAY);
         int endMonth = json.getInt(JSON_ENDMONTH);
         int endYear = json.getInt(JSON_ENDYEAR);
+        
+        courseDataManager.setEndDay(endDay);
+        courseDataManager.setEndMonth(endMonth);
+        courseDataManager.setEndYear(endYear);
         
         if(endDay != 0 && endMonth != 0 && endYear != 0){
             LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
@@ -951,23 +959,35 @@ public class CSGFiles implements AppFileComponent{
 
     @Override
     public void exportData() throws IOException {
-        //GetExportLabel gets the template and the getCourseTemplateLabel gets the export.
-            File selectedFile = new File((workspace.getExportLabel().getText()));
-            File destFile = new File(workspace.getCourseTemplateLocLabel().getText());
+            File selectedFile = new File((workspace.getCourseTemplateLocLabel().getText()));
+            File destFile = new File(workspace.getExportLabel().getText());
             CourseData courseData = (CourseData)app.getCourseDataComponent();
             File bannerFile = new File(courseData.getBannerLink());
             File selectedImgFile = new File(selectedFile.getAbsolutePath() + "/images/");
             File publicHTMLFile = new File("../CourseGenTester/public_html/images/");
             
-            FileUtils.copyFileToDirectory(bannerFile, selectedImgFile);
             
             File leftFooterFile = new File(courseData.getLeftFooterLink());
             File rightFooterFile = new File(courseData.getRightFooterLink());
-            FileUtils.copyFileToDirectory(leftFooterFile, selectedImgFile);
-            FileUtils.copyFileToDirectory(rightFooterFile, selectedImgFile);
-            FileUtils.copyFileToDirectory(bannerFile, publicHTMLFile);
-            FileUtils.copyFileToDirectory(leftFooterFile, publicHTMLFile);
-            FileUtils.copyFileToDirectory(rightFooterFile, publicHTMLFile);
+            
+            if(!bannerFile.getPath().contains(selectedFile.getAbsolutePath())){
+                FileUtils.copyFileToDirectory(bannerFile, selectedImgFile);
+            }
+            if(!leftFooterFile.getPath().contains(selectedFile.getAbsolutePath())){
+                FileUtils.copyFileToDirectory(leftFooterFile, selectedImgFile);
+            }
+            if(!rightFooterFile.getPath().contains(selectedFile.getAbsolutePath())){
+                FileUtils.copyFileToDirectory(rightFooterFile, selectedImgFile);
+            }          
+            if(!bannerFile.getPath().contains("public_html")){
+                FileUtils.copyFileToDirectory(bannerFile, publicHTMLFile);
+            }
+            if(!leftFooterFile.getPath().contains("public_html")){
+                FileUtils.copyFileToDirectory(leftFooterFile, publicHTMLFile);
+            }
+            if(!rightFooterFile.getPath().contains("public_html")){
+                FileUtils.copyFileToDirectory(rightFooterFile, publicHTMLFile);
+            }
             
             CourseData cd = (CourseData)app.getCourseDataComponent();
             
@@ -1023,11 +1043,32 @@ public class CSGFiles implements AppFileComponent{
             String pathCourse =  "../CourseGenTester/public_html/js/ProjectsData.json";
             saveProjectsData(app.getCourseDataComponent(),app.getProjectDataComponent(), pathCourse);
             
-            String initPath = destFile.toString();
-            Path initialPath = Paths.get(initPath);
-            File initFile= new File(initPath);
             
-            FileUtils.copyDirectory(initFile, selectedFile);
+            String path2 = selectedFile.getAbsolutePath() + "/js/OfficeHoursGridData.json";
+            saveData(app.getTADataComponent(), 
+                app.getRecitationDataComponent(), app.getScheduleDataComponent(),
+                app.getProjectDataComponent(), app.getCourseDataComponent(), path2);
+            
+            String path2TA = selectedFile.getAbsolutePath() + "/js/TAsData.json";
+            saveTAData(app.getTADataComponent(), path2TA);
+            
+            String path2Rec =  selectedFile.getAbsolutePath() + "/js/RecitationsData.json";
+            saveRecitationData(app.getRecitationDataComponent(), path2Rec);
+            
+            String path2Sch = selectedFile.getAbsolutePath() + "/js/ScheduleData.json";
+            saveScheduleData(app.getScheduleDataComponent(), path2Sch);
+            
+            String path2CourseData =  selectedFile.getAbsolutePath() + "/js/CourseData.json";
+            saveCourseData(app.getCourseDataComponent(), path2CourseData);
+            
+            String path2TeamsStudents =   selectedFile.getAbsolutePath() + "/js/TeamsAndStudents.json";
+            saveTeamsAndStudentsData(app.getProjectDataComponent(), path2TeamsStudents);
+            
+            String path2Course =   selectedFile.getAbsolutePath() + "/js/ProjectsData.json";
+            saveProjectsData(app.getCourseDataComponent(),app.getProjectDataComponent(), path2Course);
+            
+            
+            FileUtils.copyDirectory(selectedFile, destFile);
     }
 
 }

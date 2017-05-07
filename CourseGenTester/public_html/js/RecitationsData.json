@@ -7,7 +7,7 @@
             "day_time":"Wed 5:30 pm-6:23pm",
             "location":"Krusty Krabs",
             "ta_1":"Mr. Krabs",
-            "ta_2":"SpongeBob"
+            "ta_2":""
         },
         {
             "section":"R02",
@@ -22,8 +22,16 @@
             "instructor":"McKenna",
             "day_time":"Fri 10:00am-10:53am",
             "location":"Pineapple",
-            "ta_1":"SpongeBob",
-            "ta_2":"Sandy Cheeks"
+            "ta_1":"Sandy Cheeks",
+            "ta_2":""
+        },
+        {
+            "section":"R04",
+            "instructor":"asdf",
+            "day_time":"asdf",
+            "location":"ads",
+            "ta_1":"Patrick",
+            "ta_2":""
         }
     ]
 }

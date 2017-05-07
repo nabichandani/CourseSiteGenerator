@@ -213,7 +213,7 @@ public class CSGControls {
               String firstName = workspace.getStudentFNameTextField().getText().trim();
               String lastName = workspace.getStudentLNameTextField().getText().trim();
               String team = workspace.getStudentTeamCombo().getValue().toString().trim();
-              String role = workspace.getStudentRoleTextField().getText().trim();
+              String role = workspace.getStudentRoleCombo().getValue().toString().trim();
               Student s = new Student(firstName, lastName, team, role);
               if(firstName.isEmpty() || lastName.isEmpty() || team.isEmpty() || 
                 role.isEmpty()){
@@ -228,7 +228,7 @@ public class CSGControls {
                 workspace.getStudentFNameTextField().clear();
                 workspace.getStudentLNameTextField().clear();
                 workspace.getStudentTeamCombo().setValue(null);
-                workspace.getStudentRoleTextField().clear();
+                workspace.getStudentRoleCombo().setValue(null);
                appFileController.markAsEdited(app.getGUI()); 
             }
             else{
@@ -250,7 +250,7 @@ public class CSGControls {
               String firstName = workspace.getStudentFNameTextField().getText().trim();
               String lastName = workspace.getStudentLNameTextField().getText().trim();
               String team = workspace.getStudentTeamCombo().getValue().toString().trim();
-              String role = workspace.getStudentRoleTextField().getText().trim();
+              String role = workspace.getStudentRoleCombo().getValue().toString().trim();
               Student s = new Student(firstName, lastName, team, role);
             if(!data.isUniqueStudent(s) && (!student.getFirstName()
                 .equals(firstName) || !student.getLastName().equals(lastName))) {
@@ -449,7 +449,7 @@ public class CSGControls {
            String ta1 = workspace.getRecTA1Combo().getValue().toString();
            String ta2 = workspace.getRecTA2Combo().getValue().toString();
            if(section.isEmpty() || instructor.isEmpty() || dayTime.isEmpty() || 
-                location.isEmpty() || ta1.isEmpty()){
+                location.isEmpty()){
                 AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
                 dialog.show(props.getProperty(REC_MISSING_TITLE), props.getProperty(REC_MISSING_MESSAGE));
            }
@@ -504,7 +504,7 @@ public class CSGControls {
                return;
            }
            else if (section.isEmpty() || instructor.isEmpty() || dayTime.isEmpty()
-                  || location.isEmpty() || ta1.isEmpty()) {
+                  || location.isEmpty()) {
               AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
               dialog.show(props.getProperty(REC_MISSING_TITLE), props.getProperty(REC_MISSING_MESSAGE));   
           }

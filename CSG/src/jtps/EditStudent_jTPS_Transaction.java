@@ -44,7 +44,7 @@ public class EditStudent_jTPS_Transaction implements jTPS_Transaction{
         workspace.getStudentFNameTextField().setText(newStudent.getFirstName());
         workspace.getStudentLNameTextField().setText(newStudent.getLastName());
         workspace.getStudentTeamCombo().setValue(newStudent.getTeam());
-        workspace.getStudentRoleTextField().setText(newStudent.getRole());
+        workspace.getStudentRoleCombo().setValue(newStudent.getRole());
     }
 
     @Override
@@ -60,7 +60,7 @@ public class EditStudent_jTPS_Transaction implements jTPS_Transaction{
         workspace.getStudentFNameTextField().setText(oldStudent.getFirstName());
         workspace.getStudentLNameTextField().setText(oldStudent.getLastName());
         workspace.getStudentTeamCombo().setValue(oldStudent.getTeam());
-        workspace.getStudentRoleTextField().setText(oldStudent.getRole());
+        workspace.getStudentRoleCombo().setValue(oldStudent.getRole());
     }
 
 }

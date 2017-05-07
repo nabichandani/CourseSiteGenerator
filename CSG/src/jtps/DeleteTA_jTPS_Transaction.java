@@ -70,7 +70,7 @@ import properties_manager.PropertiesManager;
         ArrayList<String> delArr = new ArrayList();
             for(Recitation recitation: recData.getRecitations()){
                 if(recitation.getFirstTA().equals(name) && recitation.getSecondTA().isEmpty()){
-                    delArr.add(recitation.getSection());
+                    recitation.setFirstTA("");
                 }
                 else if(recitation.getFirstTA().equals(name) && !recitation.getSecondTA().isEmpty()){
                     recitation.setFirstTA(recitation.getSecondTA());

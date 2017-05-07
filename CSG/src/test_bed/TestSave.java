@@ -273,6 +273,12 @@ public class TestSave implements AppFileComponent{
         courseDataManager.setTemplateDir(courseJson.getString(JSON_TEMPLATEDIR));
         courseDataManager.setExportDir(courseJson.getString(JSON_EXPORTDIR));
         courseDataManager.setStyleSheet(courseJson.getString(JSON_STYLESHEET));
+        courseDataManager.setStartDay(json.getInt(JSON_STARTDAY));
+        courseDataManager.setStartMonth(json.getInt(JSON_STARTMONTH));
+        courseDataManager.setStartYear(json.getInt(JSON_STARTYEAR));
+        courseDataManager.setEndDay(json.getInt(JSON_ENDDAY));
+        courseDataManager.setEndMonth(json.getInt(JSON_ENDMONTH));
+        courseDataManager.setEndYear(json.getInt(JSON_ENDYEAR));
     }
     
     // HELPER METHOD FOR LOADING DATA FROM A JSON FORMAT
@@ -450,6 +456,12 @@ public class TestSave implements AppFileComponent{
         courseDataManager.setTemplateDir("Navin\\CourseSiteGenerator\\CourseGenTester\\data");
         courseDataManager.setExportDir("C:\\Users\\Navin");
         courseDataManager.setStyleSheet("sea_wolf.css");
+        courseDataManager.setStartDay(2);
+        courseDataManager.setStartMonth(1);
+        courseDataManager.setStartYear(2017);
+        courseDataManager.setEndDay(14);
+        courseDataManager.setEndMonth(7);
+        courseDataManager.setEndYear(2017);
         
         JsonObject courseJson = Json.createObjectBuilder()
                 .add(JSON_SUBJECT, courseDataManager.getSubject())
@@ -478,12 +490,12 @@ public class TestSave implements AppFileComponent{
 		.add(JSON_RECITATION, recitaitonArray)
                 .add(JSON_SCHEDULEITEM, scheduleArray)
                 .add(JSON_RECITATION, recitaitonArray)
-                .add(JSON_STARTDAY, 2)
-                .add(JSON_STARTMONTH,1)
-                .add(JSON_STARTYEAR,2017)
-                .add(JSON_ENDDAY, 14)
-                .add(JSON_ENDMONTH, 7)
-                .add(JSON_ENDYEAR,2017)
+                .add(JSON_STARTDAY, courseDataManager.getStartDay())
+                .add(JSON_STARTMONTH,courseDataManager.getStartMonth())
+                .add(JSON_STARTYEAR, courseDataManager.getStartYear())
+                .add(JSON_ENDDAY, courseDataManager.getEndDay())
+                .add(JSON_ENDMONTH, courseDataManager.getEndMonth())
+                .add(JSON_ENDYEAR, courseDataManager.getEndYear())
                 .add(JSON_TEAMS, teamArray)
                 .add(JSON_STUDENTS, studentArray)
 		.build();
