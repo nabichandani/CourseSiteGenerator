@@ -119,7 +119,6 @@ public class CSGControls {
             workspace.getTaNameTextField().setText("");
             workspace.getEmailTextField().setText("");
             // AND SEND THE CARET BACK TO THE NAME TEXT FIELD FOR EASY DATA ENTRY
-            nameTextField.requestFocus();
             
             appFileController.markAsEdited(app.getGUI());
             }
@@ -298,15 +297,14 @@ public class CSGControls {
                 dialog.show(props.getProperty(TEAM_MISSING_TITLE), props.getProperty(TEAM_MISSING_MESSAGE));
             }
             else if(!data.containsTeam(name)){
-               data.addTeam(name, color, textColor, link);
-               workspace.getjTPS().addTransaction(new AddTeam_jTPS_Transaction
-                (app, name, color, textColor, link));
-               workspace.getTeamsTable().getSelectionModel().select(data.getTeam(name));
-               workspace.getTeamNameTextField().setText("");
-               workspace.getColorPicker().setValue(Color.WHITE);
-               workspace.getTextColorPicker().setValue(Color.WHITE);
-               workspace.getTeamLinkTextField().setText("");
-               appFileController.markAsEdited(app.getGUI()); 
+                data.addTeam(name, color, textColor, link);
+                workspace.getjTPS().addTransaction(new AddTeam_jTPS_Transaction(app, name, color, textColor, link));
+                workspace.getTeamsTable().getSelectionModel().select(data.getTeam(name));
+                workspace.getTeamNameTextField().setText("");
+                workspace.getColorPicker().setValue(Color.WHITE);
+                workspace.getTextColorPicker().setValue(Color.WHITE);
+                workspace.getTeamLinkTextField().setText("");
+                appFileController.markAsEdited(app.getGUI());
             }
             else{
                 AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
@@ -459,14 +457,8 @@ public class CSGControls {
                 jTPS jtps = workspace.getjTPS();
                 jtps.addTransaction(new AddRecitation_jTPS_Transaction(app, 
                     section, instructor, dayTime, location, ta1, ta2));
-                workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT2_TEXT
+                workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
                 .toString()));
-                workspace.getRecLocationText().setText(location); 
-                workspace.getRecInstructorText().setText(instructor);
-                workspace.getRecSectionText().setText(section);
-                workspace.getRecDayTimeText().setText(dayTime);
-                workspace.getRecTA1Combo().setValue(ta1);
-                workspace.getRecTA2Combo().setValue(ta2);
                 appFileController.markAsEdited(app.getGUI()); 
                 workspace.getRecitationTable().getSelectionModel().select(data.getRecitation(section));
                 workspace.getRecLocationText().setText("");

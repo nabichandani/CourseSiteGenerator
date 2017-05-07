@@ -6,17 +6,29 @@
             "red":102,
             "green":255,
             "blue":0,
-            "text_color":"0000ff"
+            "text_color":"#0000ff"
         },
         {
             "name":"Team 2",
             "red":102,
             "green":51,
             "blue":255,
-            "text_color":"0099ff"
+            "text_color":"#0099ff"
         }
     ],
     "students":[
+        {
+            "lastName":"Dutchman",
+            "firstName":"Flying",
+            "team":"Team 1",
+            "role":"Lead Programmer"
+        },
+        {
+            "lastName":"Fancyson",
+            "firstName":"Squilliam",
+            "team":"Team 2",
+            "role":"Lead Designer"
+        },
         {
             "lastName":"Gupta",
             "firstName":"Amy",
@@ -24,10 +36,34 @@
             "role":"Lead Programmer"
         },
         {
+            "lastName":"Krabs",
+            "firstName":"Pearl",
+            "team":"Team 1",
+            "role":"Data Designer"
+        },
+        {
+            "lastName":"Lobster",
+            "firstName":"Larry",
+            "team":"Team 1",
+            "role":"Project Manager"
+        },
+        {
+            "lastName":"Puff",
+            "firstName":"Mrs",
+            "team":"Team 2",
+            "role":"Data Designer"
+        },
+        {
             "lastName":"Shmoe",
             "firstName":"Joe",
             "team":"Team 1",
             "role":"Lead Designer"
+        },
+        {
+            "lastName":"Snail",
+            "firstName":"Gary",
+            "team":"Team 2",
+            "role":"Project Manager"
         }
     ]
 }

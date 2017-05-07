@@ -1660,6 +1660,15 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         }
         });
         
+        styleSheetCombo.setOnAction(e ->{
+            if(styleSheetCombo.getValue() == null){
+                courseData.setStyleSheet("");
+            }
+            else{
+                courseData.setStyleSheet((String)styleSheetCombo.getValue());
+            }
+        });
+        
         courseTemplateButton.setOnAction(e -> {
             try {
                 String exportDirLocation = pickDirectory();

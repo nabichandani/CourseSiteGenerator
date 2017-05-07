@@ -844,7 +844,7 @@ public class CSGFiles implements AppFileComponent{
                     .add(JSON_RED, (Integer.parseInt(team.getColor().toString().substring(0,2), 16)))
                     .add(JSON_GREEN, (Integer.parseInt(team.getColor().toString().substring(2,4), 16)))
                     .add(JSON_BLUE, (Integer.parseInt(team.getColor().toString().substring(4,6), 16)))
-                    .add(JSON_TEXTCOLOR, team.getTextColor())        
+                    .add(JSON_TEXTCOLOR, "#" + team.getTextColor())        
                     .build();
 	    teamArrayBuilder.add(teamsJson);
 	}

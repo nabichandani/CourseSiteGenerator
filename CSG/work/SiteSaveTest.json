@@ -1,18 +1,18 @@
 
 {
     "course":{
-        "subject":"CSE",
-        "number":"219",
-        "semester":"Fall",
-        "year":"2017",
-        "title":"Computer Science III",
-        "instructorName":"Richard McKenna",
+        "subject":"ITS",
+        "number":"380",
+        "semester":"Winter",
+        "year":"2020",
+        "title":"Navin's Website",
+        "instructorName":"Navin Abichandani",
         "instructorHome":"http://www3.cs.stonybrook.edu/~richard/",
         "banner":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\SBUDarkRedShieldLogo.png",
         "leftFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\CSLogo.png",
         "rightFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\SBUWhiteShieldLogo.jpg",
-        "exportDirectory":"C:\\Users\\Navin",
-        "templateDirectory":"Navin\\CourseSiteGenerator\\CourseGenTester\\data",
+        "exportDirectory":"C:\\Users\\Navin\\Desktop",
+        "templateDirectory":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html",
         "styleSheet":"sea_wolf.css"
     },
     "courseTemplate":[
@@ -51,8 +51,8 @@
     "endHour":"23",
     "undergrad_tas":[
         {
-            "name":"SpongeBob",
-            "email":"spongebob@stonybrook.edu",
+            "name":"Mr. Krabs",
+            "email":"krabs@stonybrook.edu",
             "undergrad":false
         },
         {
@@ -61,18 +61,18 @@
             "undergrad":true
         },
         {
-            "name":"Squidward",
-            "email":"squidward@stonybrook.edu",
-            "undergrad":false
-        },
-        {
             "name":"Sandy Cheeks",
             "email":"sandy.cheeks@stonybrook.edu",
             "undergrad":true
         },
         {
-            "name":"Mr. Krabs",
-            "email":"krabs@stonybrook.edu",
+            "name":"SpongeBob",
+            "email":"spongebob@stonybrook.edu",
+            "undergrad":false
+        },
+        {
+            "name":"Squidward",
+            "email":"squidward@stonybrook.edu",
             "undergrad":false
         }
     ],
@@ -84,7 +84,7 @@
         },
         {
             "day":"FRIDAY",
-            "time":"12_00am",
+            "time":"12_00pm",
             "name":"Patrick"
         }
     ],
@@ -114,6 +114,12 @@
             "ta_2":"Sandy Cheeks"
         }
     ],
+    "startDay":2,
+    "startMonth":1,
+    "startYear":2017,
+    "endDay":14,
+    "endMonth":7,
+    "endYear":2017,
     "scheduleItems":[
         {
             "type":"holiday",
@@ -127,17 +133,6 @@
             "criteria":"Break for students"
         },
         {
-            "type":"lecture",
-            "day":13,
-            "month":3,
-            "year":2017,
-            "time":"12:00pm",
-            "title":"Class",
-            "topic":"Event Programming",
-            "link":"",
-            "criteria":"Class for students"
-        },
-        {
             "type":"hw",
             "day":15,
             "month":2,
@@ -147,14 +142,19 @@
             "topic":"UML",
             "link":"",
             "criteria":"Homework"
+        },
+        {
+            "type":"lecture",
+            "day":13,
+            "month":3,
+            "year":2017,
+            "time":"12:00pm",
+            "title":"Class",
+            "topic":"Event Programming",
+            "link":"",
+            "criteria":"Class for students"
         }
     ],
-    "startDay":2,
-    "startMonth":1,
-    "startYear":2017,
-    "endDay":14,
-    "endMonth":7,
-    "endYear":2017,
     "teams":[
         {
             "name":"Team 1",
@@ -171,9 +171,15 @@
     ],
     "students":[
         {
-            "firstName":"Joe",
-            "lastName":"Shmoe",
+            "firstName":"Flying",
+            "lastName":"Dutchman",
             "team":"Team 1",
+            "role":"Lead Programmer"
+        },
+        {
+            "firstName":"Squilliam",
+            "lastName":"Fancyson",
+            "team":"Team 2",
             "role":"Lead Designer"
         },
         {
@@ -181,6 +187,36 @@
             "lastName":"Gupta",
             "team":"Team 2",
             "role":"Lead Programmer"
+        },
+        {
+            "firstName":"Pearl",
+            "lastName":"Krabs",
+            "team":"Team 1",
+            "role":"Data Designer"
+        },
+        {
+            "firstName":"Larry",
+            "lastName":"Lobster",
+            "team":"Team 1",
+            "role":"Project Manager"
+        },
+        {
+            "firstName":"Mrs",
+            "lastName":"Puff",
+            "team":"Team 2",
+            "role":"Data Designer"
+        },
+        {
+            "firstName":"Joe",
+            "lastName":"Shmoe",
+            "team":"Team 1",
+            "role":"Lead Designer"
+        },
+        {
+            "firstName":"Gary",
+            "lastName":"Snail",
+            "team":"Team 2",
+            "role":"Project Manager"
         }
     ]
 }

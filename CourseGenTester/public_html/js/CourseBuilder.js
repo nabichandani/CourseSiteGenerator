@@ -40,7 +40,21 @@ function makeBanner(json){
     document.getElementById("navbar").innerHTML = "<a><img class='sbu_navbar' src=./images/" + banner.substring(banner.lastIndexOf("\\") + 1) + "></a>" + makeNavBar(json);
             //"<a><img class='sbu_navbar' src=./images/" + banner.substring(banner.lastIndexOf("\\") + 1) + "></a>";
     
-    document.getElementById("instructor_link").innerHTML = "<a href=" + instructorHome + ">" + instructorName + "</a></span>";
+    document.getElementById("instructor_link").innerHTML = "<a href=" + makeLink(instructorHome) + ">" + instructorName + "</a></span>";
+}
+
+function makeLink(link){
+    var finalLink = "";
+    link = link + "";
+    
+    if(link.indexOf("http://") != -1 || link.indexOf("https://") != -1){
+        return link;
+    }
+    else{
+        finalLink = "https://" + link;
+        return finalLink;
+    }
+    
 }
 
 function makeNavBar(json){
