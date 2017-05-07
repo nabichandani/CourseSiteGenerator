@@ -1,16 +1,16 @@
 
 {
     "course":{
-        "subject":"CSE",
-        "number":"219",
-        "semester":"Fall",
-        "year":"2017",
-        "title":"Computer Science III",
-        "instructorName":"Richard McKenna",
-        "instructorHome":"http://www3.cs.stonybrook.edu/~richard/",
-        "banner":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\SBUDarkRedShieldLogo.png",
-        "leftFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\CSLogo.png",
-        "rightFooter":"C:\\Users\\Navin\\CourseSiteGenerator\\CourseGenTester\\public_html\\images\\SBUWhiteShieldLogo.jpg",
+        "subject":"ITS",
+        "number":"102",
+        "semester":"Summer",
+        "year":"2020",
+        "title":"Navinsssss TRApPPPP HOUSE",
+        "instructorName":"Navin Abixchandani",
+        "instructorHome":"www.google.co",
+        "banner":"C:\\Users\\Navin\\Desktop\\travel.jpg",
+        "leftFooter":"C:\\Users\\Navin\\Desktop\\download.png",
+        "rightFooter":"C:\\Users\\Navin\\Desktop\\100px-Cyclopropane-3D-balls.png",
         "styleSheet":"sea_wolf.css"
     },
     "courseTemplate":[

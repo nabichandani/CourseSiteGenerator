@@ -571,7 +571,7 @@ public class TestSave implements AppFileComponent{
     }
 
     @Override
-    public void saveProjectsData(AppDataComponent data, String filePath) throws IOException {
+    public void saveProjectsData(AppDataComponent courseData, AppDataComponent projectData, String filePath) throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

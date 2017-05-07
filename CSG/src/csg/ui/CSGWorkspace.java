@@ -528,6 +528,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseSubjectLabel.setPadding(new Insets(0,0,0,10));
         courseSubNum.getChildren().add(courseSubjectLabel);
         subjectCombo = new ComboBox();
+        ObservableList<String> subjectItems = FXCollections.observableArrayList();
+        subjectItems.addAll("CSE", "ITS");
+        subjectCombo.setItems(subjectItems);
         subjectCombo.setPrefWidth(130);
         courseSubNum.getChildren().add(subjectCombo);
         
@@ -537,6 +540,9 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         courseSubNum.getChildren().add(courseNumberLabel);
         courseSubNum.setSpacing(89);
         numCombo = new ComboBox();
+        ObservableList<String> numItems = FXCollections.observableArrayList();
+        numItems.addAll("101", "102", "214", "215", "219", "308", "380");
+        numCombo.setItems(numItems);
         numCombo.setPrefWidth(130);
         courseSubNum.getChildren().add(numCombo);
         courseDetails.getChildren().add(courseSubNum);
@@ -1641,15 +1647,28 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             try {
                 LocalDate start = monStartDatePicker.getValue();
                 LocalDate end = friEndDatePicker.getValue();
-                if (start.isAfter(end)) {
+                 if (start.getDayOfWeek().getValue() != 1) {
                     monStartDatePicker.setValue(null);
                     AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
                     dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));
-                } else if (start.getDayOfWeek().getValue() != 1) {
-                    monStartDatePicker.setValue(null);
-                    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
-                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));
+                    courseData.setStartDay(0);
+                    courseData.setStartMonth(0);
+                    courseData.setStartYear(0);
                 }
+                if(end == null || start.isBefore(end)){
+                    courseData.setStartDay(start.getDayOfMonth());
+                    courseData.setStartMonth(start.getMonthValue());
+                    courseData.setStartYear(start.getYear());
+                }
+                else if (start.isAfter(end)) {
+                    monStartDatePicker.setValue(null);
+                    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));
+                    courseData.setStartDay(0);
+                    courseData.setStartMonth(0);
+                    courseData.setStartYear(0);
+                }
+                appFileController.markAsEdited(app.getGUI());
             } catch (NullPointerException ex) {
 
             }
@@ -1657,19 +1676,30 @@ public class CSGWorkspace extends AppWorkspaceComponent{
 
         friEndDatePicker.setOnAction(e -> {
             try {
-                friEndDatePicker.setChronology(Chronology.from(monStartDatePicker.getValue()));
                 LocalDate start = monStartDatePicker.getValue();
                 LocalDate end = friEndDatePicker.getValue();
-                if (start.isAfter(end)) {
+                if (end.getDayOfWeek().getValue() != 5) {
                     friEndDatePicker.setValue(null);
                     AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
                     dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));
-                } else if (end.getDayOfWeek().getValue() != 5) {
-                    friEndDatePicker.setValue(null);
-                    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
-                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));
-
+                    courseData.setEndDay(0);
+                    courseData.setEndMonth(0);
+                    courseData.setEndYear(0);
                 }
+                else if(start == null || start.isBefore(end)){
+                    courseData.setEndDay(end.getDayOfMonth());
+                    courseData.setEndMonth(end.getMonthValue());
+                    courseData.setEndYear(end.getYear());
+                }
+                else if (start.isAfter(end)) {
+                    friEndDatePicker.setValue(null);
+                    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                    dialog.show(props.getProperty(INVALID_DATE_TITLE), props.getProperty(INVALID_DATE_MESSAGE));
+                    courseData.setEndDay(0);
+                    courseData.setEndMonth(0);
+                    courseData.setEndYear(0);
+                }
+                appFileController.markAsEdited(app.getGUI());
             } catch (NullPointerException ex) {
 
             }
@@ -2283,7 +2313,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         });
         
         
-        subjectCombo.setOnMouseClicked(e -> {
+        subjectCombo.setOnAction(e -> {
             if(subjectCombo.getValue() == null){
                 courseData.setSubject("");
             }
@@ -2292,7 +2322,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             }
         });
         
-        numCombo.setOnMouseClicked(e -> {
+        numCombo.setOnAction(e -> {
             if(numCombo.getValue() == null){
                 courseData.setNumber("");
             }
@@ -2301,7 +2331,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             }
         });
         
-        semCombo.setOnMouseClicked(e -> {
+        semCombo.setOnAction(e -> {
             if(semCombo.getValue() == null){
                 courseData.setSemester("");
             }
@@ -2311,7 +2341,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         });
         
         
-        yearCombo.setOnMouseClicked(e -> {
+        yearCombo.setOnAction(e -> {
             if(yearCombo.getValue() == null){
                 courseData.setYear("");
             }
@@ -3221,7 +3251,6 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         // CLEAR OUT THE GRID PANE
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         jtps.clearTransactions();
-        officeHoursGridPane.getChildren().clear();
         yearCombo.setValue("");
         subjectCombo.setValue("");
         semCombo.setValue("");
@@ -3277,6 +3306,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         
 
         // AND THEN ALL THE GRID PANES AND LABELS
+        officeHoursGridPane.getChildren().clear();
         officeHoursGridTimeHeaderPanes.clear();
         officeHoursGridTimeHeaderLabels.clear();
         officeHoursGridDayHeaderPanes.clear();
@@ -3347,14 +3377,7 @@ public class CSGWorkspace extends AppWorkspaceComponent{
         int prevStartIndex = data.getStartHour() * 2;
         int prevStart = data.getStartHour();
         int prevEnd = data.getEndHour();
-        officeHoursGridTimeHeaderPanes.clear();
-        officeHoursGridTimeHeaderLabels.clear();
-        officeHoursGridDayHeaderPanes.clear();
-        officeHoursGridDayHeaderLabels.clear();
-        officeHoursGridTimeCellPanes.clear();
-        officeHoursGridTimeCellLabels.clear();
-        officeHoursGridTACellPanes.clear();
-        officeHoursGridTACellLabels.clear();
+        resetGrid();
         data.initOfficeHours(startInt, endInt);
         for(String key: taOfficeHours.keySet()){
             String[] keyArr = key.split("_");
@@ -3500,6 +3523,18 @@ public class CSGWorkspace extends AppWorkspaceComponent{
             cellText += "pm";
         }
         return cellText;
+    }
+        
+    public void resetGrid(){
+        officeHoursGridPane.getChildren().clear();
+        officeHoursGridTimeHeaderPanes.clear();
+        officeHoursGridTimeHeaderLabels.clear();
+        officeHoursGridDayHeaderPanes.clear();
+        officeHoursGridDayHeaderLabels.clear();
+        officeHoursGridTimeCellPanes.clear();
+        officeHoursGridTimeCellLabels.clear();
+        officeHoursGridTACellPanes.clear();
+        officeHoursGridTACellLabels.clear();
     }
 
     @Override

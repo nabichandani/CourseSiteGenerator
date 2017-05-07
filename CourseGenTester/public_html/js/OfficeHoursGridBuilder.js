@@ -19,6 +19,7 @@ function loadData(jsonFile, callback) {
 function loadOfficeHours(json) {
     initDays(json);
     addUndergradTAs(json);
+    addGradTAs(json)
     addOfficeHours(json);
 }
 
@@ -43,14 +44,36 @@ function addUndergradTAs(data) {
     for (var i = 0; i < data.undergrad_tas.length; ) {
         var text = "";
         text = "<tr>";
-        for (var j = 0; j < tasPerRow; j++) {
-            text += buildTACell(i, numTAs, data.undergrad_tas[i]);
+        for (var j = 0; j < tasPerRow && i < data.undergrad_tas.length; ) {
+            if(data.undergrad_tas[i].undergrad == true){
+                text += buildTACell(i, numTAs, data.undergrad_tas[i]); 
+                j++
+            }
             i++;
         }
         text += "</tr>";
         tas.append(text);
     }
 }
+function addGradTAs(data) {
+    var tas = $("#grad_tas");
+    var tasPerRow = 4;
+    var numTAs = data.undergrad_tas.length;
+    for (var i = 0; i < data.undergrad_tas.length; ) {
+        var text = "";
+        text = "<tr>";
+        for (var j = 0; j < tasPerRow && i < data.undergrad_tas.length;) {
+            if(data.undergrad_tas[i].undergrad == false){
+                text += buildTACell(i, numTAs, data.undergrad_tas[i]);
+                j++
+            }
+        i++;
+        }
+        text += "</tr>";
+        tas.append(text);
+    }
+}
+
 function buildTACell(counter, numTAs, ta) {
     if (counter >= numTAs)
         return "<td></td>";

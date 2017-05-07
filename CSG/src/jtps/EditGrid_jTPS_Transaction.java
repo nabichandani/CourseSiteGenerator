@@ -47,7 +47,7 @@ public class EditGrid_jTPS_Transaction implements jTPS_Transaction{
     @Override
     public void doTransaction() {
         int prevStartIndex = oldStart * 2;
-        workspace.resetWorkspace(); 
+        workspace.resetGrid(); 
         data.initOfficeHours(newStart, newEnd);
         
         for(String key: oldHashMap.keySet()){
@@ -69,7 +69,7 @@ public class EditGrid_jTPS_Transaction implements jTPS_Transaction{
     @Override
     public void undoTransaction() {
         int prevStartIndex = newStart * 2;
-        workspace.resetWorkspace(); 
+        workspace.resetGrid(); 
         data.initOfficeHours(oldStart, oldEnd);
         for(String key: oldHashMap.keySet()){
              data.addToGrid(key, oldHashMap.get(key).getValue());

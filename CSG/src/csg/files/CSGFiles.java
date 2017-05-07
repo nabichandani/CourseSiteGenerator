@@ -30,7 +30,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -47,6 +46,7 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.json.JsonValue;
 import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
@@ -136,6 +136,13 @@ public class CSGFiles implements AppFileComponent{
     static final String JSON_ENDDAY = "endDay";
     static final String JSON_ENDMONTH = "endMonth";
     static final String JSON_ENDYEAR = "endYear";
+    
+    static final String JSON_RED = "red";
+    static final String JSON_GREEN = "green";
+    static final String JSON_BLUE = "blue";
+    
+    static final String JSON_WORK = "work";
+    static final String JSON_PROJECTS = "projects";
                         
     
     
@@ -168,19 +175,28 @@ public class CSGFiles implements AppFileComponent{
         
         
         int startDay = json.getInt(JSON_STARTDAY);
-        int startMon = json.getInt(JSON_STARTMONTH);
+        int startMonth = json.getInt(JSON_STARTMONTH);
         int startYear = json.getInt(JSON_STARTYEAR);
         
-        LocalDate startDate = LocalDate.of(startYear, startMon,startDay);
-        workspace.getMonStartDatePicker().setValue(startDate);
-        
+        if(startDay != 0 && startMonth != 0 && startYear != 0){
+            LocalDate startDate = LocalDate.of(startYear, startMonth,startDay);
+            workspace.getMonStartDatePicker().setValue(startDate);
+        }
+        else{
+            workspace.getMonStartDatePicker().setValue(null);
+        }
         
         int endDay = json.getInt(JSON_ENDDAY);
-        int endMon = json.getInt(JSON_ENDMONTH);
+        int endMonth = json.getInt(JSON_ENDMONTH);
         int endYear = json.getInt(JSON_ENDYEAR);
         
-        LocalDate endDate = LocalDate.of(endYear, endMon, endDay);
-        workspace.getFriEndDatePicker().setValue(endDate);
+        if(endDay != 0 && endMonth != 0 && endYear != 0){
+            LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
+            workspace.getFriEndDatePicker().setValue(endDate);
+        }
+        else{
+            workspace.getFriEndDatePicker().setValue(null); 
+        }
 
         // NOW LOAD ALL THE UNDERGRAD TAs
         JsonArray jsonTAArray = json.getJsonArray(JSON_UNDERGRAD_TAS);
@@ -289,18 +305,33 @@ public class CSGFiles implements AppFileComponent{
         workspace.getInsHomeTextField().setText(courseDataManager.getInsHome());
         workspace.getStyleSheetCombo().setValue(courseDataManager.getStyleSheet());
         
-        FileInputStream bannerLocation = new FileInputStream(courseJson.getString(JSON_BANNER));
-        Image newImg = new Image(bannerLocation);
-        workspace.getBannerImage().setImage(newImg);
-
-        FileInputStream leftFooterLocation = new FileInputStream(courseJson.getString(JSON_LEFTFOOTER));
-        Image newImg2 = new Image(leftFooterLocation);
-        workspace.getLeftFooterImage().setImage(newImg2);
         
-        FileInputStream rightFooterLocation = new FileInputStream(courseJson.getString(JSON_RIGHTFOOTER));
-        Image newImg3 = new Image(rightFooterLocation);
-        workspace.getRightFooterImage().setImage(newImg3);
+        if(!courseDataManager.getBannerLink().isEmpty()){
+            FileInputStream bannerLocation = new FileInputStream(courseJson.getString(JSON_BANNER));
+            Image newImg = new Image(bannerLocation);
+            workspace.getBannerImage().setImage(newImg);
+        }
+        else{
+            workspace.getBannerImage().setImage(null);
+        }
         
+        if(!courseDataManager.getLeftFooterLink().isEmpty()){
+            FileInputStream leftFooterLocation = new FileInputStream(courseJson.getString(JSON_LEFTFOOTER));
+            Image newImg2 = new Image(leftFooterLocation);
+            workspace.getLeftFooterImage().setImage(newImg2);
+        }
+        else{
+            workspace.getLeftFooterImage().setImage(null);
+        }
+        
+        if(!courseDataManager.getRightFooterLink().isEmpty()){
+            FileInputStream rightFooterLocation = new FileInputStream(courseJson.getString(JSON_RIGHTFOOTER));
+            Image newImg3 = new Image(rightFooterLocation);
+            workspace.getRightFooterImage().setImage(newImg3);
+        }
+        else{
+            workspace.getRightFooterImage().setImage(null);
+        }
         workspace.getCourseTemplateLocLabel().setText(courseJson.getString(JSON_TEMPLATEDIR));
         workspace.getExportLabel().setText(courseJson.getString(JSON_EXPORTDIR));
         
@@ -320,13 +351,31 @@ public class CSGFiles implements AppFileComponent{
     public void saveData(AppDataComponent data, AppDataComponent recData, 
         AppDataComponent schData, AppDataComponent projectData, 
         AppDataComponent courseData, String filePath) throws IOException {
-	// GET THE DATA
-	TAData dataManager = (TAData)data;
+	       // GET THE DATA
+        TAData dataManager = (TAData) data;
+        CourseData cd = (CourseData) courseData;
+        CSGWorkspace workspace = (CSGWorkspace)app.getWorkspaceComponent();
 
-	// NOW BUILD THE TA JSON OBJCTS TO SAVE
-	JsonArrayBuilder taArrayBuilder = Json.createArrayBuilder();
-	ObservableList<TeachingAssistant> tas = dataManager.getTeachingAssistants();
-	for (TeachingAssistant ta : tas) {	    
+        if (workspace.getTitleTextField().getText().equals("")) {
+            cd.setTitle("");
+        } else {
+            cd.setTitle(workspace.getTitleTextField().getText());
+        }
+        if (workspace.getInsNameTextField().getText().equals("")) {
+            cd.setInsName("");
+        } else {
+            cd.setInsName(workspace.getInsNameTextField().getText());
+        }
+        if (workspace.getInsHomeTextField().getText().equals("")) {
+            cd.setInsHome("");
+        } else {
+            cd.setInsHome(workspace.getInsHomeTextField().getText());
+        }
+
+        // NOW BUILD THE TA JSON OBJCTS TO SAVE
+        JsonArrayBuilder taArrayBuilder = Json.createArrayBuilder();
+        ObservableList<TeachingAssistant> tas = dataManager.getTeachingAssistants();
+        for (TeachingAssistant ta : tas) {	    
 	    JsonObject taJson = Json.createObjectBuilder()
 		    .add(JSON_NAME, ta.getName())
                     .add(JSON_EMAIL, ta.getEmail())
@@ -432,7 +481,6 @@ public class CSGFiles implements AppFileComponent{
 	}
         JsonArray courseArray = courseArrayBuilder.build();
         
-        CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
         JsonObject courseJson = Json.createObjectBuilder()
                 .add(JSON_SUBJECT, courseDataManager.getSubject())
                 .add(JSON_NUMBER, courseDataManager.getNumber())
@@ -460,21 +508,16 @@ public class CSGFiles implements AppFileComponent{
                 .add(JSON_UNDERGRAD_TAS, undergradTAsArray)
                 .add(JSON_OFFICE_HOURS, timeSlotsArray)
 		.add(JSON_RECITATION, recitaitonArray)
-                .add(JSON_STARTDAY, workspace.getMonStartDatePicker().getValue().getDayOfMonth())
-                .add(JSON_STARTMONTH,workspace.getMonStartDatePicker().getValue().getMonthValue())
-                .add(JSON_STARTYEAR,workspace.getMonStartDatePicker().getValue().getYear())
-                .add(JSON_ENDDAY, workspace.getFriEndDatePicker().getValue().getDayOfMonth())
-                .add(JSON_ENDMONTH,workspace.getFriEndDatePicker().getValue().getMonthValue())
-                .add(JSON_ENDYEAR,workspace.getFriEndDatePicker().getValue().getYear())
+                .add(JSON_STARTDAY, courseDataManager.getStartDay())
+                .add(JSON_STARTMONTH,courseDataManager.getStartMonth())
+                .add(JSON_STARTYEAR, courseDataManager.getStartYear())
+                .add(JSON_ENDDAY, courseDataManager.getEndDay())
+                .add(JSON_ENDMONTH,courseDataManager.getEndMonth())
+                .add(JSON_ENDYEAR,courseDataManager.getEndYear())
                 .add(JSON_SCHEDULEITEM, scheduleArray)
                 .add(JSON_TEAMS, teamArray)
                 .add(JSON_STUDENTS, studentArray)
-		.build();
-        
-        
-        
-        
-        
+		.build();       
         
 	
 	// AND NOW OUTPUT IT TO A JSON FILE WITH PRETTY PRINTING
@@ -790,9 +833,10 @@ public class CSGFiles implements AppFileComponent{
         for (Team team : teams) {	    
 	    JsonObject teamsJson = Json.createObjectBuilder()
 		    .add(JSON_NAME, team.getName())
-                    .add(JSON_COLOR, team.getColor())
-                    .add(JSON_TEXTCOLOR, team.getTextColor())
-                    .add(JSON_LINK, team.getLink())        
+                    .add(JSON_RED, (Integer.parseInt(team.getColor().toString().substring(0,2), 16)))
+                    .add(JSON_GREEN, (Integer.parseInt(team.getColor().toString().substring(2,4), 16)))
+                    .add(JSON_BLUE, (Integer.parseInt(team.getColor().toString().substring(4,6), 16)))
+                    .add(JSON_TEXTCOLOR, team.getTextColor())        
                     .build();
 	    teamArrayBuilder.add(teamsJson);
 	}
@@ -833,43 +877,46 @@ public class CSGFiles implements AppFileComponent{
 	pw.close();
     }
     
-    public void saveProjectsData(AppDataComponent courseData, String filePath) throws IOException{
+    public void saveProjectsData(AppDataComponent courseData, AppDataComponent projectData, String filePath) throws IOException{
         
         CourseData courseDataManager = (CourseData)courseData;
-        JsonArrayBuilder courseArrayBuilder = Json.createArrayBuilder();
-	ObservableList<CourseTemplate> templates = courseDataManager.getTemplates();
+        ProjectData projectDataManager = (ProjectData)projectData;
         
-        for (CourseTemplate template : templates) {	    
-	    JsonObject courseJson = Json.createObjectBuilder()
-		    .add(JSON_USE, template.isUse().getValue())
-                    .add(JSON_NAVBAR, template.getNavbarTitle())
-                    .add(JSON_FILENAME, template.getFileName())
-                    .add(JSON_SCRIPT, template.getScript())        
+        ObservableList<Student> students = projectDataManager.getStudents(); 
+        
+        JsonArrayBuilder studentArrayBuilder = Json.createArrayBuilder();
+        JsonArrayBuilder teamArrayBuilder = Json.createArrayBuilder();
+	ObservableList<Team> teams = projectDataManager.getTeams();
+        
+        for (Team team : teams) {
+            for (Student student : students) {
+                if(student.getTeam().equals(team.getName())){
+                        studentArrayBuilder
+                        .add(student.getFirstName() + " " + student.getLastName());
+                }
+            }
+            JsonArray studentArray = studentArrayBuilder.build();
+            JsonObject teamsJson = Json.createObjectBuilder()
+                    .add(JSON_NAME, team.getName())
+                    .add(JSON_STUDENTS, studentArray)
+                    .add(JSON_LINK, team.getLink())
                     .build();
-	    courseArrayBuilder.add(courseJson);
-	}
-        JsonArray courseArray = courseArrayBuilder.build();
+            teamArrayBuilder.add(teamsJson);
+        }
+        JsonArray teamArray = teamArrayBuilder.build();
         
         CSGWorkspace workspace = (CSGWorkspace) app.getWorkspaceComponent();
-        JsonObject courseJson = Json.createObjectBuilder()
-                .add(JSON_SUBJECT, courseDataManager.getSubject())
-                .add(JSON_NUMBER, courseDataManager.getNumber())
-                .add(JSON_SEMESTER, courseDataManager.getSemester())
-                .add(JSON_YEAR, courseDataManager.getYear())
-                .add(JSON_TITLE, courseDataManager.getTitle())
-                .add(JSON_INSTRUCTORNAME, courseDataManager.getInsName())
-                .add(JSON_INSTRUCTORHOME, courseDataManager.getInsHome())
-                .add(JSON_BANNER, courseDataManager.getBannerLink())
-                .add(JSON_LEFTFOOTER, courseDataManager.getLeftFooterLink())
-                .add(JSON_RIGHTFOOTER, courseDataManager.getRightFooterLink())
-                .add(JSON_EXPORTDIR, courseDataManager.getExportDir())
-                .add(JSON_TEMPLATEDIR, courseDataManager.getTemplateDir())
-                .add(JSON_STYLESHEET, courseDataManager.getStyleSheet())
+        JsonArrayBuilder courseJsonBuilder = Json.createArrayBuilder();
+                JsonObject coursesJson = Json.createObjectBuilder()
+                .add(JSON_SEMESTER, courseDataManager.getSemester() + " " + courseDataManager.getYear())
+                .add(JSON_PROJECTS, teamArray)
                 .build();
+        courseJsonBuilder.add(coursesJson);
+        
+        JsonArray courseJsonArr = courseJsonBuilder.build();
         
         JsonObject dataManagerJSO = Json.createObjectBuilder()
-                .add(JSON_COURSE, courseJson)
-                .add(JSON_COURSETEMPLATE, courseArray)
+                .add(JSON_WORK, courseJsonArr)
 		.build();
         
 	
@@ -910,6 +957,7 @@ public class CSGFiles implements AppFileComponent{
             CourseData courseData = (CourseData)app.getCourseDataComponent();
             File bannerFile = new File(courseData.getBannerLink());
             File selectedImgFile = new File(selectedFile.getAbsolutePath() + "/images/");
+            File publicHTMLFile = new File("../CourseGenTester/public_html/images/");
             
             FileUtils.copyFileToDirectory(bannerFile, selectedImgFile);
             
@@ -917,6 +965,30 @@ public class CSGFiles implements AppFileComponent{
             File rightFooterFile = new File(courseData.getRightFooterLink());
             FileUtils.copyFileToDirectory(leftFooterFile, selectedImgFile);
             FileUtils.copyFileToDirectory(rightFooterFile, selectedImgFile);
+            FileUtils.copyFileToDirectory(bannerFile, publicHTMLFile);
+            FileUtils.copyFileToDirectory(leftFooterFile, publicHTMLFile);
+            FileUtils.copyFileToDirectory(rightFooterFile, publicHTMLFile);
+            
+            CourseData cd = (CourseData)app.getCourseDataComponent();
+            
+            if(workspace.getTitleTextField().getText().isEmpty()){
+                cd.setTitle("");
+            }
+            else{
+                cd.setTitle(workspace.getTitleTextField().getText());
+            }
+            if(workspace.getInsNameTextField().getText().isEmpty()){
+                cd.setInsName("");
+            }
+            else{
+                cd.setInsName(workspace.getInsNameTextField().getText());
+            }
+            if(workspace.getInsHomeTextField().getText().isEmpty()){
+                cd.setInsHome("");
+            }
+            else{
+                cd.setInsHome(workspace.getInsHomeTextField().getText());
+            }
             
 //        String newBanner = bannerFile.getName();
 //        courseData.setBannerLink("./images/" + newBanner);
@@ -934,7 +1006,7 @@ public class CSGFiles implements AppFileComponent{
                 app.getProjectDataComponent(), app.getCourseDataComponent(), path);
             
             String pathTA = "../CourseGenTester/public_html/js/TAsData.json";
-            saveTAData( app.getTADataComponent(), pathTA);
+            saveTAData(app.getTADataComponent(), pathTA);
             
             String pathRec = "../CourseGenTester/public_html/js/RecitationsData.json";
             saveRecitationData(app.getRecitationDataComponent(), pathRec);
@@ -949,7 +1021,7 @@ public class CSGFiles implements AppFileComponent{
             saveTeamsAndStudentsData(app.getProjectDataComponent(), pathTeamsStudents);
             
             String pathCourse =  "../CourseGenTester/public_html/js/ProjectsData.json";
-            saveProjectsData(app.getCourseDataComponent(), pathCourse);
+            saveProjectsData(app.getCourseDataComponent(),app.getProjectDataComponent(), pathCourse);
             
             String initPath = destFile.toString();
             Path initialPath = Paths.get(initPath);

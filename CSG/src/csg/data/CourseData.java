@@ -6,10 +6,12 @@
 package csg.data;
 
 import csg.CSGApp;
+import csg.CSGProp;
 import csg.ui.CSGWorkspace;
 import djf.components.AppDataComponent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import properties_manager.PropertiesManager;
 
 /**
  *
@@ -39,9 +41,16 @@ public class CourseData implements AppDataComponent{
     String exportDir;
     String templateDir;
     String styleSheet;
+    int startMonth;
+    int startYear;
+    int startDay;
+    int endMonth;
+    int endYear;
+    int endDay;
     
     public CourseData(CSGApp initApp){
         app = initApp;   
+        PropertiesManager props = PropertiesManager.getPropertiesManager();  
         templates = FXCollections.observableArrayList();
         home = new CourseTemplate(true, "Home", "index.html", "Homebuilder.js");
         syllabus = new CourseTemplate(true, "Syllabus", 
@@ -67,9 +76,18 @@ public class CourseData implements AppDataComponent{
         bannerLink = "";
         leftFooterLink = "";
         rightFooterLink = "";
-        exportDir = "";
-        templateDir = "";
+        exportDir = props.getProperty(CSGProp
+            .EXPORT_LOCATION_TEXT.toString());
+        templateDir = props.getProperty(CSGProp
+            .TEMPLATE_LOCATION_TEXT.toString());
         styleSheet = "";
+        
+        startMonth = 0;
+        startDay = 0;
+        startYear = 0;
+        endMonth = 0;
+        endDay = 0;
+        endYear = 0;
     }
 
     public String getSubject() {
@@ -184,8 +202,55 @@ public class CourseData implements AppDataComponent{
     public void setRightFooterLink(String rightFooterLink) {
         this.rightFooterLink = rightFooterLink;
     }
-    
-    
+
+    public int getStartMonth() {
+        return startMonth;
+    }
+
+    public void setStartMonth(int startMonth) {
+        this.startMonth = startMonth;
+    }
+
+    public int getStartYear() {
+        return startYear;
+    }
+
+    public void setStartYear(int startYear) {
+        this.startYear = startYear;
+    }
+
+    public int getStartDay() {
+        return startDay;
+    }
+
+    public void setStartDay(int startDay) {
+        this.startDay = startDay;
+    }
+
+    public int getEndMonth() {
+        return endMonth;
+    }
+
+    public void setEndMonth(int endMonth) {
+        this.endMonth = endMonth;
+    }
+
+    public int getEndYear() {
+        return endYear;
+    }
+
+    public void setEndYear(int endYear) {
+        this.endYear = endYear;
+    }
+
+    public int getEndDay() {
+        return endDay;
+    }
+
+    public void setEndDay(int endDay) {
+        this.endDay = endDay;
+    }
+     
 
     public ObservableList<CourseTemplate> getTemplates() {
         return templates;
@@ -196,15 +261,13 @@ public class CourseData implements AppDataComponent{
         CourseTemplate newTemplate = new CourseTemplate(use, navbarTitle,
         fileName, script);
         templates.add(newTemplate);
-    }
-    
-    
+    }   
     
     @Override
     public void resetData() {
         templates.clear();
-        
-                home = new CourseTemplate(true, "Home", "index.html", "Homebuilder.js");
+        PropertiesManager props = PropertiesManager.getPropertiesManager();  
+        home = new CourseTemplate(true, "Home", "index.html", "Homebuilder.js");
         syllabus = new CourseTemplate(true, "Syllabus", 
             "syllabus.html", "SyllabusBuilder.js");
         schedule = new CourseTemplate(true, "Schedule",
@@ -228,9 +291,17 @@ public class CourseData implements AppDataComponent{
         bannerLink = "";
         leftFooterLink = "";
         rightFooterLink = "";
-        exportDir = "";
-        templateDir = "";
+        exportDir = props.getProperty(CSGProp
+            .EXPORT_LOCATION_TEXT.toString());
+        templateDir = props.getProperty(CSGProp
+            .TEMPLATE_LOCATION_TEXT.toString());
         styleSheet = "";
+        startMonth = 0;
+        startDay = 0;
+        startYear = 0;
+        endMonth = 0;
+        endDay = 0;
+        endYear = 0;
     }
     
 }

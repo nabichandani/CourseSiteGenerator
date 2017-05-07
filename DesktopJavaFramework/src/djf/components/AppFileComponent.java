@@ -49,5 +49,5 @@ public interface AppFileComponent {
 
     public void saveTeamsAndStudentsData(AppDataComponent data, String filePath) throws IOException;
 
-    public void saveProjectsData(AppDataComponent data, String filePath) throws IOException;
+    public void saveProjectsData(AppDataComponent courseData, AppDataComponent projectData, String filePath) throws IOException;
 }

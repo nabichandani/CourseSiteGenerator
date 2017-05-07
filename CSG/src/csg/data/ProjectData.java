@@ -62,7 +62,6 @@ public class ProjectData implements AppDataComponent{
         }
         return false;
     }
-    
     public Student getStudent(String fName,String lName) {
         for (Student student: students) {
             if (student.getFirstName().equals(fName)) {
