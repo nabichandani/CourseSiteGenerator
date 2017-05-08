@@ -10,6 +10,8 @@ import java.util.HashMap;
 import javafx.beans.property.StringProperty;
 import csg.CSGApp;
 import csg.CSGProp;
+import csg.data.Recitation;
+import csg.data.RecitationData;
 import csg.data.TeachingAssistant;
 import csg.data.TAData;
 import csg.ui.CSGWorkspace;
@@ -26,6 +28,7 @@ public class EditTA_jTPS_Transaction implements jTPS_Transaction {
     CSGApp app;
     TAData data;
     CSGWorkspace workspace;
+    RecitationData recData;
     String newName;
     String newEmail;
     BooleanProperty oldUG;
@@ -46,6 +49,7 @@ public class EditTA_jTPS_Transaction implements jTPS_Transaction {
         oldEmail = oldE;
         oldUG = new SimpleBooleanProperty();
         oldUG.set(oldUndergrad);
+        recData = (RecitationData) app.getRecitationDataComponent();
     }
 
     @Override
@@ -75,6 +79,23 @@ public class EditTA_jTPS_Transaction implements jTPS_Transaction {
                 .toString()));
         workspace.getTaNameTextField().setText(newName);
         workspace.getEmailTextField().setText(newEmail);
+        for (Recitation rec : recData.getRecitations()) {
+            if (rec.getFirstTA().equals(oldName)) {
+                rec.setFirstTA(newName);
+            } else if (rec.getSecondTA().equals(oldName)) {
+                rec.setSecondTA(newName);
+            }
+        }
+        workspace.getRecitationTable().refresh();
+        workspace.getRecitationTable().refresh();
+        workspace.getRecTA1Combo().setValue(null);
+        workspace.getRecTA2Combo().setValue(null);
+        workspace.getRecDayTimeText().clear();
+        workspace.getRecInstructorText().clear();
+        workspace.getRecLocationText().clear();
+        workspace.getRecSectionText().clear();
+        workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+            .toString()));
 
     }
 
@@ -105,6 +126,24 @@ public class EditTA_jTPS_Transaction implements jTPS_Transaction {
                 .toString()));
         workspace.getTaNameTextField().setText(newName);
         workspace.getEmailTextField().setText(newEmail);
+
+        for (Recitation rec : recData.getRecitations()) {
+            if (rec.getFirstTA().equals(newName)) {
+                rec.setFirstTA(oldName);
+            } else if (rec.getSecondTA().equals(newName)) {
+                rec.setSecondTA(oldName);
+            }
+        }
+        workspace.getRecitationTable().refresh();
+        workspace.getRecitationTable().refresh();
+        workspace.getRecTA1Combo().setValue(null);
+        workspace.getRecTA2Combo().setValue(null);
+        workspace.getRecDayTimeText().clear();
+        workspace.getRecInstructorText().clear();
+        workspace.getRecLocationText().clear();
+        workspace.getRecSectionText().clear();
+        workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+           .toString()));
     }
 
 }

@@ -8,6 +8,7 @@ package jtps;
 import csg.CSGApp;
 import csg.CSGProp;
 import csg.data.ProjectData;
+import csg.data.Student;
 import csg.data.Team;
 import csg.ui.CSGWorkspace;
 import javafx.scene.paint.Color;
@@ -49,6 +50,20 @@ public class EditTeam_jTPS_Transaction implements jTPS_Transaction {
         workspace.getColorPicker().setValue(Color.valueOf(newTeam.getColor()));
         workspace.getTextColorPicker().setValue(Color.valueOf(newTeam.getTextColor()));
         workspace.getTeamLinkTextField().setText(newTeam.getLink());
+        
+        for (Student s : data.getStudents()) {
+            if (s.getTeam().equals(oldTeam.getName())) {
+                s.setTeam(newTeam.getName());
+            }
+        }
+        workspace.getStudentTable().refresh();
+
+        workspace.getStudentFNameTextField().clear();
+        workspace.getStudentLNameTextField().clear();
+        workspace.getStudentRoleCombo().setValue(null);
+        workspace.getStudentTeamCombo().setValue(null);
+        workspace.getStudentAddUpdateButton().setText(props.getProperty(
+            CSGProp.ADDEDIT_TEXT.toString()));
     }
 
     @Override
@@ -64,6 +79,20 @@ public class EditTeam_jTPS_Transaction implements jTPS_Transaction {
         workspace.getColorPicker().setValue(Color.valueOf(oldTeam.getColor()));
         workspace.getTextColorPicker().setValue(Color.valueOf(oldTeam.getTextColor()));
         workspace.getTeamLinkTextField().setText(oldTeam.getLink());
+        
+        for (Student s : data.getStudents()) {
+            if (s.getTeam().equals(newTeam.getName())) {
+                s.setTeam(oldTeam.getName());
+            }
+        }
+        workspace.getStudentTable().refresh();
+
+        workspace.getStudentFNameTextField().clear();
+        workspace.getStudentLNameTextField().clear();
+        workspace.getStudentRoleCombo().setValue(null);
+        workspace.getStudentTeamCombo().setValue(null);
+        workspace.getStudentAddUpdateButton().setText(props.getProperty(
+            CSGProp.ADDEDIT_TEXT.toString()));
     }
 
 }

@@ -142,6 +142,7 @@ public class CSGControls {
           String initName = ta.getName();
           
           TAData data = (TAData)app.getTADataComponent();
+          RecitationData recData = (RecitationData)app.getRecitationDataComponent();
         
           PropertiesManager props = PropertiesManager.getPropertiesManager();
          
@@ -193,6 +194,23 @@ public class CSGControls {
                 Collections.sort(data.getTeachingAssistants());
                 appFileController.markAsEdited(app.getGUI());
                 workspace.getTaTable().getSelectionModel().select(data.getTA(name));
+                for(Recitation rec: recData.getRecitations()){
+                    if(rec.getFirstTA().equals(ta.getName())){
+                        rec.setFirstTA(name);
+                    }
+                    else if(rec.getSecondTA().equals(ta.getName())){
+                        rec.setSecondTA(name);
+                    }
+                }
+                workspace.getRecitationTable().refresh();
+                workspace.getRecTA1Combo().setValue(null);
+                workspace.getRecTA2Combo().setValue(null);
+                workspace.getRecDayTimeText().clear();
+                workspace.getRecInstructorText().clear();
+                workspace.getRecLocationText().clear();
+                workspace.getRecSectionText().clear();
+                workspace.getRecAddButton().setText(props.getProperty(CSGProp.ADDEDIT_TEXT
+                .toString()));
             }
             else{
                 AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
@@ -350,6 +368,20 @@ public class CSGControls {
                 workspace.getjTPS().addTransaction(new EditTeam_jTPS_Transaction(app, team, newTeam));
                 appFileController.markAsEdited(app.getGUI());
                 workspace.getTeamsTable().getSelectionModel().select(data.getTeam(name));
+                for(Student s: data.getStudents()){
+                    if(s.getTeam().equals(team.getName())){
+                        s.setTeam(name);
+                    }
+                }
+                workspace.getStudentTable().refresh();
+                
+                workspace.getStudentFNameTextField().clear();
+                workspace.getStudentLNameTextField().clear();
+                workspace.getStudentRoleCombo().setValue(null);
+                workspace.getStudentTeamCombo().setValue(null);
+                workspace.getStudentAddUpdateButton().setText(props.getProperty
+                   (CSGProp.ADDEDIT_TEXT.toString()));
+                        
            }
           }catch(Exception e){
           }
