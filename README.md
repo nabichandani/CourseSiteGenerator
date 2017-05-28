@@ -1,4 +1,4 @@
-# Data-Structure-Projects
+# Course Site Generator
 
 Time worked on: From March 2017 - May 2017
 
